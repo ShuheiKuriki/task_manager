@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+    <head>
+        <metacharset="utf8"/>
+    </head>
+    <body>
+        <h1>タスクを追加してください</h1>
+        <form method="POST" action="/">
+            {%csrf_token%}
+            <input placeholder="タスク" name="sentence" type="text"/>
+            <input value="追加" type="submit"/>
+        </form>
+    </body>
+</html>
