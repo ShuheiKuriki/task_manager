@@ -1,35 +1,82 @@
 <!doctype　html>
-<html>
+
+<html lang="ja">
   <head>
     <meta　charset="utf8"/>
-    <!-- <link rel="stylesheet" href="/static/style.css"/> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>タスク管理アプリ : 一覧ページ</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous"/>
   </head>
   <body>
-    <h1>タスク管理アプリ</h1>
-    <table class='table'>
-      <thead>
-        <tr>
-          <th scope='col'></th>
-          <th scope='col'>タスク名</th>
-          <th scope='col'>削除</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for task in tasks %}
-          <tr>
-            <th scope='row'>{{ forloop.counter }}</th>
-            <td>{{ task.name }}</td>
-            <td>
-              <form method="POST" action="/delete">
-                  {%csrf_token%}
-                  <input name='id' type="hidden" value="{{ task.id }}"/>
-                  <button type="submit">削除</button>
-              </form>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <a href="{% url 'form' %}">予定を追加する</a>
+    <!-- <nav class="navbar navbar-dark bg-dark mt-3 mb-3">
+      <a class="navbar-brand" href="/">タスク管理アプリ</a>
+    </nav> -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mt-3 mb-3">
+        <a class="navbar-brand" href="/">タスク管理アプリ</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarText" aria-controls="navbarText"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">ホーム</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/form">タスク追加</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">今日の予定</a>
+                </li>
+            </ul>
+            <span class="navbar-text">
+                <a href="/login" class="btn btn-primary">ログイン</a>
+            </span>
+        </div>
+    </nav>
+    <!-- <div class="jumbotron"> -->
+      <div class="container">
+        <table class='table border col-8'>
+          <thead>
+            <tr>
+              <th scope='col'></th>
+              <th scope='col'>タスク名</th>
+              <th scope='col'>削除</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for task in tasks %}
+              <tr>
+                <th scope='row'>{{ forloop.counter }}</th>
+                <td>{{ task.name }}</td>
+                <td>
+                  <form method="POST" action="/delete">
+                      {%csrf_token%}
+                      <input name='id' type="hidden" value="{{ task.id }}"/>
+                      <button type="submit">削除</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="container">
+        <a href="{% url 'form' %}">予定を追加する</a>
+      </div>
+    <!-- </div> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
   </body>
 </html>

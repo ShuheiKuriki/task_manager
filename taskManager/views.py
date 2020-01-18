@@ -26,3 +26,12 @@ def delete(request):
         task = Task.objects.get(id=request.POST['id'])
         task.delete()
     return redirect(to='/')
+
+def today(request):
+    return none
+
+def login(request):
+    if request.POST['username'] and request.POST['email']:
+        return render(request, 'check.html', {"email": request.POST['email'], "username": request.POST['username']})
+    else:
+        return render(request, 'error.html')
