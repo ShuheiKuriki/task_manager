@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}一覧ページ{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <table class='table border col-6'>
+          <thead>
+            <tr>
+              <th scope='col'></th>
+              <th scope='col'>完了したタスク</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for done in dones %}
+              <tr>
+                <th scope='row'>{{ forloop.counter }}</th>
+                <td>{{ done.name }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    {%else%}
+        <h1>ログインして下さい</h1>
+    {%endif%}
+{% endblock %}
