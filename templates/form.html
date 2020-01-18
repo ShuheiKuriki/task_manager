@@ -5,10 +5,11 @@
     </head>
     <body>
         <h1>タスクを追加してください</h1>
-        <form method="POST" action="/">
-            {%csrf_token%}
-            <input placeholder="タスク" name="sentence" type="text"/>
-            <input value="追加" type="submit"/>
+        <form method="POST" action="/post">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">追加</button>
         </form>
+        <a href="{% url 'index' %}">トップに戻る</a>
     </body>
 </html>
