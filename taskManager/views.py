@@ -15,7 +15,7 @@ def post(request):
         return redirect(to="/form")
     form = TaskForm(request.POST)
     if form.is_valid():
-        task=Task.objects.create(name=request.POST.get('name'), id=request.POST.get('id'))
+        task=Task.objects.create(name=request.POST.get('タスク名'), id=request.POST.get('id'))
         task.save()
         return redirect(to='/')
     else:
