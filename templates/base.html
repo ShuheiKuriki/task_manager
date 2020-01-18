@@ -36,9 +36,15 @@
                     <a class="nav-link" href="/">完了済み</a>
                 </li>
             </ul>
+            {% if user.is_authenticated %}
             <span class="navbar-text">
-                <a href="/login" class="btn btn-primary">ログイン</a>
+                <a href="/accounts/login" class="btn btn-primary">ログアウト</a>
             </span>
+            {%else%}
+            <span class="navbar-text">
+                <a href="/logout" class="btn btn-primary">ログイン</a>
+            </span>
+            {%endif%}
         </div>
     </nav>
     <!-- <div class="jumbotron"> -->

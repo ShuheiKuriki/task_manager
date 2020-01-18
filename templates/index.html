@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}一覧ページ{% endblock %}
 {% block content %}
+    {% if user.is_authenticated %}
         <table class='table border col-8'>
           <thead>
             <tr>
@@ -25,4 +26,7 @@
             {% endfor %}
           </tbody>
         </table>
+    {%else%}
+        <h1>ログインして下さい</h1>
+    {%endif%}
 {% endblock %}
