@@ -28,6 +28,7 @@ urlpatterns = [
     path('done_view', views.done_view),
     path('edit', views.edit),
     path('edit_view', views.edit_view),
+    path('recover', views.recover),
     path('today', views.today),
     path('login_view', views.login_view, name='login'),
     path('create_user/', views.create_user, name='create_user'),

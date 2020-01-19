@@ -56,6 +56,13 @@ def edit_view(request):
     form = TaskForm()
     return render(request, 'edit.html', {'form': form, 'id': id})
 
+def recover(request):
+    if request.method == 'POST' and request.POST['id'] and request.POST['name']:
+        task = Task.objects.create(name=request.POST['name'])
+        done = Done.objects.get(id=request.POST['id'])
+        done.delete()
+    return redirect('/')
+
 def today(request):
     return none
 

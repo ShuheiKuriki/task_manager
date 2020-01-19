@@ -7,6 +7,7 @@
             <tr>
               <th scope='col'></th>
               <th scope='col'>完了したタスク</th>
+              <th scope='col'>元に戻す</th>
             </tr>
           </thead>
           <tbody>
@@ -14,6 +15,14 @@
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ done.name }}</td>
+                <td>
+                  <form method="POST" action="/recover">
+                      {%csrf_token%}
+                      <input name='name' type="hidden" value="{{ done.name }}"/>
+                      <input name='id' type="hidden" value="{{ done.id }}"/>
+                      <button type="submit">元に戻す</button>
+                  </form>
+                </td>
               </tr>
             {% endfor %}
           </tbody>
