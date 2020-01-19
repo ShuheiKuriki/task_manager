@@ -18,7 +18,6 @@
                 <td>
                   <form method="POST" action="/recover">
                       {%csrf_token%}
-                      <input name='name' type="hidden" value="{{ done.name }}"/>
                       <input name='id' type="hidden" value="{{ done.id }}"/>
                       <button type="submit">元に戻す</button>
                   </form>

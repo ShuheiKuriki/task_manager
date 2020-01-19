@@ -3,10 +3,10 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import TaskForm, UserForm
-from .models import Task, Done
+from .models import Task
 
 def index(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.all().filter(done_or_not=False)
     return render(request, 'index.html', {'tasks':tasks})
 
 def form(request):
@@ -18,7 +18,7 @@ def post(request):
         return redirect(to="/form")
     form = TaskForm(request.POST)
     if form.is_valid():
-        task=Task.objects.create(name=request.POST.get('タスク名'))
+        task=Task.objects.create(name=request.POST.get('name'), deadline=request.POST.get('deadline'))
         task.save()
         return redirect(to='/')
     else:
@@ -31,14 +31,14 @@ def delete(request):
     return redirect(to='/')
 
 def done(request):
-    if request.method == 'POST' and request.POST['id'] and request.POST['name']:
-        done = Done.objects.create(name=request.POST['name'])
+    if request.method == 'POST' and request.POST['id']:
         task = Task.objects.get(id=request.POST['id'])
-        task.delete()
+        task.done_or_not = True
+        task.save()
         return redirect(to='/')
 
 def done_view(request):
-    dones = Done.objects.all()
+    dones = Task.objects.all().filter(done_or_not=True)
     return render(request, 'done.html', {'dones':dones})
 
 def edit(request):
@@ -46,25 +46,28 @@ def edit(request):
         form = TaskForm(request.POST)
         if form.is_valid():
             task = Task.objects.get(id=request.POST['id'])
-            task.name = request.POST['タスク名']
+            if request.POST['name']!="":
+                task.name = request.POST['name']
+            if request.POST['deadline']!="":
+                task.deadline = request.POST['deadline']
             task.save()
     return redirect(to='/')
 
 def edit_view(request):
     if request.method == 'POST' and request.POST.get('id'):
-        id = request.POST.get('id')
+        id = request.POST['id']
     form = TaskForm()
     return render(request, 'edit.html', {'form': form, 'id': id})
 
 def recover(request):
-    if request.method == 'POST' and request.POST['id'] and request.POST['name']:
-        task = Task.objects.create(name=request.POST['name'])
-        done = Done.objects.get(id=request.POST['id'])
-        done.delete()
+    if request.method == 'POST' and request.POST['id']:
+        task = Task.objects.get(id=request.POST['id'])
+        task.done_or_not = False
+        task.save()
     return redirect('/')
 
 def today(request):
-    return none
+    return None
 
 def login_view(request):
     user=authenticate(

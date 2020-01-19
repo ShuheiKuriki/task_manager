@@ -1,12 +1,9 @@
 {% extends "base.html" %}
 {% block title %}追加フォーム{% endblock %}
 {% block content %}
-    <h1>タスクを追加してください</h1>
-{% endblock %}
-{% block content2 %}
     <form method="POST" action="/post">
         {% csrf_token %}
-        {{ form }}
-        <button type="submit">追加</button>
+        {{ form.as_ul }}
+        <button type="submit">作成</button>
     </form>
 {% endblock %}

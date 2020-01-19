@@ -2,11 +2,12 @@
 {% block title %}一覧ページ{% endblock %}
 {% block content %}
     {% if user.is_authenticated %}
-        <table class='table border col-6'>
+        <table class='table border col-12'>
           <thead>
             <tr>
               <th scope='col'></th>
               <th scope='col'>タスク名</th>
+              <th scope='col'>期限</th>
               <th scope='col'>完了</th>
               <th scope='col'>編集</th>
               <th scope='col'>削除</th>
@@ -17,10 +18,10 @@
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ task.name }}</td>
+                <td>{{ task.deadline }}</td>
                 <td>
                   <form method="POST" action="/done">
                       {%csrf_token%}
-                      <input name='name' type="hidden" value="{{ task.name }}"/>
                       <input name='id' type="hidden" value="{{ task.id }}"/>
                       <button type="submit">完了</button>
                   </form>
