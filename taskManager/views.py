@@ -36,13 +36,19 @@ def done(request):
         task = Task.objects.get(id=request.POST['id'])
         task.done_date = datetime.date.today()
         task.save()
-        return redirect(to='/')
+        return redirect(to='/done_view')
 
 def done_view(request):
     dones = Task.objects.all().filter(done_date__isnull=False)
     done_today = dones.filter(done_date=datetime.date.today())
+    done_yes = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=1))
     num = len(done_today)
-    return render(request, 'done.html', {'dones':dones, 'num':num})
+    if num == 0:
+        num = len(done_yes)
+        message = '昨日は{}個のタスクをこなしました。今日も頑張りましょう！'.format(num)
+    else:
+        message = '今日は{}個のタスクをこなしました。よく頑張りましたね！'.format(num)
+    return render(request, 'done.html', {'dones':dones, 'message':message})
 
 def edit(request):
     if request.method == 'POST' and request.POST['id']:
@@ -67,14 +73,18 @@ def edit_view(request):
 def recover(request):
     if request.method == 'POST' and request.POST['id']:
         task = Task.objects.get(id=request.POST['id'])
-        task.done_or_not = False
+        task.done_date = ''
         task.save()
     return redirect('/')
 
 def today(request):
     tasks = Task.objects.all().filter(done_date__isnull=True, when=datetime.date.today())
     num = len(tasks)
-    return render(request, 'today.html', {'tasks':tasks,'num':num})
+    if num == 0:
+        message = '今日のタスクは完了です！ゆっくり休みましょう！'
+    else:
+        message = '今日のタスクはあと{}個です！頑張りましょう！'.format(num)
+    return render(request, 'today.html', {'tasks':tasks,'message':message})
 
 def login_view(request):
     user=authenticate(

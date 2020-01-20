@@ -2,7 +2,7 @@
 {% block title %}一覧ページ{% endblock %}
 {% block active4 %}active{% endblock %}
 {% block content %}
-  <h1>今日は{{ num }}個のタスクをこなしました！よく頑張りましたね！</h1>
+  <h1>{{ message }}</h1>
 {% endblock %}
 {% block content2 %}
     {% if user.is_authenticated %}
