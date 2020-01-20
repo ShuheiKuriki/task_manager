@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import TaskForm, UserForm
 from .models import Task
+import datetime
 
 def index(request):
-    tasks = Task.objects.all().filter(done_or_not=False)
+    tasks = Task.objects.all().filter(done_or_not=False).order_by('deadline').order_by('when')
     return render(request, 'index.html', {'tasks':tasks})
 
 def form(request):
@@ -69,7 +70,9 @@ def recover(request):
     return redirect('/')
 
 def today(request):
-    return None
+    tasks = Task.objects.all().filter(done_or_not=False, when=datetime.date.today())
+    num = len(tasks)
+    return render(request, 'today.html', {'tasks':tasks,'num':num})
 
 def login_view(request):
     user=authenticate(
