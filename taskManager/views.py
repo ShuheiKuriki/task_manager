@@ -50,6 +50,8 @@ def edit(request):
                 task.name = request.POST['name']
             if request.POST['deadline']!="":
                 task.deadline = request.POST['deadline']
+            if request.POST['when']!="":
+                task.when = request.POST['when']
             task.save()
     return redirect(to='/')
 
