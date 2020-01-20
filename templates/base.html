@@ -23,16 +23,16 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item {% block active1 %}{% endblock %}">
                     <a class="nav-link" href="/">ホーム</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% block active2 %}{% endblock %}">
                     <a class="nav-link" href="/form">タスク追加</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/">今日の予定</a>
+                <li class="nav-item {% block active3 %}{% endblock %}">
+                    <a class="nav-link" href="/today">今日の予定</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% block active4 %}{% endblock %}">
                     <a class="nav-link" href="/done_view">完了済み</a>
                 </li>
             </ul>
