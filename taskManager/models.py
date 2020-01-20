@@ -1,12 +1,13 @@
 from django.db import models
-from django.utils import timezone
+import datetime
 
 class Task(models.Model):
     name = models.CharField('タスク名', max_length=256, blank=True)
     id = models.AutoField(primary_key=True)
-    deadline = models.DateField('期限', default=timezone.now, blank=True)
-    when = models.DateField('実行予定日', default=timezone.now, blank=True)
-    done_or_not = models.BooleanField(default=False)
+    deadline = models.DateField('期限', default=datetime.date.today(), blank=True, null=True)
+    when = models.DateField('実行予定日', default=datetime.date.today(), blank=True)
+    done_date = models.DateField('完了した日', blank=True, null=True)
+
 
 # class Done(models.Model):
 #     name = models.CharField(max_length=256)

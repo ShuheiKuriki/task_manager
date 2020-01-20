@@ -7,7 +7,7 @@ from .models import Task
 import datetime
 
 def index(request):
-    tasks = Task.objects.all().filter(done_or_not=False).order_by('deadline').order_by('when')
+    tasks = Task.objects.all().filter(done_date__isnull=True).order_by('deadline').order_by('when')
     return render(request, 'index.html', {'tasks':tasks})
 
 def form(request):
@@ -34,13 +34,15 @@ def delete(request):
 def done(request):
     if request.method == 'POST' and request.POST['id']:
         task = Task.objects.get(id=request.POST['id'])
-        task.done_or_not = True
+        task.done_date = datetime.date.today()
         task.save()
         return redirect(to='/')
 
 def done_view(request):
-    dones = Task.objects.all().filter(done_or_not=True)
-    return render(request, 'done.html', {'dones':dones})
+    dones = Task.objects.all().filter(done_date__isnull=False)
+    done_today = dones.filter(done_date=datetime.date.today())
+    num = len(done_today)
+    return render(request, 'done.html', {'dones':dones, 'num':num})
 
 def edit(request):
     if request.method == 'POST' and request.POST['id']:
@@ -70,7 +72,7 @@ def recover(request):
     return redirect('/')
 
 def today(request):
-    tasks = Task.objects.all().filter(done_or_not=False, when=datetime.date.today())
+    tasks = Task.objects.all().filter(done_date__isnull=True, when=datetime.date.today())
     num = len(tasks)
     return render(request, 'today.html', {'tasks':tasks,'num':num})
 
