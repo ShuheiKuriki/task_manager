@@ -6,7 +6,8 @@ class Task(models.Model):
     id = models.AutoField(primary_key=True)
     deadline = models.DateField('期限', default=datetime.date.today(), blank=True, null=True)
     when = models.DateField('実行予定日', default=datetime.date.today(), blank=True)
-    done_date = models.DateField('完了した日', blank=True, null=True)
+    done_or_not = models.BooleanField(default=False)
+    done_date = models.DateField('完了した日', default=datetime.date.today(), blank=True, null=True)
 
 
 # class Done(models.Model):

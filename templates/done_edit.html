@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}完了日編集フォーム{% endblock %}
+{% block active4 %}active{% endblock %}
+{% block content %}
+    <form method="POST" action="/done_edit">
+        {% csrf_token %}
+        {{ form.as_ul }}
+        <input name='id' type="hidden" value="{{ id }}"/>
+        <button type="submit">更新</button>
+    </form>
+{% endblock %}

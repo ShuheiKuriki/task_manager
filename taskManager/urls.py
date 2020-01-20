@@ -26,6 +26,8 @@ urlpatterns = [
     path('delete', views.delete),
     path('done', views.done),
     path('done_view', views.done_view),
+    path('done_edit', views.done_edit),
+    path('done_edit_view', views.done_edit_view),
     path('edit', views.edit),
     path('edit_view', views.edit_view),
     path('recover', views.recover),

@@ -11,7 +11,12 @@ class UserForm(ModelForm):
 class TaskForm(ModelForm):
     class Meta:
         model = Task
-        exclude = ('done_date',)
+        exclude = ('done_date','done_or_not')
+
+class DoneEditForm(ModelForm):
+    class Meta:
+        model = Task
+        fields = ['done_date']
 
 # class EditForm(Form, task):
 #     name = CharField('タスク名', max_length=256, default=task.name)
