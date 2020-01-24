@@ -10,43 +10,8 @@
           crossorigin="anonymous"/>
   </head>
   <body>
-    <!-- <nav class="navbar navbar-dark bg-dark mt-3 mb-3">
-      <a class="navbar-brand" href="/">タスク管理アプリ</a>
-    </nav> -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mt-3 mb-3">
-        <a class="navbar-brand" href="/">タスク管理アプリ</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#navbarText" aria-controls="navbarText"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item {% block active1 %}{% endblock %}">
-                    <a class="nav-link" href="/">ホーム</a>
-                </li>
-                <li class="nav-item {% block active2 %}{% endblock %}">
-                    <a class="nav-link" href="/form">タスク追加</a>
-                </li>
-                <li class="nav-item {% block active3 %}{% endblock %}">
-                    <a class="nav-link" href="/today">今日の予定</a>
-                </li>
-                <li class="nav-item {% block active4 %}{% endblock %}">
-                    <a class="nav-link" href="/done_view">完了済み</a>
-                </li>
-            </ul>
-            {% if user.is_authenticated %}
-            <span class="navbar-text">
-                <a href="/accounts/login" class="btn btn-primary">ログアウト</a>
-            </span>
-            {%else%}
-            <span class="navbar-text">
-                <a href="/logout" class="btn btn-primary">ログイン</a>
-            </span>
-            {%endif%}
-        </div>
-    </nav>
-    <!-- <div class="jumbotron"> -->
+      {% block nav %}
+      {% endblock %}
       <div class="container mt-3 mb-3">
         {% block content %}
         {% endblock %}
