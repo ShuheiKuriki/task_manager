@@ -2,106 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import TaskForm, UserForm, DoneEditForm
 from .models import Task
 import datetime
 
 def index(request):
-    tasks = Task.objects.all().filter(done_or_not=False).order_by('deadline').order_by('when')
-    return render(request, 'index.html', {'tasks':tasks})
-
-def form(request):
-    form = TaskForm()
-    return render(request, 'form.html', {'form': form})
-
-def post(request):
-    if request.method != 'POST':
-        return redirect(to="/form")
-    form = TaskForm(request.POST)
-    if form.is_valid():
-        task=Task.objects.create(name=request.POST.get('name'), deadline=request.POST.get('deadline'))
-        task.save()
-        return redirect(to='/')
-    else:
-        return redirect(to='/form')
-
-def delete(request):
-    if request.method == 'POST' and request.POST['id']:
-        task = Task.objects.get(id=request.POST['id'])
-        task.delete()
-    return redirect(to='/')
-
-def done(request):
-    if request.method == 'POST' and request.POST['id']:
-        task = Task.objects.get(id=request.POST['id'])
-        task.done_or_not = True
-        task.done_date = datetime.date.today()
-        task.save()
-        return redirect(to='/done_view')
-
-def done_view(request):
-    dones = Task.objects.all().filter(done_or_not=True).order_by('-done_date')
-    done_today = dones.filter(done_date=datetime.date.today())
-    done_yes = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=1))
-    num = len(done_today)
-    if num == 0:
-        num = len(done_yes)
-        message = '昨日は{}個のタスクをこなしました。今日も頑張りましょう！'.format(num)
-    else:
-        message = '今日は{}個のタスクをこなしました。よく頑張りましたね！'.format(num)
-    return render(request, 'done.html', {'dones':dones, 'message':message})
-
-def done_edit(request):
-    if request.method != 'POST':
-        return redirect(to="/done_view")
-    form = DoneEditForm(request.POST)
-    if form.is_valid():
-        task = Task.objects.get(id=request.POST['id'])
-        task.done_date = request.POST['done_date']
-        task.save()
-    return redirect(to='/done_view')
-
-def done_edit_view(request):
-    if request.method == 'POST' and request.POST.get('id'):
-        id = request.POST['id']
-    form = DoneEditForm()
-    return render(request, 'done_edit.html', {'form': form, 'id': id})
-
-def edit(request):
-    if request.method == 'POST' and request.POST['id']:
-        form = TaskForm(request.POST)
-        if form.is_valid():
-            task = Task.objects.get(id=request.POST['id'])
-            if request.POST['name']!="":
-                task.name = request.POST['name']
-            if request.POST['deadline']!="":
-                task.deadline = request.POST['deadline']
-            if request.POST['when']!="":
-                task.when = request.POST['when']
-            task.save()
-    return redirect(to='/')
-
-def edit_view(request):
-    if request.method == 'POST' and request.POST.get('id'):
-        id = request.POST['id']
-    form = TaskForm()
-    return render(request, 'edit.html', {'form': form, 'id': id})
-
-def recover(request):
-    if request.method == 'POST' and request.POST['id']:
-        task = Task.objects.get(id=request.POST['id'])
-        task.done_or_not = False
-        task.save()
-    return redirect('/')
-
-def today(request):
-    tasks = Task.objects.all().filter(done_or_not=False, when=datetime.date.today())
-    num = len(tasks)
-    if num == 0:
-        message = '今日のタスクは完了です！ゆっくり休みましょう！'
-    else:
-        message = '今日のタスクはあと{}個です！頑張りましょう！'.format(num)
-    return render(request, 'today.html', {'tasks':tasks,'message':message})
+    return render(request, 'index.html')
 
 def login_view(request):
     user=authenticate(
@@ -110,7 +17,8 @@ def login_view(request):
     )
     if user is not None:
         login(request,user)
-        return redirect('/')
+        url='/'+str(request.user.id)
+        return redirect(url)
     else:
         return redirect('accounts/login')
 
@@ -126,6 +34,128 @@ def create_user(request):
     )
     user.save()
     return redirect('/accounts/login/')
+
+def post(request):
+    num = str(request.user.id)
+    url = '/'+num
+    form_url = '/'+num+'/form'
+    if request.method != 'POST':
+        return redirect(to=form_url)
+    form = TaskForm(request.POST)
+    if form.is_valid():
+        task=Task.objects.create(
+            name=request.POST.get('name'),
+            deadline=request.POST.get('deadline'),
+            when=request.POST.get('when'),
+            user=request.user
+            )
+        task.save()
+        return redirect(to=url)
+    else:
+        return redirect(to=form_url)
+
+def delete(request):
+    if request.method == 'POST' and request.POST['id']:
+        task = Task.objects.get(id=request.POST['id'])
+        task.delete()
+    return redirect(to='/'+str(request.user.id))
+
+def done(request):
+    if request.method == 'POST' and request.POST['id']:
+        task = Task.objects.get(id=request.POST['id'])
+        task.done_or_not = True
+        task.done_date = datetime.date.today()
+        task.save()
+        return redirect(to='/'+str(request.user.id)+'/done_view')
+
+def done_edit(request):
+    if request.method != 'POST':
+        return redirect(to='/'+str(request.user.id)+'/done_view')
+    form = DoneEditForm(request.POST)
+    if form.is_valid():
+        task = Task.objects.get(id=request.POST['id'])
+        task.done_date = request.POST['done_date']
+        task.save()
+    return redirect(to='/'+str(request.user.id)+'/done_view')
+
+def recover(request):
+    if request.method == 'POST' and request.POST['id']:
+        task = Task.objects.get(id=request.POST['id'])
+        task.done_or_not = False
+        task.save()
+    return redirect('/'+str(request.user.id))
+
+def edit(request):
+    if request.method == 'POST' and request.POST['id']:
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            task = Task.objects.get(id=request.POST['id'])
+            if request.POST['name']!="":
+                task.name = request.POST['name']
+            if request.POST['deadline']!="":
+                task.deadline = request.POST['deadline']
+            if request.POST['when']!="":
+                task.when = request.POST['when']
+            task.save()
+    return redirect(to='/'+str(request.user.id))
+# class UserOnlyMixin(UserPassesTestMixin):
+#     raise_exception = True
+#
+#     def test_func(self):
+#         user = self.request.user
+#         return user.pk == self.kwargs['pk'] or user.is_superuser
+#
+# class OnlyYouMixin(UserOnlyMixin):
+
+def list(request,pk):
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False).order_by('deadline').order_by('when')
+    return render(request, 'list.html', {'tasks':tasks})
+
+def form(request,pk):
+    form = TaskForm()
+    return render(request, 'form.html', {'form': form})
+
+def done_view(request,pk):
+    dones = Task.objects.all().filter(user=request.user, done_or_not=True).order_by('-done_date')
+    done_today = dones.filter(done_date=datetime.date.today())
+    done_yes = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=1))
+    num = len(done_today)
+    if num == 0:
+        num = len(done_yes)
+        message = '昨日は{}個のタスクをこなしました。今日も頑張りましょう！'.format(num)
+    else:
+        message = '今日は{}個のタスクをこなしました。よく頑張りましたね！'.format(num)
+    return render(request, 'done.html', {'dones':dones, 'message':message})
+
+def done_edit_view(request):
+    if request.method == 'POST' and request.POST.get('id'):
+        id = request.POST['id']
+    form = DoneEditForm()
+    return render(request, 'done_edit.html', {'form': form, 'id': id})
+
+def edit_view(request):
+    if request.method == 'POST' and request.POST.get('id'):
+        id = request.POST['id']
+    form = TaskForm()
+    return render(request, 'edit.html', {'form': form, 'id': id})
+
+def today(request,pk):
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today())
+    num = len(tasks)
+    if num == 0:
+        message = '今日のタスクは完了です！ゆっくり休みましょう！'
+    else:
+        message = '今日のタスクはあと{}個です！頑張りましょう！'.format(num)
+    return render(request, 'today.html', {'tasks':tasks,'message':message})
+
+def tomorrow(request,pk):
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1))
+    num = len(tasks)
+    if num == 0:
+        message = '明日は自由に過ごしましょう！'
+    else:
+        message = '明日のタスクは{}個です！明日も頑張りましょう！'.format(num)
+    return render(request, 'tomorrow.html', {'tasks':tasks,'message':message})
 
 @login_required
 def logout_view(request):

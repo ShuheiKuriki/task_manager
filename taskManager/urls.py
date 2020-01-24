@@ -16,22 +16,25 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('form', views.form, name='form'),
+    path('<int:pk>', views.list, name='list'),
+    path('<int:pk>/form', views.form, name='form'),
     path('post', views.post),
     path('delete', views.delete),
     path('done', views.done),
-    path('done_view', views.done_view),
+    path('<int:pk>/done_view', views.done_view, name='done_view'),
     path('done_edit', views.done_edit),
     path('done_edit_view', views.done_edit_view),
     path('edit', views.edit),
     path('edit_view', views.edit_view),
     path('recover', views.recover),
-    path('today', views.today),
+    path('<int:pk>/today', views.today, name='today'),
+    path('<int:pk>/tomorrow', views.tomorrow, name='tomorrow'),
     path('login_view', views.login_view, name='login'),
     path('create_user/', views.create_user, name='create_user'),
     path('create_user_view/', views.create_user_view),
