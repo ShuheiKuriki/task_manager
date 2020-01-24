@@ -6,16 +6,16 @@ ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'taskmanager',
-        'USER': 'django',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': 5432
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'taskmanager',
+#         'USER': 'django',
+#         'PASSWORD': '',
+#         'HOST': 'host',
+#         'PORT': ''
+#     }
+# }
 
 import dj_database_url
 db_from_env = dj_database_url.config()
