@@ -11,7 +11,7 @@ class UserForm(ModelForm):
 class TaskForm(ModelForm):
     class Meta:
         model = Task
-        exclude = ('done_date','done_or_not')
+        fields = ['name','deadline','when']
 
 class DoneEditForm(ModelForm):
     class Meta:
