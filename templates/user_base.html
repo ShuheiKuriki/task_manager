@@ -26,11 +26,19 @@
                     <a class="nav-link" href="{% url 'list' user.pk%}">一覧</a>
                 </li>
                 <li class="nav-item {% block active2 %}{% endblock %}">
+<<<<<<< HEAD
                     <a class="nav-link" href="{% url 'today' user.pk %}">今日のタスク</a>
                 </li>
                 <li class="nav-item {% block active3 %}{% endblock %}">
                     <a class="nav-link" href="{% url 'tomorrow' user.pk %}">明日のタスク</a>
                 </li>
+=======
+                    <a class="nav-link" href="{% url 'today' user.pk %}">今日の予定</a>
+                </li>
+                <li class="nav-item {% block active3 %}{% endblock %}">
+                    <a class="nav-link" href="{% url 'tomorrow' user.pk %}">明日の予定</a>
+                </li>
+>>>>>>> edbe34527f426ec67f9d323d4f340b6562d15515
                 <li class="nav-item {% block active4 %}{% endblock %}">
                     <a class="nav-link" href="{% url 'done_view' user.pk %}">完了済み</a>
                 </li>
@@ -38,7 +46,11 @@
             {% if user.is_authenticated %}
             <ul class="navbar-nav">
               <li class="nav-item mr-2 mb-2">
+<<<<<<< HEAD
                   <a href="/post" class="btn btn-primary">タスク追加</a>
+=======
+                  <a href="/form" class="btn btn-primary">タスク追加</a>
+>>>>>>> edbe34527f426ec67f9d323d4f340b6562d15515
               </li>
               <li class="nav-item">
                   <a href="/logout" class="btn btn-primary">ログアウト</a>
