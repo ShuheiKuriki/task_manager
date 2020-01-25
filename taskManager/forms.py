@@ -13,18 +13,18 @@ class TaskForm(ModelForm):
     class Meta:
         model = Task
         fields = ['name','deadline','when']
-        widgets = {
-            'deadline': forms.SelectDateWidget,
-            'when': forms.SelectDateWidget
-        }
+        # widgets = {
+        #     'deadline': forms.SelectDateWidget,
+        #     'when': forms.SelectDateWidget
+        # }
 
 class DoneEditForm(ModelForm):
     class Meta:
         model = Task
         fields = ['done_date']
-        widgets = {
-            'done_date': forms.SelectDateWidget
-        }
+        # widgets = {
+        #     'done_date': forms.SelectDateWidget
+        # }
 
 # class EditForm(Form, task):
 #     name = CharField('タスク名', max_length=256, default=task.name)
