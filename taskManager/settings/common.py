@@ -64,6 +64,8 @@ TEMPLATES = [
     },
 ]
 
+DATABASES = {}
+
 WSGI_APPLICATION = 'taskManager.wsgi.application'
 
 
