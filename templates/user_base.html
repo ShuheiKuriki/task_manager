@@ -26,22 +26,24 @@
                     <a class="nav-link" href="{% url 'list' user.pk%}">一覧</a>
                 </li>
                 <li class="nav-item {% block active2 %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'form' user.pk%}">タスク追加</a>
-                </li>
-                <li class="nav-item {% block active3 %}{% endblock %}">
                     <a class="nav-link" href="{% url 'today' user.pk %}">今日の予定</a>
                 </li>
-                <li class="nav-item {% block active4 %}{% endblock %}">
+                <li class="nav-item {% block active3 %}{% endblock %}">
                     <a class="nav-link" href="{% url 'tomorrow' user.pk %}">明日の予定</a>
                 </li>
-                <li class="nav-item {% block active5 %}{% endblock %}">
+                <li class="nav-item {% block active4 %}{% endblock %}">
                     <a class="nav-link" href="{% url 'done_view' user.pk %}">完了済み</a>
                 </li>
             </ul>
             {% if user.is_authenticated %}
-            <span class="navbar-text">
-                <a href="/logout" class="btn btn-primary">ログアウト</a>
-            </span>
+            <ul class="navbar-nav">
+              <li class="nav-item mr-2 mb-2">
+                  <a href="/post" class="btn btn-primary">タスク追加</a>
+              </li>
+              <li class="nav-item">
+                  <a href="/logout" class="btn btn-primary">ログアウト</a>
+              </li>
+            </ul>
             {%else%}
             <span class="navbar-text">
                 <a href="/accounts/logint" class="btn btn-primary">ログイン</a>
@@ -56,6 +58,14 @@
       </div>
       <div class="container mt-3 mb-3">
         {% block content2 %}
+        {% endblock %}
+      </div>
+      <div class="container mt-3 mb-3">
+        {% block content3 %}
+        {% endblock %}
+      </div>
+      <div class="container mt-3 mb-3">
+        {% block content4 %}
         {% endblock %}
       </div>
     <!-- </div> -->
