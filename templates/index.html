@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse" id="navbarText">
             {% if user.is_authenticated %}
             <span class="navbar-text">
-                <a href="{% url 'list' user.pk %}" class="btn btn-primary">タスク管理を始める</a>
+                <a href="{% url 'list' user.pk %}" class="btn btn-primary mr-2">タスク管理を始める</a>
                 <a href="/logout" class="btn btn-primary">ログアウト</a>
             </span>
             {%else%}
