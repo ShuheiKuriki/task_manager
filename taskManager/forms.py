@@ -1,4 +1,5 @@
-from django.forms import Form, CharField, DateTimeField, ModelForm
+from django.forms import Form, CharField, ModelForm
+from django import forms
 from django.contrib.auth.models import User
 from .models import Task
 # from django.utils import timezone
@@ -12,11 +13,18 @@ class TaskForm(ModelForm):
     class Meta:
         model = Task
         fields = ['name','deadline','when']
+        widgets = {
+            'deadline': forms.SelectDateWidget,
+            'when': forms.SelectDateWidget
+        }
 
 class DoneEditForm(ModelForm):
     class Meta:
         model = Task
         fields = ['done_date']
+        widgets = {
+            'done_date': forms.SelectDateWidget
+        }
 
 # class EditForm(Form, task):
 #     name = CharField('タスク名', max_length=256, default=task.name)
