@@ -17,7 +17,7 @@ LOGGING = {
     },
     "formatters": {
         "production": {
-            "format": "\t".join
+            "format": "\t".join(
                 [
                     "[%(levelname)s]",
                     "%(asctime)s",
