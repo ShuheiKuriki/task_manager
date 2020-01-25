@@ -10,6 +10,9 @@ import datetime
 def index(request):
     return render(request, 'index.html')
 
+def sample(request):
+    return render(request, 'index_sample.html')
+
 def login_view(request):
     user=authenticate(
         username=request.POST.get('username'),

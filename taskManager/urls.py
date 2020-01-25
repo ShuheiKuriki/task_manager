@@ -22,6 +22,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
+    path('sample', views.sample),
     path('<int:pk>', views.list, name='list'),
     path('<int:pk>/form', views.form, name='form'),
     path('post', views.post),
