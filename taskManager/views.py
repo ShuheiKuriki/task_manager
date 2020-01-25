@@ -121,10 +121,13 @@ def edit(request):
 def list(request,pk):
     if request.user.pk != pk:
         return redirect('login')
-    tasks_today = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()).order_by('deadline')
-    tasks_tomorrow = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('deadline')
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when')
-    return render(request, 'list.html', {'tasks':tasks, 'tasks_today':tasks_today, 'tasks_tomorrow':tasks_tomorrow})
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
+    tasks_today = tasks.filter(when__lte=datetime.date.today()).order_by('deadline')
+    tasks_tom = tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('deadline')
+    tasks = tasks.filter(user=request.user, done_or_not=False, when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when')
+    num_today = len(tasks_today)
+    num_tom = len(tasks_tom)
+    return render(request, 'list.html', {'tasks':tasks, 'tasks_today':tasks_today, 'tasks_tom':tasks_tom, 'num_today':num_today, 'num_tom':num_tom})
 
 def form(request,pk):
     if request.user.pk != pk:
@@ -138,13 +141,14 @@ def done_view(request,pk):
     dones = Task.objects.all().filter(user=request.user, done_or_not=True).order_by('-done_date')
     done_today = dones.filter(done_date=datetime.date.today())
     done_yes = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=1))
-    num = len(done_today)
-    if num == 0:
-        num = len(done_yes)
-        message = '昨日は{}個のタスクをこなしました。今日も頑張りましょう！'.format(num)
+    dones = dones.filter(done_date__lt=datetime.date.today()-datetime.timedelta(days=1))
+    num_today = len(done_today)
+    num_yes = len(done_yes)
+    if num_today == 0:
+        message = '昨日は{}個のタスクをこなしました。今日も頑張りましょう！'.format(num_yes)
     else:
-        message = '今日は{}個のタスクをこなしました。よく頑張りましたね！'.format(num)
-    return render(request, 'done.html', {'dones':dones, 'message':message})
+        message = '今日は{}個のタスクをこなしました。よく頑張りましたね！'.format(num_today)
+    return render(request, 'done.html', {'dones':dones, 'done_today':done_today, 'done_yes':done_yes, 'num_today':num_today, 'num_yes':num_yes, 'message':message})
 
 def done_edit_view(request):
     if request.method == 'POST' and request.POST.get('id'):

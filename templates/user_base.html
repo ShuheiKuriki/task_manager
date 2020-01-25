@@ -14,7 +14,7 @@
       <a class="navbar-brand" href="/">タスク管理アプリ</a>
     </nav> -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mt-3 mb-3">
-        <a class="navbar-brand" href="/">タスク管理アプリ</a>
+        <a class="navbar-brand" href="/">Task Scheduler</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarText" aria-controls="navbarText"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -26,10 +26,10 @@
                     <a class="nav-link" href="{% url 'list' user.pk%}">一覧</a>
                 </li>
                 <li class="nav-item {% block active2 %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'today' user.pk %}">今日の予定</a>
+                    <a class="nav-link" href="{% url 'today' user.pk %}">今日のタスク</a>
                 </li>
                 <li class="nav-item {% block active3 %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'tomorrow' user.pk %}">明日の予定</a>
+                    <a class="nav-link" href="{% url 'tomorrow' user.pk %}">明日のタスク</a>
                 </li>
                 <li class="nav-item {% block active4 %}{% endblock %}">
                     <a class="nav-link" href="{% url 'done_view' user.pk %}">完了済み</a>

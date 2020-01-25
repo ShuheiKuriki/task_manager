@@ -5,12 +5,83 @@
   <h1>{{ message }}</h1>
 {% endblock %}
 {% block content2 %}
-    {% if user.is_authenticated %}
         <table class='table border col-12'>
           <thead>
             <tr>
               <th scope='col'></th>
-              <th scope='col'>完了したタスク</th>
+              <th scope='col'>今日完了したタスク : <span class='text-danger'>{{num_today}}個</span></th>
+              <th scope='col'>完了した日</th>
+              <th scope='col'>編集</th>
+              <th scope='col'>元に戻す</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for done in done_today %}
+              <tr>
+                <th scope='row'>{{ forloop.counter }}</th>
+                <td>{{ done.name }}</td>
+                <td>{{ done.done_date }}</td>
+                <td>
+                  <form method="POST" action="/done_edit_view">
+                      {%csrf_token%}
+                      <input name='id' type="hidden" value="{{ done.id }}"/>
+                      <button type="submit">編集</button>
+                  </form>
+                </td>
+                <td>
+                  <form method="POST" action="/recover">
+                      {%csrf_token%}
+                      <input name='id' type="hidden" value="{{ done.id }}"/>
+                      <button type="submit">元に戻す</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+{% endblock %}
+{% block content3 %}
+        <table class='table border col-12'>
+          <thead>
+            <tr>
+              <th scope='col'></th>
+              <th scope='col'>昨日完了したタスク : <span class='text-danger'>{{num_yes}}個</span></th>
+              <th scope='col'>完了した日</th>
+              <th scope='col'>編集</th>
+              <th scope='col'>元に戻す</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for done in done_yes %}
+              <tr>
+                <th scope='row'>{{ forloop.counter }}</th>
+                <td>{{ done.name }}</td>
+                <td>{{ done.done_date }}</td>
+                <td>
+                  <form method="POST" action="/done_edit_view">
+                      {%csrf_token%}
+                      <input name='id' type="hidden" value="{{ done.id }}"/>
+                      <button type="submit">編集</button>
+                  </form>
+                </td>
+                <td>
+                  <form method="POST" action="/recover">
+                      {%csrf_token%}
+                      <input name='id' type="hidden" value="{{ done.id }}"/>
+                      <button type="submit">元に戻す</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+{% endblock %}
+{% block content4 %}
+        <table class='table border col-12'>
+          <thead>
+            <tr>
+              <th scope='col'></th>
+              <th scope='col'>それ以前に完了したタスク</th>
               <th scope='col'>完了した日</th>
               <th scope='col'>編集</th>
               <th scope='col'>元に戻す</th>
@@ -40,7 +111,4 @@
             {% endfor %}
           </tbody>
         </table>
-    {%else%}
-        <h1>ログインして下さい</h1>
-    {%endif%}
 {% endblock %}
