@@ -35,6 +35,12 @@ def create_user(request):
     user.save()
     return redirect('/accounts/login/')
 
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+
+@login_required
 def post(request):
     num = str(request.user.id)
     url = '/'+num
@@ -54,20 +60,23 @@ def post(request):
     else:
         return redirect(to=form_url)
 
+@login_required
 def delete(request):
     if request.method == 'POST' and request.POST['id']:
         task = Task.objects.get(id=request.POST['id'])
         task.delete()
     return redirect(to='/'+str(request.user.id))
 
+@login_required
 def done(request):
     if request.method == 'POST' and request.POST['id']:
         task = Task.objects.get(id=request.POST['id'])
         task.done_or_not = True
         task.done_date = datetime.date.today()
         task.save()
-        return redirect(to='/'+str(request.user.id)+'/done_view')
+    return redirect(to='/'+str(request.user.id)+'/done_view')
 
+@login_required
 def done_edit(request):
     if request.method != 'POST':
         return redirect(to='/'+str(request.user.id)+'/done_view')
@@ -78,6 +87,7 @@ def done_edit(request):
         task.save()
     return redirect(to='/'+str(request.user.id)+'/done_view')
 
+@login_required
 def recover(request):
     if request.method == 'POST' and request.POST['id']:
         task = Task.objects.get(id=request.POST['id'])
@@ -85,6 +95,7 @@ def recover(request):
         task.save()
     return redirect('/'+str(request.user.id))
 
+@login_required
 def edit(request):
     if request.method == 'POST' and request.POST['id']:
         form = TaskForm(request.POST)
@@ -108,14 +119,22 @@ def edit(request):
 # class OnlyYouMixin(UserOnlyMixin):
 
 def list(request,pk):
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False).order_by('deadline').order_by('when')
-    return render(request, 'list.html', {'tasks':tasks})
+    if request.user.pk != pk:
+        return redirect('login')
+    tasks_today = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()).order_by('deadline')
+    tasks_tomorrow = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('deadline')
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when')
+    return render(request, 'list.html', {'tasks':tasks, 'tasks_today':tasks_today, 'tasks_tomorrow':tasks_tomorrow})
 
 def form(request,pk):
+    if request.user.pk != pk:
+        return redirect('login')
     form = TaskForm()
     return render(request, 'form.html', {'form': form})
 
 def done_view(request,pk):
+    if request.user.pk != pk:
+        return redirect('login')
     dones = Task.objects.all().filter(user=request.user, done_or_not=True).order_by('-done_date')
     done_today = dones.filter(done_date=datetime.date.today())
     done_yes = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=1))
@@ -130,17 +149,21 @@ def done_view(request,pk):
 def done_edit_view(request):
     if request.method == 'POST' and request.POST.get('id'):
         id = request.POST['id']
-    form = DoneEditForm()
-    return render(request, 'done_edit.html', {'form': form, 'id': id})
+        form = DoneEditForm()
+        return render(request, 'done_edit.html', {'form': form, 'id': id})
+    return redirect('login')
 
 def edit_view(request):
     if request.method == 'POST' and request.POST.get('id'):
         id = request.POST['id']
-    form = TaskForm()
-    return render(request, 'edit.html', {'form': form, 'id': id})
+        form = TaskForm()
+        return render(request, 'edit.html', {'form': form, 'id': id})
+    return redirect('login')
 
 def today(request,pk):
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today())
+    if request.user.pk != pk:
+        return redirect('login')
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()).order_by('deadline')
     num = len(tasks)
     if num == 0:
         message = '今日のタスクは完了です！ゆっくり休みましょう！'
@@ -149,15 +172,12 @@ def today(request,pk):
     return render(request, 'today.html', {'tasks':tasks,'message':message})
 
 def tomorrow(request,pk):
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1))
+    if request.user.pk != pk:
+        return redirect('login')
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('deadline')
     num = len(tasks)
     if num == 0:
         message = '明日は自由に過ごしましょう！'
     else:
         message = '明日のタスクは{}個です！明日も頑張りましょう！'.format(num)
     return render(request, 'tomorrow.html', {'tasks':tasks,'message':message})
-
-@login_required
-def logout_view(request):
-    logout(request)
-    return redirect('/')
