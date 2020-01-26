@@ -56,8 +56,8 @@ def post(request):
             name=request.POST.get('name'),
             deadline=request.POST.get('deadline'),
             when=request.POST.get('when'),
-            important=request.POST.get('important'),
-            urgent=request.POST.get('urgent'),
+            important=form.cleaned_data['important'],
+            urgent=form.cleaned_data['urgent'],
             user=request.user
             )
         task.save()
