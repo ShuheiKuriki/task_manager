@@ -1,10 +1,6 @@
-{% extends "user_base.html" %}
-{% block title %}追加フォーム{% endblock %}
+{% extends "form_base.html" %}
+{% block title2 %}タスク追加フォーム{% endblock %}
+{% block h2 %}タスク追加フォーム{% endblock %}
 {% block active2 %}active{% endblock %}
-{% block content %}
-    <form method="POST" action="/post">
-        {% csrf_token %}
-        {{ form.as_ul }}
-        <button type="submit">作成</button>
-    </form>
-{% endblock %}
+{% block action %}/post{% endblock%}
+{% block message %}作成{% endblock%}

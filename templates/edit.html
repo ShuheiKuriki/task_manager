@@ -1,13 +1,6 @@
-{% extends "user_base.html" %}
-{% block title %}編集フォーム{% endblock %}
-{% block content %}
-    <h1>変更したい項目のみ入力してください</h1>
-{% endblock %}
-{% block content2 %}
-    <form method="POST" action="/edit">
-        {% csrf_token %}
-        {{ form.as_ul }}
-        <input name='id' type="hidden" value="{{ id }}"/>
-        <button type="submit">更新</button>
-    </form>
-{% endblock %}
+{% extends "form_base.html" %}
+{% block title2 %}編集フォーム{% endblock %}
+{% block h2 %}変更したい項目のみ<br>入力してください{% endblock %}
+{% block active3 %}active{% endblock %}
+{% block action %}/edit{% endblock%}
+{% block message %}更新{% endblock%}

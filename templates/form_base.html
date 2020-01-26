@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{% block title2 %}{% endblock %}{% endblock %}
+{% block nav %}
+<nav id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-nav-item">
+      <a class="js-scroll-trigger" href="/">Home</a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a class="js-scroll-trigger" href="{% url 'list' user.pk %}">一覧</a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a class="js-scroll-trigger" href="{% url 'today' user.pk %}">今日のタスク</a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a class="js-scroll-trigger" href="{% url 'tomorrow' user.pk %}">明日のタスク</a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a class="js-scroll-trigger" href="{% url 'done_view' user.pk %}">完了済み</a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a class="js-scroll-trigger" href="/logout">ログアウト</a>
+    </li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block header %}
+    <h2>{% block h2 %}{% endblock %}</h2>
+    <form class='col-xl-6 col-md-8 col-lg-6 col-sm-12 mx-auto m-5' method="POST" action='{% block action %}{% endblock%}'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-info btn-block my-5" type="submit">{% block message %}{% endblock%}</button>
+    </form>
+{% endblock %}
