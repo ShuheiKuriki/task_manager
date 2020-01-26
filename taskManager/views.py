@@ -56,6 +56,8 @@ def post(request):
             name=request.POST.get('name'),
             deadline=request.POST.get('deadline'),
             when=request.POST.get('when'),
+            important=request.POST.get('important'),
+            urgent=request.POST.get('urgent'),
             user=request.user
             )
         task.save()
@@ -110,6 +112,8 @@ def edit(request):
                 task.deadline = request.POST['deadline']
             if request.POST['when']!="":
                 task.when = request.POST['when']
+            task.important = request.POST['important']
+            task.urgent = request.POST['urgent']
             task.save()
     return redirect(to='/'+str(request.user.id))
 # class UserOnlyMixin(UserPassesTestMixin):

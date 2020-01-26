@@ -10,6 +10,8 @@
             <tr>
               <th scope='col'></th>
               <th scope='col'>今日完了したタスク : <span class='text-danger'>{{num_today}}個</span></th>
+              <th scope='col'>重要</th>
+              <th scope='col'>緊急</th>
               <th scope='col'>完了した日</th>
               <th scope='col'>編集</th>
               <th scope='col'>元に戻す</th>
@@ -20,7 +22,8 @@
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ done.name }}</td>
-                <td>{{ done.done_date }}</td>
+                <<td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
+                <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>td>{{ done.done_date }}</td>
                 <td>
                   <form method="POST" action="/done_edit_view">
                       {%csrf_token%}

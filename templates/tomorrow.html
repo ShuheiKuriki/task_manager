@@ -11,6 +11,8 @@
             <tr>
               <th scope='col'></th>
               <th scope='col'>タスク名</th>
+              <th scope='col'>重要</th>
+              <th scope='col'>緊急</th>
               <th scope='col'>実行予定日</th>
               <th scope='col'>期限</th>
               <th scope='col'>完了</th>
@@ -22,7 +24,8 @@
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ task.name }}</td>
-                <td>{{ task.when }}</td>
+                <td><td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
+                <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>{{ task.when }}</td>
                 <td>{{ task.deadline }}</td>
                 <td>
                   <form method="POST" action="/done">

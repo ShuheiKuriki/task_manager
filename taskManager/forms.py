@@ -12,7 +12,7 @@ class UserForm(ModelForm):
 class TaskForm(ModelForm):
     class Meta:
         model = Task
-        fields = ['name','deadline','when']
+        fields = ['name','when','deadline','important','urgent']
         # widgets = {
         #     'deadline': forms.SelectDateWidget,
         #     'when': forms.SelectDateWidget
