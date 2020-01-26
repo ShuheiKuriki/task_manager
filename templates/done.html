@@ -22,8 +22,8 @@
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ done.name }}</td>
-                <td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
-                <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
+                <td>{% if done.important == True %}○{% else %}✖️{% endif %}</td>
+                <td>{% if done.urgent == True %}○{% else %}✖️{% endif %}</td>
                 <td>{{ done.done_date }}</td>
                 <td>
                   <form method="POST" action="/done_edit_view">
@@ -62,8 +62,8 @@
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ done.name }}</td>
-                <td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
-                <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
+                <td>{% if done.important == True %}○{% else %}✖️{% endif %}</td>
+                <td>{% if done.urgent == True %}○{% else %}✖️{% endif %}</td>
                 <td>{{ done.done_date }}</td>
                 <td>
                   <form method="POST" action="/done_edit_view">
@@ -102,8 +102,8 @@
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ done.name }}</td>
-                <td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
-                <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
+                <td>{% if done.important == True %}○{% else %}✖️{% endif %}</td>
+                <td>{% if done.urgent == True %}○{% else %}✖️{% endif %}</td>
                 <td>{{ done.done_date }}</td>
                 <td>
                   <form method="POST" action="/done_edit_view">
