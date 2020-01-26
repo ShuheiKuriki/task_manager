@@ -30,7 +30,10 @@
     <form class='col-xl-6 col-md-8 col-lg-6 col-sm-12 mx-auto m-5' method="POST" action='{% block action %}{% endblock%}'>
         {% csrf_token %}
         {{ form.as_p }}
+<<<<<<< HEAD
         {% block input %}{% endblock%}
+=======
+>>>>>>> d49e541883c46a20f719115bf2203558a73044af
         <button class="btn btn-info btn-block my-5" type="submit">{% block message %}{% endblock%}</button>
     </form>
 {% endblock %}
