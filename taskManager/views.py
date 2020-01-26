@@ -30,13 +30,17 @@ def create_user_view(request):
     return render(request,'create_user_view.html', {'form':form})
 
 def create_user(request):
-    user=User.objects.create_user(
+    user = UserForm(request.POST)
+    if user.is_valid():
+        user=User.objects.create_user(
         request.POST.get('username'),
         request.POST.get('email'),
         request.POST.get('password')
     )
-    user.save()
-    return redirect('/accounts/login/')
+        user.save()
+        return redirect('/accounts/login/')
+    else:
+        return redirect('/create_user_view')
 
 @login_required
 def logout_view(request):
