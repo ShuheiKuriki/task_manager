@@ -206,3 +206,6 @@ def tomorrow(request,pk):
     else:
         message = '明日のタスクは{}個です！明日も頑張りましょう！'.format(num)
     return render(request, 'tomorrow.html', {'tasks':tasks,'message':message})
+
+def notice(request):
+    return render(request, 'notice.html')

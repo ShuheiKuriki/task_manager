@@ -5,3 +5,5 @@
 {% block action %}/done_edit{% endblock%}
 {% block input %}<input name='id' type="hidden" value="{{ id }}"/>{% endblock%}
 {% block message %}更新{% endblock%}
+{% block url %}{% url 'done_view' user.pk %}{% endblock%}
+{% block name %}編集{% endblock%}
