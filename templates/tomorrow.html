@@ -5,7 +5,6 @@
     <h1>{{message}}</h1>
 {% endblock %}
 {% block content2 %}
-    {% if user.is_authenticated %}
         <table class='table border col-12'>
           <thead>
             <tr>
@@ -24,8 +23,9 @@
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ task.name }}</td>
-                <td><td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
-                <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>{{ task.when }}</td>
+                <td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
+                <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
+                <td>{{ task.when }}</td>
                 <td>{{ task.deadline }}</td>
                 <td>
                   <form method="POST" action="/done">
@@ -38,14 +38,11 @@
                   <form method="POST" action="/edit_view">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit" class='samll'>edit</button>
+                      <button type="submit" class='small'>edit</button>
                   </form>
                 </td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
-    {%else%}
-        <h1>ログインして下さい</h1>
-    {%endif%}
 {% endblock %}
