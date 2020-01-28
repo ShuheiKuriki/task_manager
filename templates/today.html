@@ -13,7 +13,7 @@
               <th scope='col'>タスク名</th>
               <th scope='col'>重要</th>
               <th scope='col'>緊急</th>
-              <th scope='col'>実行予定日</th>
+              <th scope='col'>実行日</th>
               <th scope='col'>期限</th>
               <th scope='col'>完了</th>
               <th scope='col'>編集</th>
@@ -31,14 +31,14 @@
                   <form method="POST" action="/done">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">完了</button>
+                      <button type="submit" class='small'>done</button>
                   </form>
                 </td>
                 <td>
                   <form method="POST" action="/edit_view">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">編集</button>
+                      <button type="submit" class='samall'>edit</button>
                   </form>
                 </td>
               </tr>

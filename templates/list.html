@@ -5,14 +5,15 @@
 <h1>{{user.username}}さん 今日も頑張りましょう！</h1>
 {% endblock %}
 {% block content2 %}
+    {% for dic in dics %}
         <table class='table border col-12'>
           <thead>
             <tr>
               <th scope='col'></th>
-              <th scope='col'>今日のタスク : <span class='text-danger'>{{num_today}}個</span></th>
+              <th scope='col'>{{dic.name}}のタスク : <span class='text-danger'>{{dic.num}}個</span></th>
               <th scope='col'>重要</th>
               <th scope='col'>緊急</th>
-              <th scope='col'>実行予定日</th>
+              <th scope='col'>実行日</th>
               <th scope='col'>期限</th>
               <th scope='col'>完了</th>
               <th scope='col'>編集</th>
@@ -20,137 +21,38 @@
             </tr>
           </thead>
           <tbody>
-            {% for task in tasks_today %}
+            {% for task in dic.tasks %}
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ task.name }}</td>
                 <td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
                 <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
-                <td>{{ task.when }}</td>
-                <td>{{ task.deadline }}</td>
+                <td>{{ task.when.month }}/{{ task.when.day }}</td>
+                <td>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td>
                   <form method="POST" action="/done">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">完了</button>
+                      <button type="submit" class='small'>done</button>
                   </form>
                 </td>
                 <td>
                   <form method="POST" action="/edit_view">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">編集</button>
+                      <button type="submit" class='small'>edit</button>
                   </form>
                 </td>
                 <td>
                   <form method="POST" action="/delete">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">削除</button>
+                      <button type="submit" class='small'>del</button>
                   </form>
                 </td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
-{% endblock %}
-{% block content3 %}
-        <table class='table border col-12'>
-          <thead>
-            <tr>
-              <th scope='col'></th>
-              <th scope='col'>明日のタスク : <span class='text-danger'>{{num_tom}}個</span></th>
-              <th scope='col'>重要</th>
-              <th scope='col'>緊急</th>
-              <th scope='col'>実行予定日</th>
-              <th scope='col'>期限</th>
-              <th scope='col'>完了</th>
-              <th scope='col'>編集</th>
-              <th scope='col'>削除</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for task in tasks_tom %}
-              <tr>
-                <th scope='row'>{{ forloop.counter }}</th>
-                <td>{{ task.name }}</td>
-                <td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
-                <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
-                <td>{{ task.when }}</td>
-                <td>{{ task.deadline }}</td>
-                <td>
-                  <form method="POST" action="/done">
-                      {%csrf_token%}
-                      <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">完了</button>
-                  </form>
-                </td>
-                <td>
-                  <form method="POST" action="/edit_view">
-                      {%csrf_token%}
-                      <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">編集</button>
-                  </form>
-                </td>
-                <td>
-                  <form method="POST" action="/delete">
-                      {%csrf_token%}
-                      <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">削除</button>
-                  </form>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-{% endblock %}
-{% block content4 %}
-        <table class='table border col-12'>
-          <thead>
-            <tr>
-              <th scope='col'></th>
-              <th scope='col'>明後日以降のタスク</th>
-              <th scope='col'>重要</th>
-              <th scope='col'>緊急</th>
-              <th scope='col'>実行予定日</th>
-              <th scope='col'>期限</th>
-              <th scope='col'>完了</th>
-              <th scope='col'>編集</th>
-              <th scope='col'>削除</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for task in tasks %}
-              <tr>
-                <th scope='row'>{{ forloop.counter }}</th>
-                <td>{{ task.name }}</td>
-                <td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
-                <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
-                <td>{{ task.when }}</td>
-                <td>{{ task.deadline }}</td>
-                <td>
-                  <form method="POST" action="/done">
-                      {%csrf_token%}
-                      <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">完了</button>
-                  </form>
-                </td>
-                <td>
-                  <form method="POST" action="/edit_view">
-                      {%csrf_token%}
-                      <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">編集</button>
-                  </form>
-                </td>
-                <td>
-                  <form method="POST" action="/delete">
-                      {%csrf_token%}
-                      <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">削除</button>
-                  </form>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    {% endfor %}
 {% endblock %}

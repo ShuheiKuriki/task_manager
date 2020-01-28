@@ -31,14 +31,14 @@
                   <form method="POST" action="/done">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">完了</button>
+                      <button type="submit" class='small'>done</button>
                   </form>
                 </td>
                 <td>
                   <form method="POST" action="/edit_view">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit">編集</button>
+                      <button type="submit" class='samll'>edit</button>
                   </form>
                 </td>
               </tr>

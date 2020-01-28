@@ -138,7 +138,12 @@ def list(request,pk):
     tasks = tasks.filter(user=request.user, done_or_not=False, when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when')
     num_today = len(tasks_today)
     num_tom = len(tasks_tom)
-    return render(request, 'list.html', {'tasks':tasks, 'tasks_today':tasks_today, 'tasks_tom':tasks_tom, 'num_today':num_today, 'num_tom':num_tom})
+    num = len(tasks)
+    today = {'tasks':tasks_today, 'num':num_today, 'name':'今日'}
+    tom = {'tasks':tasks_tom, 'num':num_tom, 'name':'明日'}
+    other = {'tasks':tasks, 'num':num, 'name':'明日以降'}
+    dics = [today, tom, other]
+    return render(request, 'list.html', {'dics':dics})
 
 def form(request,pk):
     if request.user.pk != pk:
@@ -155,11 +160,16 @@ def done_view(request,pk):
     dones = dones.filter(done_date__lt=datetime.date.today()-datetime.timedelta(days=1))
     num_today = len(done_today)
     num_yes = len(done_yes)
+    num = len(dones)
+    today = {'done':done_today, 'num':num_today, 'name':'今日'}
+    yes = {'done':done_yes, 'num':num_yes, 'name':'昨日'}
+    other = {'done':dones, 'num':num, 'name':'昨日以前'}
+    dics = [today, yes, other]
     if num_today == 0:
         message = '昨日は{}個のタスクをこなしました。今日も頑張りましょう！'.format(num_yes)
     else:
         message = '今日は{}個のタスクをこなしました。よく頑張りましたね！'.format(num_today)
-    return render(request, 'done.html', {'dones':dones, 'done_today':done_today, 'done_yes':done_yes, 'num_today':num_today, 'num_yes':num_yes, 'message':message})
+    return render(request, 'done.html', {'dics':dics, 'message':message})
 
 def done_edit_view(request):
     if request.method == 'POST' and request.POST.get('id'):
