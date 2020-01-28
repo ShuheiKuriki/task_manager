@@ -13,7 +13,7 @@
     <!-- <nav class="navbar navbar-dark bg-dark mt-3 mb-3">
       <a class="navbar-brand" href="/">タスク管理アプリ</a>
     </nav> -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mt-3 mb-3">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/">Task Scheduler</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarText" aria-controls="navbarText"
@@ -22,17 +22,20 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item {% block active1 %}{% endblock %}">
+                <li class="nav-item {% block active_list %}{% endblock %}">
                     <a class="nav-link" href="{% url 'list' user.pk%}">一覧</a>
                 </li>
-                <li class="nav-item {% block active2 %}{% endblock %}">
+                <li class="nav-item {% block active_today %}{% endblock %}">
                     <a class="nav-link" href="{% url 'today' user.pk %}">今日のタスク</a>
                 </li>
-                <li class="nav-item {% block active3 %}{% endblock %}">
+                <li class="nav-item {% block active_tomorrow %}{% endblock %}">
                     <a class="nav-link" href="{% url 'tomorrow' user.pk %}">明日のタスク</a>
                 </li>
-                <li class="nav-item {% block active4 %}{% endblock %}">
+                <li class="nav-item {% block active_done %}{% endblock %}">
                     <a class="nav-link" href="{% url 'done_view' user.pk %}">完了済み</a>
+                </li>
+                <li class="nav-item {% block active_notice %}{% endblock %}">
+                    <a class="nav-link" href="{% url 'notice' %}">お知らせ</a>
                 </li>
             </ul>
             {% if user.is_authenticated %}
@@ -52,19 +55,21 @@
         </div>
     </nav>
     <!-- <div class="jumbotron"> -->
-      <div class="container mt-3 mb-3">
-        {% block content %}
-        {% endblock %}
+      <div class="container">
+        <div class="m-4">
+          {% block content %}
+          {% endblock %}
+        </div>
       </div>
-      <div class="container mt-3 mb-3">
+      <div class="container">
         {% block content2 %}
         {% endblock %}
       </div>
-      <div class="container mt-3 mb-3">
+      <div class="container">
         {% block content3 %}
         {% endblock %}
       </div>
-      <div class="container mt-3 mb-3">
+      <div class="container">
         {% block content4 %}
         {% endblock %}
       </div>

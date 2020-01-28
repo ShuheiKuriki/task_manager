@@ -25,19 +25,32 @@
 
 <body id="page-top">
 
-  <!-- Navigation -->
   <a class="menu-toggle rounded" href="#">
     <i class="fas fa-bars"></i>
   </a>
-  {% block nav %}
-  {% endblock %}
+  <nav id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="/">Home</a>
+      </li>
+      {% block li %}
+      {% endblock %}
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="/notice">お知らせ</a>
+      </li>
+    </ul>
+  </nav>
+  <!-- Navigation -->
 
   <!-- Header -->
-  <header class="masthead d-flex">
-    <div class="container text-center my-auto">
-      {% block header %}
-      {% endblock %}
-    </div>
+  <header class="masthead">
+      <div class='mt-3 mb-4 mx-3'>
+        <a class="text-dark text-left btn btn-dark" href="/">Task Scheduler</a>
+      </div>
+      <div class='container text-center'>
+        {% block header %}
+        {% endblock %}
+      </div>
     <div class="overlay"></div>
   </header>
 
