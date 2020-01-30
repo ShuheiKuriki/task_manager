@@ -14,14 +14,18 @@
       <a class="navbar-brand" href="/">タスク管理アプリ</a>
     </nav> -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">Task Scheduler</a>
+        <a class="navbar-brand" href='{% url 'list' user.pk %}'>Task Scheduler</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarText" aria-controls="navbarText"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
+            {% if user.is_authenticated %}
             <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a href="/post" class="nav-link">タスク追加</a>
+                </li>
                 <li class="nav-item {% block active_list %}{% endblock %}">
                     <a class="nav-link" href="{% url 'list' user.pk%}">一覧</a>
                 </li>
@@ -38,11 +42,7 @@
                     <a class="nav-link" href="{% url 'notice' %}">お知らせ</a>
                 </li>
             </ul>
-            {% if user.is_authenticated %}
             <ul class="navbar-nav">
-              <li class="nav-item active">
-                  <a href="/post" class="nav-link">タスク追加</a>
-              </li>
               <li class="nav-item active">
                   <a href="/logout" class="nav-link">ログアウト</a>
               </li>

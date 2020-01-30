@@ -45,7 +45,11 @@
   <!-- Header -->
   <header class="masthead">
       <div class='mt-3 mb-4 mx-3'>
-        <a class="text-dark text-left btn btn-dark" href="/">Task Scheduler</a>
+        {% if user.is_authenticated %}
+          <a class="text-dark text-left btn btn-dark" href='{% url 'list' user.pk %}'>Task Scheduler</a>
+        {% else %}
+          <a class="text-dark text-left btn btn-dark" href="/">Task Scheduler</a>
+        {% endif %}
       </div>
       <div class='container text-center'>
         {% block header %}
