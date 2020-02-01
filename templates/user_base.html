@@ -79,12 +79,11 @@
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <!-- <script src="{% static 'vendor/jquery/jquery.ui.touch-punch.min.js' %}"></script> -->
-    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script src="{% static 'jquery-ui-touch-punch/jquery.ui.touch-punch.min.js' %}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
           	$('.sortable').sortable({
+              cursor: 'move'
               opacity: 0.5,
               update: function(event, ui) {
                 var serial = $('.sortable').sortable('serialize');
