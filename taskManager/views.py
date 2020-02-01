@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -6,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import TaskForm, UserForm, DoneEditForm
 from .models import Task
 import datetime
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     return render(request, 'index.html')
@@ -188,12 +190,12 @@ def edit_view(request):
 def today(request,pk):
     if request.user.pk != pk:
         return redirect('login')
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__lte=datetime.date.today()).order_by('deadline')
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__lte=datetime.date.today()).order_by('order')
     num = len(tasks)
     if num == 0:
         message = '今日のタスクは完了です！ゆっくり休みましょう！'
     else:
-        message = '今日のタスクはあと{}個です！頑張りましょう！'.format(num)
+        message = '今日のタスクはあと{}個です！'.format(num)
     return render(request, 'today.html', {'tasks':tasks,'message':message})
 
 def tomorrow(request,pk):
@@ -209,3 +211,11 @@ def tomorrow(request,pk):
 
 def notice(request):
     return render(request, 'notice.html')
+
+@csrf_exempt
+def sort(request):
+    for order, id in enumerate(request.POST.getlist('task[]')):
+        task = Task.objects.get(id=id)
+        task.order = order
+        task.save()
+    return HttpResponse('')

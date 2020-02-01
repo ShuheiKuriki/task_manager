@@ -12,6 +12,7 @@ class Task(models.Model):
     done_or_not = models.BooleanField(default=False)
     done_date = models.DateField('完了した日', default=now, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    order = models.IntegerField('順番', default=0)
 
 
 # class Done(models.Model):

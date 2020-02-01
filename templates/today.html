@@ -3,6 +3,7 @@
 {% block active_today %}active{% endblock %}
 {% block content %}
     <h1>{{message}}</h1>
+    <h2>ドラッグ＆ドロップで優先順に並び替えましょう！</h2>
 {% endblock %}
 {% block content2 %}
     {% if user.is_authenticated %}
@@ -19,10 +20,10 @@
               <th scope='col'>編集</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class='sortable'>
             {% for task in tasks %}
-              <tr>
-                <th scope='row'>{{ forloop.counter }}</th>
+              <tr id="task_{{ task.id }}">
+                <th name="num_data" scope='row'>{{ forloop.counter }}</th>
                 <td>{{ task.name }}</td>
                 <td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
                 <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td><td>{{ task.when }}</td>
