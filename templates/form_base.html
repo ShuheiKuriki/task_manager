@@ -1,11 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{% block title2 %}{% endblock %}{% endblock %}
-{% block nav %}
-<nav id="sidebar-wrapper">
-  <ul class="sidebar-nav">
-    <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="/">Home</a>
-    </li>
+{% block li %}
     <li class="sidebar-nav-item">
       <a class="js-scroll-trigger" href="{% url 'list' user.pk %}">一覧</a>
     </li>
@@ -21,11 +16,6 @@
     <li class="sidebar-nav-item">
       <a class="js-scroll-trigger" href="/logout">ログアウト</a>
     </li>
-    <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'notice' %}">お知らせ</a>
-    </li>
-  </ul>
-</nav>
 {% endblock %}
 
 {% block header %}

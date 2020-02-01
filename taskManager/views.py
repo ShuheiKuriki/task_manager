@@ -188,7 +188,7 @@ def edit_view(request):
 def today(request,pk):
     if request.user.pk != pk:
         return redirect('login')
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()).order_by('deadline')
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__lte=datetime.date.today()).order_by('deadline')
     num = len(tasks)
     if num == 0:
         message = '今日のタスクは完了です！ゆっくり休みましょう！'
