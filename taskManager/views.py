@@ -135,8 +135,8 @@ def list(request,pk):
     if request.user.pk != pk:
         return redirect('login')
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
-    tasks_today = tasks.filter(when__lte=datetime.date.today()).order_by('deadline')
-    tasks_tom = tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('deadline')
+    tasks_today = tasks.filter(when__lte=datetime.date.today()).order_by('order')
+    tasks_tom = tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
     tasks = tasks.filter(user=request.user, done_or_not=False, when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when')
     num_today = len(tasks_today)
     num_tom = len(tasks_tom)
@@ -192,22 +192,14 @@ def today(request,pk):
         return redirect('login')
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__lte=datetime.date.today()).order_by('order')
     num = len(tasks)
-    if num == 0:
-        message = '今日のタスクは完了です！ゆっくり休みましょう！'
-    else:
-        message = '今日のタスクはあと{}個です！'.format(num)
-    return render(request, 'today.html', {'tasks':tasks,'message':message})
+    return render(request, 'today.html', {'tasks':tasks,'num':num})
 
 def tomorrow(request,pk):
     if request.user.pk != pk:
         return redirect('login')
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('deadline')
     num = len(tasks)
-    if num == 0:
-        message = '明日は自由に過ごしましょう！'
-    else:
-        message = '明日のタスクは{}個です！明日も頑張りましょう！'.format(num)
-    return render(request, 'tomorrow.html', {'tasks':tasks,'message':message})
+    return render(request, 'tomorrow.html', {'tasks':tasks,'num':num})
 
 def notice(request):
     return render(request, 'notice.html')

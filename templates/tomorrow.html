@@ -2,7 +2,12 @@
 {% block title %}明日の予定ページ{% endblock %}
 {% block active_tomorrow %}active{% endblock %}
 {% block content %}
-    <h1>{{message}}</h1>
+    {% if num == 0 %}
+          <h1>明日は自由に過ごしましょう！</h1>
+    {% else %}
+          <h1>明日のタスクは{{num}}個です！</h1>
+          <h2>ドラッグ＆ドロップで優先順に並び替えましょう！</h2>
+    {% endif %}
 {% endblock %}
 {% block content2 %}
         <table class='table border col-12'>
@@ -18,10 +23,10 @@
               <th scope='col'>編集</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class='sortable'>
             {% for task in tasks %}
-              <tr>
-                <th scope='row'>{{ forloop.counter }}</th>
+              <tr id="task_{{ task.id }}">
+                <th name="num_data" scope='row'>{{ forloop.counter }}</th>
                 <td>{{ task.name }}</td>
                 <td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
                 <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>

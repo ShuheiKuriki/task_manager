@@ -2,8 +2,12 @@
 {% block title %}今日のタスクページ{% endblock %}
 {% block active_today %}active{% endblock %}
 {% block content %}
-    <h1>{{message}}</h1>
-    <h2>ドラッグ＆ドロップで優先順に並び替えましょう！</h2>
+    {% if num == 0 %}
+          <h1>今日のタスクは完了です！ゆっくり休みましょう！</h1>
+    {% else %}
+          <h1>今日のタスクはあと{{num}}個です！</h1>
+          <h2>ドラッグ＆ドロップで優先順に並び替えましょう！</h2>
+    {% endif %}
 {% endblock %}
 {% block content2 %}
     {% if user.is_authenticated %}
