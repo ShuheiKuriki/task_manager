@@ -20,10 +20,10 @@
               <th scope='col'>削除</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class='sortable'>
             {% for task in dic.tasks %}
-              <tr>
-                <th scope='row'>{{ forloop.counter }}</th>
+              <tr id="task_{{ task.id }}">
+                <th name="num_data" scope='row'>{{ forloop.counter }}</th>
                 <td>{{ task.name }}</td>
                 <td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
                 <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
