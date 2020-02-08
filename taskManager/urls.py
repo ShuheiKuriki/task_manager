@@ -14,13 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path('auth/', include('allauth.urls')),     # 追加
     path('', views.index, name='index'),
     path('sample', views.sample),
     path('<int:pk>', views.list, name='list'),
@@ -35,6 +36,7 @@ urlpatterns = [
     path('edit_view', views.edit_view),
     path('recover', views.recover),
     path('notice', views.notice, name='notice'),
+    path('notify', views.notify, name='notify'),
     path('<int:pk>/today', views.today, name='today'),
     path('<int:pk>/tomorrow', views.tomorrow, name='tomorrow'),
     path('login_view', views.login_view, name='login'),
@@ -42,5 +44,6 @@ urlpatterns = [
     path('create_user_view/', views.create_user_view),
     path('logout/',views.logout_view),
     path('accounts/login/', LoginView.as_view(template_name='login_view.html')),
-    path('sort', views.sort, name='sort')
+    path('sort', views.sort, name='sort'),
+    path('callback/', views.callback, name='callback')
 ]

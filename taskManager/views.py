@@ -1,13 +1,17 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.template.loader import render_to_string
 from .forms import TaskForm, UserForm, DoneEditForm
-from .models import Task
+from .models import Task, LinePush
 import datetime
 from django.views.decorators.csrf import csrf_exempt
+import json
+import linebot
+from linebot.models import TextSendMessage
 
 def index(request):
     return render(request, 'index.html')
@@ -211,3 +215,38 @@ def sort(request):
         task.order = order
         task.save()
     return HttpResponse('')
+
+@csrf_exempt
+def callback(request):
+    """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
+    if request.method == 'POST':
+        request_json = json.loads(request.body.decode('utf-8'))
+        events = request_json['events']
+        line_user_id = events[0]['source']['userId']
+        # チャネル設定のWeb hook接続確認時にはここ。このIDで見に来る。
+        if line_user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
+            return HttpResponse("接続確認されました")
+        # 友達追加時・ブロック解除時
+        elif events[0]['type'] == 'follow':
+            LinePush.objects.create(user_id=line_user_id)
+            return HttpResponse("登録しました")
+        # アカウントがブロックされたとき
+        elif events[0]['type'] == 'unfollow':
+            LinePush.objects.filter(user_id=line_user_id).delete()
+            return HttpResponse("登録解除しました")
+
+    return HttpResponse("登録していません")
+
+def notify(request):
+    line_bot_api = linebot.LineBotApi('ffezaFUdv0+TQl/LDJ15LziQLKiekNyl5qwkMyLDtPXFZ2b97w9ZR+qZSIuZ6OSrbcWa2J0sVJDttSoUE8alOPWeh4R8zW/mh3s1emX6v6XlVKz5hvgpCi5YQ0vNbHwDCVHAaWNcpszacPzgIvvuggdB04t89/1O/w1cDnyilFU=')
+    users = LinePush.objects.all()
+    if len(users) == 0:
+        return HttpResponse("送信する相手がいません")
+    else:
+        for push in LinePush.objects.all():
+            context = {
+                'task': "散歩する",
+            }
+            message = render_to_string('notify_message.txt', context, request)
+            line_bot_api.push_message(push.user_id, messages=TextSendMessage(text=message))
+        return HttpResponse("送信しました")

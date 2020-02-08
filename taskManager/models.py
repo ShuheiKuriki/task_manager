@@ -14,6 +14,13 @@ class Task(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order = models.IntegerField('順番', default=0)
 
+class LinePush(models.Model):
+    """Lineでのプッシュ先を表す"""
+    user_id = models.CharField('ユーザーID', max_length=100, unique=True)
+
+    def __str__(self):
+        return self.user_id
+
 
 # class Done(models.Model):
 #     name = models.CharField(max_length=256)
