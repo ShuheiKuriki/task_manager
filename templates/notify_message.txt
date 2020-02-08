@@ -1,4 +1,1 @@
-明日のタスクは以下です
-
-{{ task }}
-{{ request.scheme }}://{{ request.get_host }}{% url 'list' 1 %}
+{{ request }}

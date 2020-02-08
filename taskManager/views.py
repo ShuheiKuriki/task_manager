@@ -219,23 +219,23 @@ def sort(request):
 @csrf_exempt
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
-    if request.method == 'POST':
-        request_json = json.loads(request.body.decode('utf-8'))
-        events = request_json['events']
-        line_user_id = events[0]['source']['userId']
-        # チャネル設定のWeb hook接続確認時にはここ。このIDで見に来る。
-        if line_user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
-            return HttpResponse("接続確認されました")
-        # 友達追加時・ブロック解除時
-        elif events[0]['type'] == 'follow':
-            LinePush.objects.create(user_id=line_user_id)
-            return HttpResponse("登録しました")
-        # アカウントがブロックされたとき
-        elif events[0]['type'] == 'unfollow':
-            LinePush.objects.filter(user_id=line_user_id).delete()
-            return HttpResponse("登録解除しました")
+    # if request.method == 'POST':
+        # request_json = json.loads(request.body.decode('utf-8'))
+        # events = request_json['events']
+        # line_user_id = events[0]['source']['userId']
+        # # チャネル設定のWeb hook接続確認時にはここ。このIDで見に来る。
+        # if line_user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
+        #     return HttpResponse("接続確認されました")
+        # # 友達追加時・ブロック解除時
+        # elif events[0]['type'] == 'follow':
+        #     LinePush.objects.create(user_id=line_user_id)
+        #     return HttpResponse("登録しました")
+        # # アカウントがブロックされたとき
+        # elif events[0]['type'] == 'unfollow':
+        #     LinePush.objects.filter(user_id=line_user_id).delete()
+        #     return HttpResponse("登録解除しました")
 
-    return HttpResponse("登録していません")
+    return render(request, 'notify_message.txt', {'request':request})
 
 def notify(request):
     line_bot_api = linebot.LineBotApi('ffezaFUdv0+TQl/LDJ15LziQLKiekNyl5qwkMyLDtPXFZ2b97w9ZR+qZSIuZ6OSrbcWa2J0sVJDttSoUE8alOPWeh4R8zW/mh3s1emX6v6XlVKz5hvgpCi5YQ0vNbHwDCVHAaWNcpszacPzgIvvuggdB04t89/1O/w1cDnyilFU=')
