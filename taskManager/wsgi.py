@@ -8,9 +8,9 @@ https://docs.djangoproject.com/en/3.0/howto/deployment/wsgi/
 """
 
 import os
-import time
-import schedule
-import threading
+# import time
+# import schedule
+# import threading
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'taskManager.settings.prod')

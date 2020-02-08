@@ -31,6 +31,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'django.contrib.sites',                         #追加
+    # 'allauth',                                      #追加
+    # 'allauth.account',                              #追加
+    # 'allauth.socialaccount',                        #追加
+    # 'allauth.socialaccount.providers.line',
     'taskManager',
     'bootstrap4',
 ]
@@ -111,3 +116,23 @@ STATICFILES_DIRS= [
 ]
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+# Don't forget this little dude.
+# SITE_ID = 1
+#
+# # ログインのリダイレクトURL
+# LOGIN_REDIRECT_URL = '/'
+#
+# # ログアウトのリダイレクトURL
+# ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+#
+# AUTHENTICATION_BACKENDS = (
+#     'django.contrib.auth.backends.ModelBackend',
+#     "allauth.account.auth_backends.AuthenticationBackend",
+# )
+#
+# SOCIALACCOUNT_PROVIDERS = {
+#     'line': {
+#         'SCOPE': ['profile','openid'],
+#     }
+# }
