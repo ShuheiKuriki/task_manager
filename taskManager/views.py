@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.template.loader import render_to_string
 from .forms import TaskForm, UserForm, DoneEditForm
-from .models import Task, LinePush
+from .models import Task
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 import json
