@@ -10,7 +10,7 @@ from .models import Task
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 import json
-import linebot
+from linebot import LineBotApi, WebhookHandler
 from linebot.models import TextSendMessage
 
 def index(request):
@@ -219,6 +219,22 @@ def sort(request):
 @csrf_exempt
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
+    handler = WebhookHandler('CHANNEL_SECRET')
+
+    # get X-Line-Signature header value
+    signature = request.headers['X-Line-Signature']
+
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+
+    # handle webhook body
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+
+    return 'OK'
     # if request.method == 'POST':
         # request_json = json.loads(request.body.decode('utf-8'))
         # events = request_json['events']
@@ -235,10 +251,10 @@ def callback(request):
         #     LinePush.objects.filter(user_id=line_user_id).delete()
         #     return HttpResponse("登録解除しました")
 
-    return render(request, 'notify_message.txt', {'request':request})
+    # return render(request, 'notify_message.txt', {'request':request})
 
 def notify(request):
-    line_bot_api = linebot.LineBotApi('ffezaFUdv0+TQl/LDJ15LziQLKiekNyl5qwkMyLDtPXFZ2b97w9ZR+qZSIuZ6OSrbcWa2J0sVJDttSoUE8alOPWeh4R8zW/mh3s1emX6v6XlVKz5hvgpCi5YQ0vNbHwDCVHAaWNcpszacPzgIvvuggdB04t89/1O/w1cDnyilFU=')
+    line_bot_api = LineBotApi('CHANNEL_ACCESS_TOKEN')
     users = LinePush.objects.all()
     if len(users) == 0:
         return HttpResponse("送信する相手がいません")
