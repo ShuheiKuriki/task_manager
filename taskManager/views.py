@@ -219,7 +219,8 @@ def sort(request):
 @csrf_exempt
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
-    handler = WebhookHandler('CHANNEL_SECRET')
+    CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
+    handler = WebhookHandler(CHANNEL_SECRET)
 
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
@@ -254,7 +255,8 @@ def callback(request):
     # return render(request, 'notify_message.txt', {'request':request})
 
 def notify(request):
-    line_bot_api = LineBotApi('CHANNEL_ACCESS_TOKEN')
+    CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
+    line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
     users = LinePush.objects.all()
     if len(users) == 0:
         return HttpResponse("送信する相手がいません")
