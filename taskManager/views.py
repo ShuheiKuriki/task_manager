@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import TextSendMessage
+import os
 
 def index(request):
     return render(request, 'index.html')
@@ -220,39 +221,39 @@ def sort(request):
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
     CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
-    handler = WebhookHandler(CHANNEL_SECRET)
+    # handler = WebhookHandler(CHANNEL_SECRET)
+    #
+    # # get X-Line-Signature header value
+    # signature = request.headers['X-Line-Signature']
+    #
+    # # get request body as text
+    # body = request.get_data(as_text=True)
+    # app.logger.info("Request body: " + body)
+    #
+    # # handle webhook body
+    # try:
+    #     handler.handle(body, signature)
+    # except InvalidSignatureError:
+    #     abort(400)
+    #
+    # return 'OK'
+    if request.method == 'POST':
+        request_json = json.loads(request.body.decode('utf-8'))
+        events = request_json['events']
+        line_user_id = events[0]['source']['userId']
+        # チャネル設定のWeb hook接続確認時にはここ。このIDで見に来る。
+        if line_user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
+            return HttpResponse("接続確認されました")
+        # 友達追加時・ブロック解除時
+        elif events[0]['type'] == 'follow':
+            LinePush.objects.create(user_id=line_user_id)
+            return HttpResponse("登録しました")
+        # アカウントがブロックされたとき
+        elif events[0]['type'] == 'unfollow':
+            LinePush.objects.filter(user_id=line_user_id).delete()
+            return HttpResponse("登録解除しました")
 
-    # get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
-
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-
-    # handle webhook body
-    try:
-        handler.handle(body, signature)
-    except InvalidSignatureError:
-        abort(400)
-
-    return 'OK'
-    # if request.method == 'POST':
-        # request_json = json.loads(request.body.decode('utf-8'))
-        # events = request_json['events']
-        # line_user_id = events[0]['source']['userId']
-        # # チャネル設定のWeb hook接続確認時にはここ。このIDで見に来る。
-        # if line_user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
-        #     return HttpResponse("接続確認されました")
-        # # 友達追加時・ブロック解除時
-        # elif events[0]['type'] == 'follow':
-        #     LinePush.objects.create(user_id=line_user_id)
-        #     return HttpResponse("登録しました")
-        # # アカウントがブロックされたとき
-        # elif events[0]['type'] == 'unfollow':
-        #     LinePush.objects.filter(user_id=line_user_id).delete()
-        #     return HttpResponse("登録解除しました")
-
-    # return render(request, 'notify_message.txt', {'request':request})
+    return render(request, 'notify_message.txt', {'request':request.method})
 
 def notify(request):
     CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
