@@ -279,7 +279,7 @@ def callback(request,pk):
 def test(request):
     return HttpResponse(Task.objects.all().get(id=1).name)
 
-def notify(request):
+def notify(request, when):
     try:
         CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
     except:
@@ -295,9 +295,14 @@ def notify(request):
             tasks_today = Task.objects.all().filter(user=push.user, done_or_not=False, when__lte=datetime.date.today()).order_by('order')
             tasks_tom = Task.objects.all().filter(user=push.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
             context = {
-                'tasks': {"today" : tasks_today, "tom": tasks_tom}
+                'tasks': {"today" : tasks_today, "tom": tasks_tom},
+                "id" : push.user.id
             }
-            message = render_to_string('notify_message.txt', context, request)
+            if when == 'night':
+                text = "notify_message_night.txt"
+            else:
+                text = "notify_message.txt"
+            message = render_to_string(text, context, request)
             logger.error("message OK")
             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
         return HttpResponse("送信しました")

@@ -36,7 +36,7 @@ urlpatterns = [
     path('edit_view', views.edit_view),
     path('recover', views.recover),
     path('notice', views.notice, name='notice'),
-    path('notify', views.notify, name='notify'),
+    path('notify/<str:when>', views.notify, name='notify'),
     path('<int:pk>/today', views.today, name='today'),
     path('<int:pk>/tomorrow', views.tomorrow, name='tomorrow'),
     path('login_view', views.login_view, name='login'),
