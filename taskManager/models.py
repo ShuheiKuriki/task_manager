@@ -17,9 +17,6 @@ class Task(models.Model):
 class LinePush(models.Model):
     user_id = models.CharField('ユーザーID', max_length=100, unique=True)
 
-    def __str__(self):
-        return self.user_id
-
 
 # class Done(models.Model):
 #     name = models.CharField(max_length=256)
