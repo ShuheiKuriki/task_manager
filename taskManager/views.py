@@ -221,8 +221,9 @@ def sort(request):
 @login_required
 def line(request):
     return render(request, 'add_line.html')
+
 @csrf_exempt
-def callback(request):
+def callback(request,pk):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
     logger = logging.getLogger(__name__)
     # logger.error('OK')
@@ -263,6 +264,7 @@ def callback(request):
         # 友達追加時・ブロック解除時
         elif events[0]['type'] == 'follow':
             logger.error("follow")
+            user = User.objects.all().filter(id=pk)
             logger.error(request.user)
             linepush = LinePush.objects.create(line_id=line_user_id, user=request.user)
             linepush.save()
@@ -273,6 +275,9 @@ def callback(request):
             LinePush.objects.filter(line_id=line_user_id).delete()
     return HttpResponse()
     # return render(request, 'notify_message.txt', {'request':request})
+
+def test(request):
+    return HttpResponse(User.objects.all().filter(id=1))
 
 def notify(request):
     try:
