@@ -27,11 +27,11 @@ def daily():
         schedule.run_pending()
         time.sleep(60)
 
-def secondly():
-    schedule.every(1).seconds.do(notify)
+def minutely():
+    schedule.every(1).minutes.do(notify)
     while True:
         schedule.run_pending()
         time.sleep(1)
 
-t = threading.Thread(target=secondly)
+t = threading.Thread(target=minutely)
 t.start()
