@@ -263,6 +263,7 @@ def callback(request):
         # 友達追加時・ブロック解除時
         elif events[0]['type'] == 'follow':
             logger.error("follow")
+            logger.error(request.user)
             linepush = LinePush.objects.create(line_id=line_user_id, user=request.user)
             linepush.save()
             logger.error("追加しました")
