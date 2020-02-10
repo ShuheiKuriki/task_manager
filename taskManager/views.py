@@ -13,6 +13,7 @@ import json
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import TextSendMessage
 import os
+import logging
 
 def index(request):
     return render(request, 'index.html')
@@ -220,6 +221,7 @@ def sort(request):
 @csrf_exempt
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
+    logger = logging.getLogger(__name__)
     # CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
     # handler = WebhookHandler(CHANNEL_SECRET)
     #
@@ -237,7 +239,9 @@ def callback(request):
     #     abort(400)
     #
     # return 'OK'
+    logger.error('OK')
     if request.method == 'POST':
+        logger.error('request.method==POST')
         pass
         # request_json = json.loads(request.body.decode('utf-8'))
         # events = request_json['events']
