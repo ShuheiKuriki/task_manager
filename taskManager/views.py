@@ -218,7 +218,7 @@ def sort(request):
         task.save()
     return HttpResponse('')
 
-# @csrf_exempt
+@csrf_exempt
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
     logger = logging.getLogger(__name__)
@@ -227,24 +227,22 @@ def callback(request):
     except:
         CHANNEL_SECRET = "bab444d6e36c50020cd500a0cacdfb08"
     handler = WebhookHandler(CHANNEL_SECRET)
-    #get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
-    #
-    # # get request body as text
-    body = request.get_data(as_text=True)
-    logger.info("Request body: " + body)
-    #
-    # # handle webhook body
-    # try:
-    #     handler.handle(body, signature)
-    # except InvalidSignatureError:
-    #     abort(400)
-    #
-    # return 'OK'
+    # リクエストヘッダーから署名検証のための値を取得
+    signature = request.META['HTTP_X_LINE_SIGNATURE']
+    # リクエストボディを取得
+    body = request.body.decode('utf-8')
+    try:
+        # 署名の検証を行い、成功した場合にhandleされたメソッドを呼び出す
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        # 署名検証で失敗したときは例外をあげる
+        return HttpResponseForbidden()
+    # handleの処理を終えればOK
+    return HttpResponse('OK')
     logger.error('OK')
-    if request.method == 'POST':
-        logger.error('request.method==POST')
-        pass
+    # if request.method == 'POST':
+    #     logger.error('request.method==POST')
+    #     pass
         # request_json = json.loads(request.body.decode('utf-8'))
         # events = request_json['events']
         # line_user_id = events[0]['source']['userId']
@@ -260,7 +258,7 @@ def callback(request):
         # elif events[0]['type'] == 'unfollow':
         #     LinePush.objects.filter(user_id=line_user_id).delete()
         #     return HttpResponse("登録解除しました")
-    return HttpResponse("")
+    # return HttpResponse("")
     # return render(request, 'notify_message.txt', {'request':request})
 
 def notify(request):
