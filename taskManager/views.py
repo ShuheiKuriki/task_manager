@@ -237,14 +237,14 @@ def callback(request):
     # リクエストボディを取得
     body = request.body.decode('utf-8')
     logger.error(body)
-    try:
-        # 署名の検証を行い、成功した場合にhandleされたメソッドを呼び出す
-        handler.handle(body, signature)
-        logger.error("OK")
-    except:
-        # 署名検証で失敗したときは例外をあげる
-        logger.error("fail")
-        return HttpResponseForbidden()
+    # try:
+    #     # 署名の検証を行い、成功した場合にhandleされたメソッドを呼び出す
+    #     handler.handle(body, signature)
+    #     logger.error("OK")
+    # except:
+    #     # 署名検証で失敗したときは例外をあげる
+    #     logger.error("fail")
+    #     return HttpResponseForbidden()
     # handleの処理を終えればOK
     # return HttpResponse('OK')
     if request.method == 'POST':
