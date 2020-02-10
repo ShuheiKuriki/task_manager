@@ -260,12 +260,14 @@ def callback(request):
         # 友達追加時・ブロック解除時
         elif events[0]['type'] == 'follow':
             logger.error("follow")
-            LinePush.objects.create(user_id=line_user_id)
+            linepush = LinePush.objects.create(user_id=line_user_id)
+            linepush.save()
+            logger.error("追加しました")
         # アカウントがブロックされたとき
         elif events[0]['type'] == 'unfollow':
             logger.error("unfollow")
             LinePush.objects.filter(user_id=line_user_id).delete()
-    return HttpResponse("")
+    return HttpResponse()
     # return render(request, 'notify_message.txt', {'request':request})
 
 def notify(request):
