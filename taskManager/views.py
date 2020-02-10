@@ -265,8 +265,8 @@ def callback(request,pk):
         elif events[0]['type'] == 'follow':
             logger.error("follow")
             user = User.objects.all().filter(id=pk)
-            logger.error(request.user)
-            linepush = LinePush.objects.create(line_id=line_user_id, user=request.user)
+            logger.error(user)
+            linepush = LinePush.objects.create(line_id=line_user_id, user=user)
             linepush.save()
             logger.error("追加しました")
         # アカウントがブロックされたとき
