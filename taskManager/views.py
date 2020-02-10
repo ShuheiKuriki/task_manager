@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.template.loader import render_to_string
 from .forms import TaskForm, UserForm, DoneEditForm
-from .models import Task
+from .models import Task, LinePush
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -260,7 +260,7 @@ def callback(request):
         # 友達追加時・ブロック解除時
         elif events[0]['type'] == 'follow':
             logger.error("follow")
-            # linepush = LinePush.objects.create(user_id=line_user_id)
+            linepush = LinePush.objects.create(user_id=line_user_id)
             # linepush.save()
             logger.error("追加しました")
         # アカウントがブロックされたとき
