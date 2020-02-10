@@ -22,7 +22,7 @@ def notify():
     requests.get("https://tasks-day-scheduler.herokuapp.com/notify")
 
 def daily():
-    schedule.every().day.at("23:30").do(notify)
+    schedule.every().day.at("17:20").do(notify)
     while True:
         schedule.run_pending()
         time.sleep(60)
@@ -33,5 +33,5 @@ def minutely():
         schedule.run_pending()
         time.sleep(1)
 
-t = threading.Thread(target=minutely)
+t = threading.Thread(target=daily)
 t.start()
