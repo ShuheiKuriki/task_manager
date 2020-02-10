@@ -1,1 +1,2 @@
-{{ request }}
+{% for task in tasks %}{{ task }}
+{% endfor %}

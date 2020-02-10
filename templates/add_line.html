@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}LINE通知設定{% endblock %}
+{% block li %}
+    <li class="sidebar-nav-item">
+      <a class="js-scroll-trigger" href="{% url 'list' user.pk %}">一覧</a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a class="js-scroll-trigger" href="{% url 'today' user.pk %}">今日のタスク</a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a class="js-scroll-trigger" href="{% url 'tomorrow' user.pk %}">明日のタスク</a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a class="js-scroll-trigger" href="{% url 'done_view' user.pk %}">完了済み</a>
+    </li>
+    <li class="sidebar-nav-item">
+      <a class="js-scroll-trigger" href="/logout">ログアウト</a>
+    </li>
+{% endblock %}
+{% block header %}
+  <h2>Lineで通知を受け取る</h2>
+  <p><img src="{% static 'img/QRcode.png' %}"></p>
+{% endblock %}

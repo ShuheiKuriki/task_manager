@@ -45,5 +45,6 @@ urlpatterns = [
     path('logout/',views.logout_view),
     path('accounts/login/', LoginView.as_view(template_name='login_view.html')),
     path('sort', views.sort, name='sort'),
-    path('callback/', views.callback, name='callback')
+    path('callback/', views.callback, name='callback'),
+    path('line/', views.line, name='line')
 ]

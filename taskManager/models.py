@@ -15,7 +15,9 @@ class Task(models.Model):
     order = models.IntegerField('順番', default=0)
 
 class LinePush(models.Model):
-    user_id = models.CharField('ユーザーID', max_length=100, unique=True)
+    line_id = models.CharField('ユーザーID', max_length=100, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
 
 
 # class Done(models.Model):

@@ -218,6 +218,9 @@ def sort(request):
         task.save()
     return HttpResponse('')
 
+@login_required
+def line(request):
+    return render(request, 'add_line.html')
 @csrf_exempt
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
@@ -260,7 +263,7 @@ def callback(request):
         # 友達追加時・ブロック解除時
         elif events[0]['type'] == 'follow':
             logger.error("follow")
-            linepush = LinePush.objects.create(user_id=line_user_id)
+            linepush = LinePush.objects.create(user_id=line_user_id, user=request.user)
             linepush.save()
             logger.error("追加しました")
         # アカウントがブロックされたとき
@@ -271,7 +274,10 @@ def callback(request):
     # return render(request, 'notify_message.txt', {'request':request})
 
 def notify(request):
-    CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
+    try:
+        CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
+    except:
+        CHANNEL_ACCESS_TOKEN = "ffezaFUdv0+TQl/LDJ15LziQLKiekNyl5qwkMyLDtPXFZ2b97w9ZR+qZSIuZ6OSrbcWa2J0sVJDttSoUE8alOPWeh4R8zW/mh3s1emX6v6XlVKz5hvgpCi5YQ0vNbHwDCVHAaWNcpszacPzgIvvuggdB04t89/1O/w1cDnyilFU="
     line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
     users = LinePush.objects.all()
     if len(users) == 0:
@@ -279,7 +285,7 @@ def notify(request):
     else:
         for push in LinePush.objects.all():
             context = {
-                'task': "散歩する",
+                'tasks': ["散歩する","走る"]
             }
             message = render_to_string('notify_message.txt', context, request)
             line_bot_api.push_message(push.user_id, messages=TextSendMessage(text=message))
