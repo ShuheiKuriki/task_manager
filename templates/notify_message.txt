@@ -2,3 +2,7 @@
 
 {% for task in tasks.today %}{{ task.name }}
 {% endfor %}
+明日の予定
+
+{% for task in tasks.tom %}{{ task.name }}
+{% endfor %}

@@ -293,7 +293,7 @@ def notify(request):
         for push in LinePush.objects.all():
             logger.error("push")
             tasks_today = Task.objects.all().filter(user=push.user, done_or_not=False, when__lte=datetime.date.today()).order_by('order')
-            tasks_tom = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
+            tasks_tom = Task.objects.all().filter(user=push.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
             context = {
                 'tasks': {"today" : tasks_today, "tom": tasks_tom}
             }
