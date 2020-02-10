@@ -228,12 +228,12 @@ def callback(request):
     except:
         CHANNEL_SECRET = "bab444d6e36c50020cd500a0cacdfb08"
     logger.error("OK")
-    logger.error(CHANNEL_SECRET)
+    # logger.error(CHANNEL_SECRET)
     handler = WebhookHandler(CHANNEL_SECRET)
-    logger.error(handler)
+    # logger.error(handler)
     # リクエストヘッダーから署名検証のための値を取得
     signature = request.META['HTTP_X_LINE_SIGNATURE']
-    logger.error(signature)
+    # logger.error(signature)
     # リクエストボディを取得
     body = request.body.decode('utf-8')
     logger.error(body)
@@ -241,21 +241,23 @@ def callback(request):
         # 署名の検証を行い、成功した場合にhandleされたメソッドを呼び出す
         handler.handle(body, signature)
         logger.debug("OK")
-    except InvalidSignatureError:
+    except:
         # 署名検証で失敗したときは例外をあげる
         logger.debug("fail")
         return HttpResponseForbidden()
     # handleの処理を終えればOK
-    return HttpResponse('OK')
-    # if request.method == 'POST':
-    #     logger.error('request.method==POST')
+    # return HttpResponse('OK')
+    if request.method == 'POST':
+        logger.error('POST')
     #     pass
-        # request_json = json.loads(request.body.decode('utf-8'))
-        # events = request_json['events']
-        # line_user_id = events[0]['source']['userId']
+        request_json = json.loads(request.body.decode('utf-8'))
+        events = request_json['events']
+        logger.error(events)
+        line_user_id = events[0]['source']['userId']
         # # チャネル設定のWeb hook接続確認時にはここ。このIDで見に来る。
-        # if line_user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
-        #     pass
+        logger.error(line_user_id)
+        if line_user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
+            pass
         #     # return HttpResponse("接続確認されました")
         # # 友達追加時・ブロック解除時
         # elif events[0]['type'] == 'follow':
@@ -265,7 +267,7 @@ def callback(request):
         # elif events[0]['type'] == 'unfollow':
         #     LinePush.objects.filter(user_id=line_user_id).delete()
         #     return HttpResponse("登録解除しました")
-    # return HttpResponse("")
+    return HttpResponse("")
     # return render(request, 'notify_message.txt', {'request':request})
 
 def notify(request):
