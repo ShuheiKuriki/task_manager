@@ -261,7 +261,7 @@ def callback(request):
         elif events[0]['type'] == 'follow':
             logger.error("follow")
             linepush = LinePush.objects.create(user_id=line_user_id)
-            # linepush.save()
+            linepush.save()
             logger.error("追加しました")
         # アカウントがブロックされたとき
         elif events[0]['type'] == 'unfollow':
