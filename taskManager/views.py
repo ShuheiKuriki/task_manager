@@ -222,6 +222,7 @@ def sort(request):
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
     logger = logging.getLogger(__name__)
+    logger.error('OK')
     try:
         CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
     except:
@@ -239,7 +240,6 @@ def callback(request):
         return HttpResponseForbidden()
     # handleの処理を終えればOK
     return HttpResponse('OK')
-    logger.error('OK')
     # if request.method == 'POST':
     #     logger.error('request.method==POST')
     #     pass
