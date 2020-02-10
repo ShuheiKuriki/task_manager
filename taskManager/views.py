@@ -238,21 +238,22 @@ def callback(request):
     #
     # return 'OK'
     if request.method == 'POST':
-        request_json = json.loads(request.body.decode('utf-8'))
-        events = request_json['events']
-        line_user_id = events[0]['source']['userId']
-        # チャネル設定のWeb hook接続確認時にはここ。このIDで見に来る。
-        if line_user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
-            pass
-            # return HttpResponse("接続確認されました")
-        # 友達追加時・ブロック解除時
-        elif events[0]['type'] == 'follow':
-            LinePush.objects.create(user_id=line_user_id)
-            return HttpResponse("登録しました")
-        # アカウントがブロックされたとき
-        elif events[0]['type'] == 'unfollow':
-            LinePush.objects.filter(user_id=line_user_id).delete()
-            return HttpResponse("登録解除しました")
+        pass
+        # request_json = json.loads(request.body.decode('utf-8'))
+        # events = request_json['events']
+        # line_user_id = events[0]['source']['userId']
+        # # チャネル設定のWeb hook接続確認時にはここ。このIDで見に来る。
+        # if line_user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
+        #     pass
+        #     # return HttpResponse("接続確認されました")
+        # # 友達追加時・ブロック解除時
+        # elif events[0]['type'] == 'follow':
+        #     LinePush.objects.create(user_id=line_user_id)
+        #     return HttpResponse("登録しました")
+        # # アカウントがブロックされたとき
+        # elif events[0]['type'] == 'unfollow':
+        #     LinePush.objects.filter(user_id=line_user_id).delete()
+        #     return HttpResponse("登録解除しました")
 
     return render(request, 'notify_message.txt', {'request':request})
 
