@@ -251,7 +251,7 @@ def callback(request):
     #     pass
         request_json = json.loads(request.body.decode('utf-8'))
         events = request_json['events']
-        logger.error(events)
+        # logger.error(events)
         line_user_id = events[0]['source']['userId']
         # # チャネル設定のWeb hook接続確認時にはここ。このIDで見に来る。
         logger.error(line_user_id)
@@ -259,9 +259,11 @@ def callback(request):
             pass
         # 友達追加時・ブロック解除時
         elif events[0]['type'] == 'follow':
+            logger.error("follow")
             LinePush.objects.create(user_id=line_user_id)
         # アカウントがブロックされたとき
         elif events[0]['type'] == 'unfollow':
+            logger.error("unfollow")
             LinePush.objects.filter(user_id=line_user_id).delete()
     return HttpResponse("")
     # return render(request, 'notify_message.txt', {'request':request})
