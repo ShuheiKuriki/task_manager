@@ -264,7 +264,7 @@ def callback(request,pk):
         # 友達追加時・ブロック解除時
         elif events[0]['type'] == 'follow':
             logger.error("follow")
-            user = User.objects.all().filter(id=pk)
+            user = User.objects.all().get(id=pk)
             logger.error(user)
             linepush = LinePush.objects.create(line_id=line_user_id, user=user)
             linepush.save()
@@ -277,7 +277,7 @@ def callback(request,pk):
     # return render(request, 'notify_message.txt', {'request':request})
 
 def test(request):
-    return HttpResponse(User.objects.all().filter(id=1))
+    return HttpResponse(User.objects.all().get(id=1).username)
 
 def notify(request):
     try:
