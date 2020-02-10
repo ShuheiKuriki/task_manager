@@ -218,7 +218,7 @@ def sort(request):
         task.save()
     return HttpResponse('')
 
-@csrf_exempt
+# @csrf_exempt
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
     logger = logging.getLogger(__name__)
