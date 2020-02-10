@@ -222,15 +222,17 @@ def sort(request):
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
     logger = logging.getLogger(__name__)
-    # CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
-    # handler = WebhookHandler(CHANNEL_SECRET)
-    #
-    # # get X-Line-Signature header value
-    # signature = request.headers['X-Line-Signature']
+    try:
+        CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
+    except:
+        CHANNEL_SECRET = "bab444d6e36c50020cd500a0cacdfb08"
+    handler = WebhookHandler(CHANNEL_SECRET)
+    #get X-Line-Signature header value
+    signature = request.headers['X-Line-Signature']
     #
     # # get request body as text
-    # body = request.get_data(as_text=True)
-    # app.logger.info("Request body: " + body)
+    body = request.get_data(as_text=True)
+    logger.info("Request body: " + body)
     #
     # # handle webhook body
     # try:
