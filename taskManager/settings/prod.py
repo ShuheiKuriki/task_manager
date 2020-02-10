@@ -9,7 +9,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {
         "file": {
-            "level": 'INFO',
+            "level": 'DEBUG',
             "class": "logging.handlers.RotatingFileHandler",
             "filename": "var/log/taskManager/django.log",
             "formatter": "production",
