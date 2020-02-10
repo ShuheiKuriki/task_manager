@@ -222,21 +222,27 @@ def sort(request):
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
     logger = logging.getLogger(__name__)
-    logger.error('OK')
+    # logger.error('OK')
     try:
         CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
     except:
         CHANNEL_SECRET = "bab444d6e36c50020cd500a0cacdfb08"
+    logger.debug(CHANNEL_SECRET)
     handler = WebhookHandler(CHANNEL_SECRET)
+    logger.debug(handler)
     # リクエストヘッダーから署名検証のための値を取得
     signature = request.META['HTTP_X_LINE_SIGNATURE']
+    logger.debug(signature)
     # リクエストボディを取得
     body = request.body.decode('utf-8')
+    logger.debug(body)
     try:
         # 署名の検証を行い、成功した場合にhandleされたメソッドを呼び出す
         handler.handle(body, signature)
+        logger.debug("OK")
     except InvalidSignatureError:
         # 署名検証で失敗したときは例外をあげる
+        logger.debug("fail")
         return HttpResponseForbidden()
     # handleの処理を終えればOK
     return HttpResponse('OK')
