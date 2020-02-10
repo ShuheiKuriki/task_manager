@@ -10,8 +10,10 @@ from .models import Task
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 import json
-import linebot
+from linebot import LineBotApi, WebhookHandler
 from linebot.models import TextSendMessage
+import os
+import logging
 
 def index(request):
     return render(request, 'index.html')
@@ -219,26 +221,54 @@ def sort(request):
 @csrf_exempt
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
-    # if request.method == 'POST':
-        # request_json = json.loads(request.body.decode('utf-8'))
-        # events = request_json['events']
-        # line_user_id = events[0]['source']['userId']
+    logger = logging.getLogger(__name__)
+    # logger.error('OK')
+    CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
+    # except:
+        # CHANNEL_SECRET = "bab444d6e36c50020cd500a0cacdfb08"
+    logger.error("OK")
+    # logger.error(CHANNEL_SECRET)
+    handler = WebhookHandler(CHANNEL_SECRET)
+    # logger.error(handler)
+    # リクエストヘッダーから署名検証のための値を取得
+    signature = request.META['HTTP_X_LINE_SIGNATURE']
+    # logger.error(signature)
+    # リクエストボディを取得
+    # body = request.body.decode('utf-8')
+    # logger.error(body)
+    # try:
+    #     # 署名の検証を行い、成功した場合にhandleされたメソッドを呼び出す
+    #     handler.handle(body, signature)
+    #     logger.error("OK")
+    # except:
+    #     # 署名検証で失敗したときは例外をあげる
+    #     logger.error("fail")
+    #     return HttpResponseForbidden()
+    # handleの処理を終えればOK
+    # return HttpResponse('OK')
+    if request.method == 'POST':
+        logger.error('POST')
+    #     pass
+        request_json = json.loads(request.body.decode('utf-8'))
+        events = request_json['events']
+        logger.error(events)
+        line_user_id = events[0]['source']['userId']
         # # チャネル設定のWeb hook接続確認時にはここ。このIDで見に来る。
-        # if line_user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
-        #     return HttpResponse("接続確認されました")
-        # # 友達追加時・ブロック解除時
-        # elif events[0]['type'] == 'follow':
-        #     LinePush.objects.create(user_id=line_user_id)
-        #     return HttpResponse("登録しました")
-        # # アカウントがブロックされたとき
-        # elif events[0]['type'] == 'unfollow':
-        #     LinePush.objects.filter(user_id=line_user_id).delete()
-        #     return HttpResponse("登録解除しました")
-
-    return render(request, 'notify_message.txt', {'request':request})
+        logger.error(line_user_id)
+        if line_user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
+            pass
+        # 友達追加時・ブロック解除時
+        elif events[0]['type'] == 'follow':
+            LinePush.objects.create(user_id=line_user_id)
+        # アカウントがブロックされたとき
+        elif events[0]['type'] == 'unfollow':
+            LinePush.objects.filter(user_id=line_user_id).delete()
+    return HttpResponse("")
+    # return render(request, 'notify_message.txt', {'request':request})
 
 def notify(request):
-    line_bot_api = linebot.LineBotApi('ffezaFUdv0+TQl/LDJ15LziQLKiekNyl5qwkMyLDtPXFZ2b97w9ZR+qZSIuZ6OSrbcWa2J0sVJDttSoUE8alOPWeh4R8zW/mh3s1emX6v6XlVKz5hvgpCi5YQ0vNbHwDCVHAaWNcpszacPzgIvvuggdB04t89/1O/w1cDnyilFU=')
+    CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
+    line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
     users = LinePush.objects.all()
     if len(users) == 0:
         return HttpResponse("送信する相手がいません")
