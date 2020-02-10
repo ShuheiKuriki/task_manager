@@ -220,7 +220,7 @@ def sort(request):
 @csrf_exempt
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
-    CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
+    # CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
     # handler = WebhookHandler(CHANNEL_SECRET)
     #
     # # get X-Line-Signature header value
@@ -243,7 +243,8 @@ def callback(request):
         line_user_id = events[0]['source']['userId']
         # チャネル設定のWeb hook接続確認時にはここ。このIDで見に来る。
         if line_user_id == 'Udeadbeefdeadbeefdeadbeefdeadbeef':
-            return HttpResponse("接続確認されました")
+            pass
+            # return HttpResponse("接続確認されました")
         # 友達追加時・ブロック解除時
         elif events[0]['type'] == 'follow':
             LinePush.objects.create(user_id=line_user_id)
@@ -253,7 +254,7 @@ def callback(request):
             LinePush.objects.filter(user_id=line_user_id).delete()
             return HttpResponse("登録解除しました")
 
-    return render(request, 'notify_message.txt', {'request':request.method})
+    return render(request, 'notify_message.txt', {'request':request})
 
 def notify(request):
     CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
