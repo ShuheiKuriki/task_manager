@@ -254,8 +254,8 @@ def callback(request):
         # elif events[0]['type'] == 'unfollow':
         #     LinePush.objects.filter(user_id=line_user_id).delete()
         #     return HttpResponse("登録解除しました")
-
-    return render(request, 'notify_message.txt', {'request':request})
+    return HttpResponse("")
+    # return render(request, 'notify_message.txt', {'request':request})
 
 def notify(request):
     CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
