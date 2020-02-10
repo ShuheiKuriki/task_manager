@@ -15,6 +15,7 @@ from linebot.models import TextSendMessage
 import os
 import logging
 
+logger = logging.getLogger(__name__)
 def index(request):
     return render(request, 'index.html')
 
@@ -203,7 +204,7 @@ def today(request,pk):
 def tomorrow(request,pk):
     if request.user.pk != pk:
         return redirect('login')
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('deadline')
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
     num = len(tasks)
     return render(request, 'tomorrow.html', {'tasks':tasks,'num':num})
 
@@ -225,7 +226,6 @@ def line(request):
 @csrf_exempt
 def callback(request,pk):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
-    logger = logging.getLogger(__name__)
     # logger.error('OK')
     CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
     # except:
@@ -277,7 +277,7 @@ def callback(request,pk):
     # return render(request, 'notify_message.txt', {'request':request})
 
 def test(request):
-    return HttpResponse(User.objects.all().get(id=1).username)
+    return HttpResponse(Task.objects.all().get(id=1).name)
 
 def notify(request):
     try:
@@ -286,13 +286,18 @@ def notify(request):
         CHANNEL_ACCESS_TOKEN = "ffezaFUdv0+TQl/LDJ15LziQLKiekNyl5qwkMyLDtPXFZ2b97w9ZR+qZSIuZ6OSrbcWa2J0sVJDttSoUE8alOPWeh4R8zW/mh3s1emX6v6XlVKz5hvgpCi5YQ0vNbHwDCVHAaWNcpszacPzgIvvuggdB04t89/1O/w1cDnyilFU="
     line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
     users = LinePush.objects.all()
+    logger.error("OK")
     if len(users) == 0:
         return HttpResponse("送信する相手がいません")
     else:
         for push in LinePush.objects.all():
+            logger.error("push")
+            tasks_today = Task.objects.all().filter(user=push.user, done_or_not=False, when__lte=datetime.date.today()).order_by('order')
+            tasks_tom = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
             context = {
-                'tasks': ["散歩する","走る"]
+                'tasks': {"today" : tasks_today, "tom": tasks_tom}
             }
             message = render_to_string('notify_message.txt', context, request)
-            line_bot_api.push_message(push.user_id, messages=TextSendMessage(text=message))
+            logger.error("message OK")
+            line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
         return HttpResponse("送信しました")
