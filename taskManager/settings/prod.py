@@ -33,12 +33,12 @@ LOGGING = {
     "loggers": {
         "": {
             "handlers": ["file"],
-            "level": "INFO",
+            "level": "DEBUG",
             "propagate": False,
         },
         "django": {
             "handlers": ["file"],
-            "level": "INFO",
+            "level": "DEBUG",
             "propagate": False,
         },
     },
