@@ -269,7 +269,7 @@ def callback(request):
         # アカウントがブロックされたとき
         elif events[0]['type'] == 'unfollow':
             logger.error("unfollow")
-            LinePush.objects.filter(user_id=line_user_id).delete()
+            LinePush.objects.filter(line_id=line_user_id).delete()
     return HttpResponse()
     # return render(request, 'notify_message.txt', {'request':request})
 
