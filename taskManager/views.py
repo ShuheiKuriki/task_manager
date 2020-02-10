@@ -227,15 +227,16 @@ def callback(request):
         CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
     except:
         CHANNEL_SECRET = "bab444d6e36c50020cd500a0cacdfb08"
-    logger.debug(CHANNEL_SECRET)
+    logger.info("OK")
+    logger.info(CHANNEL_SECRET)
     handler = WebhookHandler(CHANNEL_SECRET)
-    logger.debug(handler)
+    logger.info(handler)
     # リクエストヘッダーから署名検証のための値を取得
     signature = request.META['HTTP_X_LINE_SIGNATURE']
-    logger.debug(signature)
+    logger.info(signature)
     # リクエストボディを取得
     body = request.body.decode('utf-8')
-    logger.debug(body)
+    logger.info(body)
     try:
         # 署名の検証を行い、成功した場合にhandleされたメソッドを呼び出す
         handler.handle(body, signature)
