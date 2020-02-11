@@ -284,11 +284,11 @@ def notify(request, when):
         CHANNEL_ACCESS_TOKEN = "ffezaFUdv0+TQl/LDJ15LziQLKiekNyl5qwkMyLDtPXFZ2b97w9ZR+qZSIuZ6OSrbcWa2J0sVJDttSoUE8alOPWeh4R8zW/mh3s1emX6v6XlVKz5hvgpCi5YQ0vNbHwDCVHAaWNcpszacPzgIvvuggdB04t89/1O/w1cDnyilFU="
     line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
     users = LinePush.objects.all()
-    logger.error("OK")
+    logger.error(len(users))
     if len(users) == 0:
         return HttpResponse("送信する相手がいません")
     else:
-        for push in LinePush.objects.all():
+        for push in users:
             logger.error("push")
             tasks_today = Task.objects.all().filter(user=push.user, done_or_not=False, when__lte=datetime.date.today()).order_by('order')
             tasks_tom = Task.objects.all().filter(user=push.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
@@ -301,6 +301,6 @@ def notify(request, when):
             else:
                 text = "notify_message.txt"
             message = render_to_string(text, context, request)
-            logger.error("message OK")
+            logger.error("message ready")
             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
         return HttpResponse("送信しました")
