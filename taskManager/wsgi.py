@@ -18,23 +18,23 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'taskManager.settings.prod')
 
 application = get_wsgi_application()
 
-def notify():
-    requests.get("https://tasks-day-scheduler.herokuapp.com/notify")
+def notify(when):
+    requests.get("https://tasks-day-scheduler.herokuapp.com/notify/"+when)
 
 def night():
-    schedule.every().day.at("22:30").do(notify, "night")
+    schedule.every().day.at("11:40").do(notify, "night")
     while True:
         schedule.run_pending()
         time.sleep(300)
 
 def morning():
-    schedule.every().day.at("07:00").do(notify, "morning")
+    schedule.every().day.at("11:50").do(notify, "morning")
     while True:
         schedule.run_pending()
         time.sleep(300)
 
 def afternoon():
-    schedule.every().day.at("14:00").do(notify, "afternoon")
+    schedule.every().day.at("12:00").do(notify, "afternoon")
     while True:
         schedule.run_pending()
         time.sleep(300)
