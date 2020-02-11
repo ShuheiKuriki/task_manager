@@ -43,7 +43,7 @@ def minutely():
     schedule.every(1).minutes.do(notify, "a")
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(60)
 
 t = threading.Thread(target=night)
 t.start()
