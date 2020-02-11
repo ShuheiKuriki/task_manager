@@ -57,6 +57,7 @@ def test():
 t = threading.Thread(target=night)
 s = threading.Thread(target=morning)
 u = threading.Thread(target=minutely)
+logger.error("start")
 s.start()
 t.start()
 u.start()
