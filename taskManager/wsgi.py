@@ -17,7 +17,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-logger.error("wsgi")
+pid = os.getpid()
+thread_name = threading.current_thread().getName()
+logger.error("pid:",pid)
+logger.error("thread_name:",thread_name)
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'taskManager.settings.prod')
 
