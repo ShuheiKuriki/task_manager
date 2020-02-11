@@ -40,7 +40,7 @@ def afternoon():
         time.sleep(10)
 
 def minutely():
-    schedule.every(1).minutes.do(notify, "")
+    schedule.every(1).minutes.do(notify, "a")
     while True:
         schedule.run_pending()
         time.sleep(1)
