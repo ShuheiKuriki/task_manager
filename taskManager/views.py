@@ -278,10 +278,7 @@ def test(request):
     return HttpResponse(Task.objects.all().get(id=1).name)
 
 def notify(request, when):
-    try:
-        CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
-    except:
-        CHANNEL_ACCESS_TOKEN = "ffezaFUdv0+TQl/LDJ15LziQLKiekNyl5qwkMyLDtPXFZ2b97w9ZR+qZSIuZ6OSrbcWa2J0sVJDttSoUE8alOPWeh4R8zW/mh3s1emX6v6XlVKz5hvgpCi5YQ0vNbHwDCVHAaWNcpszacPzgIvvuggdB04t89/1O/w1cDnyilFU="
+    CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
     line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
     users = LinePush.objects.all()
     logger.error(len(users))
