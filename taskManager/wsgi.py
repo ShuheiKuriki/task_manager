@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 # logger.setLevel(10)
 pid = os.getpid()
 thread_name = threading.current_thread().getName()
-logger.info("pid:{}".format(pid))
-logger.info("thread_name:{}".format(thread_name))
+logger.error("pid:{}".format(pid))
+logger.error("thread_name:{}".format(thread_name))
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'taskManager.settings.prod')
 
@@ -36,10 +36,10 @@ def daily():
     # schedule.every(2).minutes.do(notify, "a")
     while True:
         schedule.run_pending()
-        logger.info("pending")
+        logger.error("pending")
         time.sleep(120)
         requests.get("https://tasks-day-scheduler.herokuapp.com/")
-        logger.info("sleep_done")
+        logger.error("sleep_done")
 
 def test():
     logger.error("test")
