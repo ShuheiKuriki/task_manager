@@ -1,11 +1,11 @@
-今日の予定
+今日のタスク
 
 {% for task in tasks.today %}・{{ task.name }}
 {% endfor %}
-明日の予定
+明日のタスク
 
 {% for task in tasks.tom %}・{{ task.name }}
 {% endfor %}
 
-必要に応じて予定を変更しましょう
+必要に応じてタスクを変更しましょう
 https://tasks-day-scheduler.herokuapp.com/{{id}}
