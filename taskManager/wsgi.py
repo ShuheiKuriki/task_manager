@@ -16,11 +16,11 @@ from django.core.wsgi import get_wsgi_application
 import logging
 
 logger = logging.getLogger(__name__)
-logger.setLevel(10)
+# logger.setLevel(10)
 pid = os.getpid()
 thread_name = threading.current_thread().getName()
-logger.debug("pid:{}".format(pid))
-logger.debug("thread_name:{}".format(thread_name))
+logger.error("pid:{}".format(pid))
+logger.error("thread_name:{}".format(thread_name))
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'taskManager.settings.prod')
 
@@ -30,19 +30,19 @@ def notify(when):
     requests.get("https://tasks-day-scheduler.herokuapp.com/notify/"+when)
 
 def night():
-    schedule.every().day.at("14:32").do(notify, "night")
+    schedule.every().day.at("14:38").do(notify, "night")
     while True:
         schedule.run_pending()
         time.sleep(60)
 
 def morning():
-    schedule.every().day.at("14:35").do(notify, "morning")
+    schedule.every().day.at("14:41").do(notify, "morning")
     while True:
         schedule.run_pending()
         time.sleep(60)
 
 def afternoon():
-    schedule.every().day.at("14:38").do(notify, "afternoon")
+    schedule.every().day.at("14:44").do(notify, "afternoon")
     while True:
         schedule.run_pending()
         time.sleep(60)
@@ -50,10 +50,10 @@ def afternoon():
 def minutely():
     # schedule.every(2).minutes.do(notify, "a")
     notify("a")
-    logger.debug("notify")
+    logger.error("notify")
     # while True:
     #     schedule.run_pending()
-    #     logger.debug("I'm going to bed")
+    #     logger.error("I'm going to bed")
     #     time.sleep(60)
     #     logger.error("I'm awake")
 def test():
@@ -62,7 +62,7 @@ def test():
 t = threading.Thread(target=night)
 s = threading.Thread(target=morning)
 u = threading.Thread(target=afternoon)
-logger.debug("start")
+logger.error("start")
 s.start()
 t.start()
 u.start()
