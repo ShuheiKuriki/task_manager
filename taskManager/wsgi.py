@@ -50,10 +50,12 @@ def minutely():
     #     logger.error("I'm going to bed")
     #     time.sleep(60)
     #     logger.error("I'm awake")
+def test():
+    logger.error("error")
 
 t = threading.Thread(target=night)
-t.start()
 s = threading.Thread(target=morning)
+u = threading.Thread(target=test)
 s.start()
-u = threading.Thread(target=minutely)
+t.start()
 u.start()
