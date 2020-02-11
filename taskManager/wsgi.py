@@ -43,12 +43,13 @@ def afternoon():
         time.sleep(60)
 
 def minutely():
-    schedule.every(2).minutes.do(notify, "a")
-    while True:
-        schedule.run_pending()
-        logger.error("I'm going to bed")
-        time.sleep(60)
-        logger.error("I'm awake")
+    # schedule.every(2).minutes.do(notify, "a")
+    notify("a")
+    # while True:
+    #     schedule.run_pending()
+    #     logger.error("I'm going to bed")
+    #     time.sleep(60)
+    #     logger.error("I'm awake")
 
 t = threading.Thread(target=night)
 t.start()
