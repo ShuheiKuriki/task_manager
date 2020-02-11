@@ -17,6 +17,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+logger.error("wsgi")
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'taskManager.settings.prod')
 
 application = get_wsgi_application()
