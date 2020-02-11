@@ -22,28 +22,30 @@ def notify(when):
     requests.get("https://tasks-day-scheduler.herokuapp.com/notify/"+when)
 
 def night():
-    schedule.every().day.at("12:10").do(notify, "night")
-    while True:
-        schedule.run_pending()
-        time.sleep(10)
-
-def morning():
-    schedule.every().day.at("12:15").do(notify, "morning")
-    while True:
-        schedule.run_pending()
-        time.sleep(10)
-
-def afternoon():
-    schedule.every().day.at("12:20").do(notify, "afternoon")
-    while True:
-        schedule.run_pending()
-        time.sleep(10)
-
-def minutely():
-    schedule.every(1).minutes.do(notify, "a")
+    schedule.every().day.at("12:50").do(notify, "night")
     while True:
         schedule.run_pending()
         time.sleep(60)
+
+def morning():
+    schedule.every().day.at("12:55").do(notify, "morning")
+    while True:
+        schedule.run_pending()
+        time.sleep(60)
+
+def afternoon():
+    schedule.every().day.at("13:00").do(notify, "afternoon")
+    while True:
+        schedule.run_pending()
+        time.sleep(60)
+
+def minutely():
+    schedule.every(2).minutes.do(notify, "a")
+    while True:
+        schedule.run_pending()
+        logger.error("I'm going to bed")
+        time.sleep(60)
+        logger.error("I'm awake")
 
 t = threading.Thread(target=night)
 t.start()
