@@ -35,6 +35,8 @@ LOGGING = {
                 [
                     "[%(levelname)s]",
                     "%(asctime)s",
+                    "%(process)d",
+                    "%(thread)d",
                     "%(pathname)s",
                     "%(lineno)d",
                     "%(message)s",

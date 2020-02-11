@@ -30,9 +30,9 @@ def notify(when):
     requests.get("https://tasks-day-scheduler.herokuapp.com/notify/"+when)
 
 def daily():
-    schedule.every().day.at("15:42").do(notify, "morning")
-    schedule.every().day.at("15:44").do(notify, "afternoon")
-    schedule.every().day.at("15:46").do(notify, "night")
+    schedule.every().day.at("08:00").do(notify, "morning")
+    schedule.every().day.at("16:00").do(notify, "afternoon")
+    schedule.every().day.at("22:30").do(notify, "night")
     # schedule.every(2).minutes.do(notify, "a")
     while True:
         schedule.run_pending()
