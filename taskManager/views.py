@@ -224,7 +224,7 @@ def line(request):
     return render(request, 'add_line.html')
 
 @csrf_exempt
-def callback(request,pk):
+def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
     # logger.error('OK')
     CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
@@ -264,9 +264,7 @@ def callback(request,pk):
         # 友達追加時・ブロック解除時
         elif events[0]['type'] == 'follow':
             logger.error("follow")
-            user = User.objects.all().get(id=pk)
-            logger.error(user)
-            linepush = LinePush.objects.create(line_id=line_user_id, user=user)
+            linepush = LinePush.objects.create(line_id=line_user_id)
             linepush.save()
             logger.error("追加しました")
         # アカウントがブロックされたとき
