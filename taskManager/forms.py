@@ -25,6 +25,10 @@ class TaskForm(ModelForm):
             # 'important': forms.CheckboxInput(),
             # 'urgent': forms.CheckboxInput()
         }
+        input_formats= {
+            'deadline': ['%d %B %Y'],
+            'when': ['%d %B %Y']
+        }
 
 class DoneEditForm(ModelForm):
     class Meta:
