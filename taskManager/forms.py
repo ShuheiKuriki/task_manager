@@ -13,6 +13,8 @@ class UserForm(ModelForm):
         fields = ['username','email','password']
 
 class TaskForm(ModelForm):
+    # deadline = forms.DateField(input_formats = '%m/%d/%Y')
+    # when = forms.DateField(input_formats = '%m/%d/%Y')
     class Meta:
         model = Task
         fields = ['name','when','deadline','important','urgent']
