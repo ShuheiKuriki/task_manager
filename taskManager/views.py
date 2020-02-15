@@ -296,14 +296,32 @@ def notify(request, when):
     else:
         for push in users:
             logger.error(when)
-            tasks_today = Task.objects.all().filter(user=push.user, done_or_not=False, when__lte=datetime.date.today()).order_by('order')
-            tasks_tom = Task.objects.all().filter(user=push.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
+            today = Taskinfo(
+                    name = "今日",
+                    tasks = Task.objects.all().filter(user=push.user, done_or_not=False, when__lte=datetime.date.today()).order_by('order')
+            )
+            tom = Taskinfo(
+                    name = "明日",
+                    tasks = Task.objects.all().filter(user=push.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
+            )
             context = {
-                'tasks': {"today" : tasks_today, "tom": tasks_tom},
+                'today': today,
+                'tom': tom,
                 "id" : push.user.id
             }
-            if when == 'night':
-                text = "notify_message_night.txt"
+            if when == 'report':
+                text = "notify_report.txt"
+                dones = Task.objects.all().filter(user=push.user, done_or_not=True).order_by('-done_date')
+                done_today = Taskinfo(
+                        name = "今日",
+                        tasks = dones.filter(done_date=datetime.date.today())
+                )
+                done_week = Taskinfo(
+                        name = "今週",
+                        tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7))
+                )
+                context["done_today"]=done_today
+                context["done_week"]=done_week
             else:
                 text = "notify_message.txt"
             message = render_to_string(text, context, request)
