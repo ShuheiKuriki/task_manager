@@ -1,4 +1,4 @@
-今日のタスク
+今日のタスクはあと{% nums.today %}
 
 {% for task in tasks.today %}・{{ task.name }}
 {% endfor %}
