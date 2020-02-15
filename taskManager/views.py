@@ -138,21 +138,32 @@ def edit(request):
 #
 # class OnlyYouMixin(UserOnlyMixin):
 
+class Taskinfo:
+    def __init__(self, name, tasks):
+        self.name = name
+        self.tasks = tasks
+        self.num = len(tasks)
+        self.level = (self.num-1)//10+1
+
+
 def list(request,pk):
     if request.user.pk != pk:
         return redirect('login')
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
-    tasks_today = tasks.filter(when__lte=datetime.date.today()).order_by('order')
-    tasks_tom = tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
-    tasks = tasks.filter(user=request.user, done_or_not=False, when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when')
-    num_today = len(tasks_today)
-    num_tom = len(tasks_tom)
-    num = len(tasks)
-    today = {'tasks':tasks_today, 'num':num_today, 'name':'今日'}
-    tom = {'tasks':tasks_tom, 'num':num_tom, 'name':'明日'}
-    other = {'tasks':tasks, 'num':num, 'name':'明日以降'}
-    dics = [today, tom, other]
-    return render(request, 'list.html', {'dics':dics})
+    today = Taskinfo(
+        name="今日",
+        tasks=tasks.filter(when__lte=datetime.date.today()).order_by('order')
+    )
+    tom = Taskinfo(
+        name="明日",
+        tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
+    )
+    other = Taskinfo(
+        name="明日以降",
+        tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when')
+    )
+    infos = [today, tom, other]
+    return render(request, 'list.html', {'infos':infos})
 
 def form(request,pk):
     if request.user.pk != pk:

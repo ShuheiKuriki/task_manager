@@ -5,12 +5,12 @@
 <h1>{{user.username}}さん 今日も頑張りましょう！</h1>
 {% endblock %}
 {% block content2 %}
-    {% for dic in dics %}
+    {% for info in infos %}
         <table class='table border col-12'>
           <thead>
             <tr>
               <th scope='col'></th>
-              <th scope='col'>{{dic.name}}のタスク : <span class='text-danger'>{{dic.num}}個</span></th>
+              <th scope='col'>{{info.name}}のタスク : <span class='text-danger'>{{info.num}}個</span></th>
               <th scope='col'>重要</th>
               <th scope='col'>緊急</th>
               <th scope='col'>実行日</th>
@@ -21,7 +21,7 @@
             </tr>
           </thead>
           <tbody class='sortable'>
-            {% for task in dic.tasks %}
+            {% for task in info.tasks %}
               <tr id="task_{{ task.id }}">
                 <th name="num_data" scope='row'>{{ forloop.counter }}</th>
                 <td>{{ task.name }}</td>
@@ -33,7 +33,7 @@
                   <form method="POST" action="/done">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit" class='small'>done</button>
+                      <button type="submit" class='small' onclick="done_alert()">done</button>
                   </form>
                 </td>
                 <td>
