@@ -175,21 +175,19 @@ def done_view(request,pk):
     if request.user.pk != pk:
         return redirect('login')
     dones = Task.objects.all().filter(user=request.user, done_or_not=True).order_by('-done_date')
-    done_today = dones.filter(done_date=datetime.date.today())
-    done_yes = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=1))
-    dones = dones.filter(done_date__lt=datetime.date.today()-datetime.timedelta(days=1))
-    num_today = len(done_today)
-    num_yes = len(done_yes)
-    num = len(dones)
-    today = {'done':done_today, 'num':num_today, 'name':'今日'}
-    yes = {'done':done_yes, 'num':num_yes, 'name':'昨日'}
-    other = {'done':dones, 'num':num, 'name':'昨日以前'}
-    dics = [today, yes, other]
-    if num_today == 0:
-        message = '昨日は{}個のタスクをこなしました。今日も頑張りましょう！'.format(num_yes)
-    else:
-        message = '今日は{}個のタスクをこなしました。よく頑張りましたね！'.format(num_today)
-    return render(request, 'done.html', {'dics':dics, 'message':message})
+    infos = []
+    names = ["今日", "昨日", "一昨日", "3日前", "4日前", "5日前", "6日前"]
+    total = 0
+    for i in range(7):
+        info = Taskinfo(
+            name = names[i],
+            tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i))
+        )
+        total += info.num
+        infos.append(info)
+    total_level = (total-1)//10+1
+    today = infos[0].num
+    return render(request, 'done.html', {'infos':infos, 'today':today, 'total':total,'level':total_level})
 
 def done_edit_view(request):
     if request.method == 'POST' and request.POST.get('id'):

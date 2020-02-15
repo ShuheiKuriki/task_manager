@@ -2,15 +2,39 @@
 {% block title %}一覧ページ{% endblock %}
 {% block active_done %}active{% endblock %}
 {% block content %}
-  <h1>{{ message }}</h1>
+  <h1>今日完了したタスク : {{ today }}個　お疲れ様でした！</h1>
 {% endblock %}
 {% block content2 %}
-    {% for dic in dics %}
+  <table class='table border col-12'>
+    <thead>
+      <tr>
+        <th scope='col'>今週のレポート</th>
+        {% for info in infos %}
+          <th scope='col'>{{ info.name }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope='col'>タスク完了数</th>
+        {% for info in infos %}
+          <th scope='col'><span class='text-danger'>{{info.num}}個</span></th>
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block content3 %}
+  <h1>今週完了したタスク : {{ total }}個　<span class='text-info'>レベル : {{level}}</span></h1>
+{% endblock %}
+
+{% block content4 %}
         <table class='table border col-12'>
           <thead>
             <tr>
               <th scope='col'></th>
-              <th scope='col'>{{dic.name}}完了したタスク : <span class='text-danger'>{{dic.num}}個</span></th>
+              <th scope='col'>タスク名</th>
               <th scope='col'>重要</th>
               <th scope='col'>緊急</th>
               <th scope='col'>完了日</th>
@@ -19,7 +43,8 @@
             </tr>
           </thead>
           <tbody>
-            {% for done in dic.done %}
+            {% for info in infos %}
+            {% for done in info.tasks %}
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ done.name }}</td>
@@ -42,7 +67,7 @@
                 </td>
               </tr>
             {% endfor %}
+            {% endfor %}
           </tbody>
         </table>
-    {% endfor %}
 {% endblock %}
