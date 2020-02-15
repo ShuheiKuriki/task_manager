@@ -63,16 +63,22 @@
         </div>
     </div>
     <div class="container">
+      <div class="m-4">
         {% block content2 %}
         {% endblock %}
+      </div>
     </div>
     <div class="container">
+      <div class="m-4">
         {% block content3 %}
         {% endblock %}
+      </div>
     </div>
     <div class="container">
+      <div class="m-4">
         {% block content4 %}
         {% endblock %}
+      </div>
     </div>
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
@@ -106,6 +112,9 @@
                 });
             });
         });
+        function done_alert() {
+            alert('タスクを完了しました。\nおめでとうどざいます！！');
+        };
     </script>
 
   </body>

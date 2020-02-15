@@ -36,7 +36,7 @@
                   <form method="POST" action="/done">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit" class='small'>done</button>
+                      <button type="submit" class='small' onclick="done_alert()">done</button>
                   </form>
                 </td>
                 <td>
