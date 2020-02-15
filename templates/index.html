@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}トップページ{% endblock %}
 
 {% block li %}
@@ -24,7 +25,17 @@
   <h3 class="mb-5">
     <em>You don't need to decide what to do today</em>
   </h3>
-  <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">もっと見る</a>
+  <div class="row my-5">
+    <div class="ml-auto">
+      <a class="btn btn-primary btn-xl js-scroll-trigger" href="/login_view">ログイン</a>
+    </div>
+    <div class="mx-4">
+      <a class="btn btn-success btn-xl js-scroll-trigger" href="/create_user_view">新規登録</a>
+    </div>
+    <div class="mr-auto">
+      <a class="btn btn-info btn-xl js-scroll-trigger" href="#about">もっと見る</a>
+    </div>
+  </div>
 {% endblock %}
 {% block content %}
 <section class="content-section bg-light" id="about">
@@ -34,7 +45,7 @@
         <h3>今日何をするべきか、悩むことはありませんか？</h3>
         <h3>このアプリはそんなあなたをサポートします！</h3>
         <p class="lead mb-5">あなたはタスクが増えたときに入力するだけ！</p>
-        <a class="btn btn-primary btn-xl js-scroll-trigger" href="/login_view">使い始める</a>
+        <a class="btn btn-primary btn-xl js-scroll-trigger" href="/create_user_view">使い始める</a>
       </div>
     </div>
   </div>
@@ -62,4 +73,60 @@
     </div>
 </nav>
 */</style>
+<!-- Services -->
+<section class="content-section bg-primary text-white text-center" id="services">
+  <div class="container">
+    <div class="content-section-heading">
+      <h3 class="text-secondary mb-0">Services</h3>
+      <h2 class="mb-5">Why you choose this app?</h2>
+    </div>
+    <div class="row">
+      <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+        <span class="service-icon rounded-circle mx-auto mb-3">
+          <i class="icon-screen-smartphone"></i>
+        </span>
+        <h4>
+          <strong>優先順位</strong>
+        </h4>
+        <p class="text-faded mb-0">ドラッグ＆ドロップで<br>優先順位付け自由自在！</p>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <span class="service-icon rounded-circle mx-auto mb-3">
+          <i class="icon-mustache"></i>
+        </span>
+        <h4>
+          <strong>７つの習慣</strong>
+        </h4>
+        <p class="text-faded mb-0">名著「７つの習慣」の教え採用！<br>"そのタスク、本当に重要ですか？"</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+        <span class="service-icon rounded-circle mx-auto mb-3">
+          <i class="icon-pencil"></i>
+        </span>
+        <h4>
+          <strong>モチベーションアップ</strong>
+        </h4>
+        <p class="text-faded mb-0">タスクが完了したら<br>ご褒美+レベルアップ！</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
+        <span class="service-icon rounded-circle mx-auto mb-3">
+          <i class="icon-like"></i>
+        </span>
+        <h4>
+          <strong>LINE連携</strong>
+        </h4>
+        <p class="text-faded mb-0">今日のタスク一覧とレポートを<br>毎日LINE配信！</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Callout -->
+<!-- <section class="callout"> -->
+  <!-- <div class="container text-center"> -->
+    <!-- <h2 class="mx-auto mb-5"><h2> -->
+    <!-- <a class="btn btn-primary btn-xl" href="/create_user_view">新規登録</a> -->
+  <!-- </div> -->
+<!-- </section> -->
+
 {% endblock %}
