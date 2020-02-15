@@ -310,6 +310,7 @@ def notify(request, when):
                 'tom': tom,
                 "id" : push.user.id
             }
+            logger.error(context)
             if when == 'report':
                 text = "notify_report.txt"
                 dones = Task.objects.all().filter(user=push.user, done_or_not=True).order_by('-done_date')
