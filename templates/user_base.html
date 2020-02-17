@@ -31,13 +31,13 @@
             </ul>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item {% block active_today %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'today' user.pk %}">今日のタスク</a>
+                    <a class="nav-link" href="{% url 'today' user.pk %}">今日</a>
                 </li>
                 <li class="nav-item {% block active_tomorrow %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'tomorrow' user.pk %}">明日のタスク</a>
+                    <a class="nav-link" href="{% url 'tomorrow' user.pk %}">明日</a>
                 </li>
                 <li class="nav-item {% block active_done %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'done_view' user.pk %}">完了済み</a>
+                    <a class="nav-link" href="{% url 'done_view' user.pk %}">レポート</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
