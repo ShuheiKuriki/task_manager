@@ -1,5 +1,5 @@
 {% extends "user_base.html" %}
-{% block title %}一覧ページ{% endblock %}
+{% block title %}レポート{% endblock %}
 {% block active_done %}active{% endblock %}
 {% block content %}
   <h1>今日完了したタスク : {{ today }}個　お疲れ様でした！</h1>
@@ -23,11 +23,12 @@
       </tr>
     </tbody>
   </table> -->
-  <canvas id="LineChart" height="70px"></canvas>
+  <canvas id="LineChart" height="80px"></canvas>
   <script type="text/javascript">
 
   /* idが"radar-chart"の要素を取得 */
   var ctx = document.getElementById("LineChart");
+  // chart.canvas.height = 100;
 
   var LineChart = new Chart(ctx, {
       type: 'line',
@@ -49,7 +50,9 @@
             line: {
                 tension: 0, // ベジェ曲線を無効にする
             }
-        }
+        },
+        responsive: true,
+        maintainAspectRatio: false
       },
       scales: {
         yAxes: [{
