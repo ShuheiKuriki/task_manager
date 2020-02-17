@@ -23,26 +23,33 @@
       </tr>
     </tbody>
   </table> -->
-  <canvas id="bar-chart" height="70px"></canvas>
+  <canvas id="LineChart" height="70px"></canvas>
   <script type="text/javascript">
 
   /* idが"radar-chart"の要素を取得 */
-  var ctx = document.getElementById("bar-chart");
+  var ctx = document.getElementById("LineChart");
 
-  var myBarChart = new Chart(ctx, {
-      type: 'bar',
+  var LineChart = new Chart(ctx, {
+      type: 'line',
       data: {
         labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
         datasets: [{
           label: 'タスク完了数',
           data: {{data}},
-          backgroundColor: "rgba(219,39,91,0.5)"
+          borderColor: "rgba(255,0,0,1)",
+          backgroundColor: "rgba(0,0,0,0)",
+          lineTension: 0
         }],
       },
       options: {
         title: {
         display: true,
-        text: '今週のタスク完了状況'
+        text: '今週のタスク完了状況',
+        elements: {
+            line: {
+                tension: 0, // ベジェ曲線を無効にする
+            }
+        }
       },
       // scales: {
       //   yAxes: [{
