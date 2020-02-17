@@ -30,8 +30,8 @@
                 <td>{{ task.name }}</td>
                 <td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
                 <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
-                <td>{{ task.when }}</td>
-                <td>{{ task.deadline }}</td>
+                <td>{{ task.when.month }}/{{ task.when.day }}</td>
+                <td>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td>
                   <form method="POST" action="/done">
                       {%csrf_token%}
