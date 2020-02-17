@@ -181,7 +181,7 @@ def done_view(request,pk):
     for i in range(7):
         info = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i)))
         data.append(info.num)
-    return render(request, 'done.html', {'week':week, 'today':data[-1], 'data':data})
+    return render(request, 'done.html', {'week':week, 'today':data[0], 'data':data})
 
 def done_edit_view(request):
     if request.method == 'POST' and request.POST.get('id'):
