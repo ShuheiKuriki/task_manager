@@ -49,3 +49,9 @@ urlpatterns = [
     path('line/', views.line, name='line'),
     path('test', views.test)
 ]
+
+# if settings.DEBUG:    # この if 文 (5STEP) を追加します。
+import debug_toolbar
+urlpatterns = [
+    path('__debug__/', include(debug_toolbar.urls))
+    ] + urlpatterns
