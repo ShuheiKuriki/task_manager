@@ -5,7 +5,7 @@
   <h1>今日完了したタスク : {{ today }}個　お疲れ様でした！</h1>
 {% endblock %}
 {% block content2 %}
-  <table class='table border col-12'>
+  <!-- <table class='table border col-12'>
     <thead>
       <tr>
         <th scope='col'>今週のレポート</th>
@@ -18,15 +18,51 @@
       <tr>
         <th scope='col'>タスク完了数</th>
         {% for info in infos %}
-          <th scope='col'><span class='text-danger'>{{info.num}}個</span></th>
+          <th scope='col'><span class='text-danger'>{{info.num}}</span></th>
         {% endfor %}
       </tr>
     </tbody>
-  </table>
+  </table> -->
+  <canvas id="bar-chart" height="70px"></canvas>
+  <script type="text/javascript">
+
+  /* idが"radar-chart"の要素を取得 */
+  var ctx = document.getElementById("bar-chart");
+
+  var myBarChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
+        datasets: [{
+          label: 'タスク完了数',
+          data: {{data}},
+          backgroundColor: "rgba(219,39,91,0.5)"
+        }],
+      },
+      options: {
+        title: {
+        display: true,
+        text: '今週のタスク完了状況'
+      },
+      // scales: {
+      //   yAxes: [{
+      //     ticks: {
+      //       suggestedMax: 100,
+      //       suggestedMin: 0,
+      //       stepSize: 10,
+      //       callback: function(value, index, values){
+      //         return  value +  '個'
+      //       }
+      //     }
+      //   }]
+      // },
+      }
+  });
+  </script>
 {% endblock %}
 
 {% block content3 %}
-  <h1>今週完了したタスク : {{ total }}個　<span class='text-info'>レベル : {{level}}</span></h1>
+  <h1>今週完了したタスク : {{ week.num }}個　<span class='text-info'>レベル : {{ week.level }}</span></h1>
 {% endblock %}
 
 {% block content4 %}
@@ -43,8 +79,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for info in infos %}
-            {% for done in info.tasks %}
+            {% for done in week.tasks %}
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ done.name }}</td>
@@ -66,7 +101,6 @@
                   </form>
                 </td>
               </tr>
-            {% endfor %}
             {% endfor %}
           </tbody>
         </table>

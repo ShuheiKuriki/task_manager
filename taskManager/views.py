@@ -17,6 +17,14 @@ import os
 import logging
 
 logger = logging.getLogger(__name__)
+
+class Taskinfo:
+    def __init__(self, tasks, name=""):
+        self.name = name
+        self.tasks = tasks
+        self.num = len(tasks)
+        self.level = (self.num-1)//10+1
+
 def index(request):
     return render(request, 'index.html')
 
@@ -139,14 +147,6 @@ def edit(request):
 #
 # class OnlyYouMixin(UserOnlyMixin):
 
-class Taskinfo:
-    def __init__(self, name, tasks):
-        self.name = name
-        self.tasks = tasks
-        self.num = len(tasks)
-        self.level = (self.num-1)//10+1
-
-
 def list(request,pk):
     if request.user.pk != pk:
         return redirect('login')
@@ -176,19 +176,12 @@ def done_view(request,pk):
     if request.user.pk != pk:
         return redirect('login')
     dones = Task.objects.all().filter(user=request.user, done_or_not=True).order_by('-done_date')
-    infos = []
-    names = ["今日", "昨日", "一昨日", "3日前", "4日前", "5日前", "6日前"]
-    total = 0
+    week = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7)))
+    data = []
     for i in range(7):
-        info = Taskinfo(
-            name = names[i],
-            tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i))
-        )
-        total += info.num
-        infos.append(info)
-    total_level = (total-1)//10+1
-    today = infos[0].num
-    return render(request, 'done.html', {'infos':infos, 'today':today, 'total':total,'level':total_level})
+        info = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i)))
+        data.append(info.num)
+    return render(request, 'done.html', {'week':week, 'today':data[-1], 'data':data})
 
 def done_edit_view(request):
     if request.method == 'POST' and request.POST.get('id'):
@@ -321,11 +314,9 @@ def notify(request, when):
                 text = "notify_report.txt"
                 dones = Task.objects.all().filter(user=push.user, done_or_not=True).order_by('-done_date')
                 done_today = Taskinfo(
-                        name = "今日",
                         tasks = dones.filter(done_date=datetime.date.today())
                 )
                 done_week = Taskinfo(
-                        name = "今週",
                         tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7))
                 )
                 context["done_today"]=done_today
