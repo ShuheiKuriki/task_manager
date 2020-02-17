@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.template.loader import render_to_string
+from django.conf import settings
 from .forms import TaskForm, UserForm, DoneEditForm
 from .models import Task, LinePush
 import datetime
@@ -236,9 +237,11 @@ def line(request):
 def callback(request):
     """ラインの友達追加時に呼び出され、ラインのIDを登録する。"""
     # logger.error('OK')
-    CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
-    # except:
-        # CHANNEL_SECRET = "bab444d6e36c50020cd500a0cacdfb08"
+    try:
+        CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
+    except:
+        CHANNEL_SECRET = getattr(settings, "CHANNEL_SECRET", None)
+
     logger.error("OK")
     # logger.error(CHANNEL_SECRET)
     handler = WebhookHandler(CHANNEL_SECRET)
@@ -287,8 +290,11 @@ def test(request):
     return HttpResponse(Task.objects.all().get(id=1).name)
 
 def notify(request, when):
-    CHANNEL_ACCESS_TOKEN = "ffezaFUdv0+TQl/LDJ15LziQLKiekNyl5qwkMyLDtPXFZ2b97w9ZR+qZSIuZ6OSrbcWa2J0sVJDttSoUE8alOPWeh4R8zW/mh3s1emX6v6XlVKz5hvgpCi5YQ0vNbHwDCVHAaWNcpszacPzgIvvuggdB04t89/1O/w1cDnyilFU="
-    # CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
+    try:
+        CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
+    except:
+        CHANNEL_ACCESS_TOKEN = getattr(settings, "CHANNEL_ACCESS_TOKEN", None)
+
     line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
     users = LinePush.objects.all()
     logger.error(len(users))

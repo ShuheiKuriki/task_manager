@@ -3,6 +3,9 @@ from .common import *
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '9bv70a@#p8+0%g!))k7!%o0t%ier9u8_#yj8vi)qwo9nk7ca0h'
 
+#LINE information
+CHANNEL_ACCESS_TOKEN = "ffezaFUdv0+TQl/LDJ15LziQLKiekNyl5qwkMyLDtPXFZ2b97w9ZR+qZSIuZ6OSrbcWa2J0sVJDttSoUE8alOPWeh4R8zW/mh3s1emX6v6XlVKz5hvgpCi5YQ0vNbHwDCVHAaWNcpszacPzgIvvuggdB04t89/1O/w1cDnyilFU="
+CHANNEL_SECRET = "bab444d6e36c50020cd500a0cacdfb08"
 
 INTERNAL_IPS = ('127.0.0.1',)
 # SECURITY WARNING: don't run with debug turned on in production!
