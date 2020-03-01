@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import views
 
@@ -37,6 +37,9 @@ urlpatterns = [
     # ユーザー固有のタスク追加フォーム
     # path('<int:pk>/add', views.add, name='add'),
 
+    # 未完了タスク関連の操作
+    path('create', views.TaskCreateView.as_view()),
+    # path('create', views.create),
         ## 編集フォームに遷移
     path('edit', views.edit),
         ## 更新
@@ -58,7 +61,8 @@ urlpatterns = [
     path('login_view', views.login_view, name='login'),
     path('create_user_form/', views.create_user_form),
     path('create_user/', views.create_user, name='create_user'),
-    path('logout/',views.logout_view),
+    # path('logout/',views.logout_view),
+    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
 
     # LINE関連
     path('callback/', views.callback, name='callback'),

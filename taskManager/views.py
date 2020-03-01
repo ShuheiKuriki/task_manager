@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.urls import reverse
+from django.views.generic.edit import CreateView
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import TaskForm, UserForm, DoneEditForm
@@ -36,10 +37,6 @@ def index(request):
 def sample(request):
     return render(request, 'index_sample.html')
 
-@login_required
-def logout_view(request):
-    logout(request)
-    return redirect('/')
 def notice(request):
     return render(request, 'notice.html')
 
@@ -87,6 +84,18 @@ def done_list(request,pk):
         info = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i)))
         data.append(info.num)
     return render(request, 'done.html', {'week':week, 'today':data[0], 'data':data})
+
+# 未完了タスク関連の操作
+class TaskCreateView(CreateView):
+    form_class = TaskForm
+    template_name = 'create.html'
+
+    def form_valid(self, form):
+        form.instance.user_id = self.request.user.id
+        return super(TaskCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('list', kwargs={'pk': self.request.user.id})
 
 
 def edit(request):
@@ -204,6 +213,10 @@ def create_user(request):
     else:
         return redirect('/create_user_form')
 
+# @login_required
+# def logout_view(request):
+#     logout(request)
+#     return redirect('/')
 
 # class UserOnlyMixin(UserPassesTestMixin):
 #     raise_exception = True
@@ -321,3 +334,33 @@ def notify(request, when):
             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
         return HttpResponse("送信しました")
 
+# ユーザー固有のタスク追加フォーム
+# def add(request,pk):
+#     if request.user.pk != pk:
+#         return redirect('login')
+#     form = TaskForm()
+#     return render(request, 'create.html', {'form': form})
+
+# @login_required
+# def create(request):
+#     num = str(request.user.id)
+#     url = '/'+num
+#     form_url = '/'+num+'/add'
+#     if request.method != 'POST':
+#         return redirect(to=form_url)
+#     form = TaskForm(request.POST)
+#     if form.is_valid():
+#         # if form.cleaned_data['important'] == False:
+#         #     return HttpResponse("javascript:alert('登録しました！');")
+#         task=Task.objects.create(
+#             name=request.POST.get('name'),
+#             deadline=request.POST.get('deadline'),
+#             when=request.POST.get('when'),
+#             important=form.cleaned_data['important'],
+#             urgent=form.cleaned_data['urgent'],
+#             user=request.user
+#             )
+#         task.save()
+#         return redirect(to=url)
+#     else:
+#         return redirect(to=form_url)
