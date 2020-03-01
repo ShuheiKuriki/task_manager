@@ -11,11 +11,10 @@
             <tr>
               <th scope='col'></th>
               <th scope='col'>{{info.name}}のタスク : <span class='text-danger'>{{info.num}}個</span></th>
-              <th scope='col'>重要</th>
-              <th scope='col'>緊急</th>
-              <th scope='col'>実行日</th>
+              <th scope='col'>重/急</th>
+              <th scope='col'>実行</th>
+              <th scope='col'>1日後</th>
               <th scope='col'>期限</th>
-              <th scope='col'>完了</th>
               <th scope='col'>編集</th>
               <th scope='col'>削除</th>
             </tr>
@@ -25,19 +24,18 @@
               <tr id="task_{{ task.id }}">
                 <th name="num_data" scope='row'>{{ forloop.counter }}</th>
                 <td>{{ task.name }}</td>
-                <td>{% if task.important == True %}○{% else %}✖️{% endif %}</td>
-                <td>{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
+                <td>{% if task.important == True %}○{% else %}✖️{% endif %}/{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
                 <td>{{ task.when.month }}/{{ task.when.day }}</td>
-                <td>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td>
-                  <form method="POST" action="/done">
+                  <form method="POST" action="/later">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit" class='small' onclick="done_alert()">done</button>
+                      <button type="submit" class='small'>later</button>
                   </form>
                 </td>
+                <td>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td>
-                  <form method="POST" action="/edit_view">
+                  <form method="POST" action="/edit">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
                       <button type="submit" class='small'>edit</button>

@@ -18,7 +18,7 @@ class TaskForm(ModelForm):
     class Meta:
         model = Task
         fields = ['name','when','deadline','important','urgent']
-        forms.CheckboxInput(attrs={'class': 'check'})
+        # forms.CheckboxInput(attrs={'class': 'check'})
         widgets = {
             'deadline': DateInput(),
             'when': DateInput(),
