@@ -38,7 +38,7 @@ def sample(request):
     return render(request, 'index_sample.html')
 
 def notice(request):
-    return render(request, 'notice.html')
+    return render(request, 'Menu/notice.html')
 
 # ユーザーに固有の一覧ページ
 def list(request,pk):
@@ -58,21 +58,21 @@ def list(request,pk):
         tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when')
     )
     infos = [today, tom, other]
-    return render(request, 'list.html', {'infos':infos})
+    return render(request, 'Menu/list.html', {'infos':infos})
 
 def today(request,pk):
     if request.user.pk != pk:
         return redirect('login')
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__lte=datetime.date.today()).order_by('order')
     num = len(tasks)
-    return render(request, 'today.html', {'tasks':tasks,'num':num})
+    return render(request, 'Menu/today.html', {'tasks':tasks,'num':num})
 
 def tomorrow(request,pk):
     if request.user.pk != pk:
         return redirect('login')
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
     num = len(tasks)
-    return render(request, 'tomorrow.html', {'tasks':tasks,'num':num})
+    return render(request, 'Menu/tomorrow.html', {'tasks':tasks,'num':num})
 
 def done_list(request,pk):
     if request.user.pk != pk:
@@ -83,12 +83,12 @@ def done_list(request,pk):
     for i in range(7):
         info = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i)))
         data.append(info.num)
-    return render(request, 'done.html', {'week':week, 'today':data[0], 'data':data})
+    return render(request, 'Menu/done.html', {'week':week, 'today':data[0], 'data':data})
 
 # 未完了タスク関連の操作
 class TaskCreateView(CreateView):
     form_class = TaskForm
-    template_name = 'create.html'
+    template_name = 'Form/create.html'
 
     def form_valid(self, form):
         form.instance.user_id = self.request.user.id
@@ -102,7 +102,7 @@ def edit(request):
     if request.method == 'POST' and request.POST.get('id'):
         id = request.POST['id']
         form = TaskForm()
-        return render(request, 'update.html', {'form': form, 'id': id})
+        return render(request, 'Form/update.html', {'form': form, 'id': id})
     return redirect('login')
 
 @login_required
@@ -117,7 +117,7 @@ def update(request):
                 task.deadline = request.POST['deadline']
             if request.POST['when']!="":
                 task.when = request.POST['when']
-            task.important = request.POST['important']
+            task.important = request.POST.get('important')
             task.urgent = request.POST['urgent']
             task.save()
     return redirect(to='/'+str(request.user.id))
@@ -160,7 +160,7 @@ def done_edit(request):
     if request.method == 'POST' and request.POST.get('id'):
         id = request.POST['id']
         form = DoneEditForm()
-        return render(request, 'done_update.html', {'form': form, 'id': id})
+        return render(request, 'Form/done_update.html', {'form': form, 'id': id})
     return redirect('login')
 
 @login_required
@@ -198,7 +198,7 @@ def login_view(request):
 
 def create_user_form(request):
     form=UserForm()
-    return render(request,'create_user_form.html', {'form':form})
+    return render(request,'Form/create_user.html', {'form':form})
 
 def create_user(request):
     user = UserForm(request.POST)
@@ -230,7 +230,7 @@ def create_user(request):
 # LINE関連
 @login_required
 def line(request):
-    return render(request, 'add_line.html')
+    return render(request, 'Menu/add_line.html')
 
 @csrf_exempt
 def callback(request):
@@ -339,7 +339,7 @@ def notify(request, when):
 #     if request.user.pk != pk:
 #         return redirect('login')
 #     form = TaskForm()
-#     return render(request, 'create.html', {'form': form})
+#     return render(request, 'Form/create.html', {'form': form})
 
 # @login_required
 # def create(request):

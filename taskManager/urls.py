@@ -57,7 +57,7 @@ urlpatterns = [
     path('recover', views.recover),
 
     # ユーザー情報関連
-    path('accounts/login/', LoginView.as_view(template_name='login_view.html')),
+    path('accounts/login/', LoginView.as_view(template_name='Form/login.html')),
     path('login_view', views.login_view, name='login'),
     path('create_user_form/', views.create_user_form),
     path('create_user/', views.create_user, name='create_user'),
