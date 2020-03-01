@@ -40,10 +40,11 @@ urlpatterns = [
     # 未完了タスク関連の操作
     path('create', views.TaskCreateView.as_view()),
     # path('create', views.create),
+    path('update', views.TaskUpdateView.as_view()),
         ## 編集フォームに遷移
-    path('edit', views.edit),
+    # path('edit', views.edit),
         ## 更新
-    path('update', views.update),
+    # path('update', views.update),
     path('delete', views.delete),
     path('later', views.later),
     path('sort', views.sort, name='sort'),

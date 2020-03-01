@@ -7,7 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.urls import reverse
-from django.views.generic.edit import CreateView
+from django.utils.decorators import method_decorator
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import TaskForm, UserForm, DoneEditForm
@@ -86,6 +87,7 @@ def done_list(request,pk):
     return render(request, 'Menu/done.html', {'week':week, 'today':data[0], 'data':data})
 
 # 未完了タスク関連の操作
+@method_decorator(login_required, name='dispatch')
 class TaskCreateView(CreateView):
     form_class = TaskForm
     template_name = 'Form/create.html'
@@ -96,6 +98,11 @@ class TaskCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('list', kwargs={'pk': self.request.user.id})
+
+@method_decorator(login_required, name='dispatch')
+class TaskUpdateView(UpdateView):
+    form_class = TaskForm
+    template_name = 'Form/update.html'
 
 
 def edit(request):
