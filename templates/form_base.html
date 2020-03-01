@@ -11,7 +11,7 @@
       <a class="js-scroll-trigger" href="{% url 'tomorrow' user.pk %}">明日のタスク</a>
     </li>
     <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'done_view' user.pk %}">完了済み</a>
+      <a class="js-scroll-trigger" href="{% url 'done_list' user.pk %}">完了済み</a>
     </li>
     <li class="sidebar-nav-item">
       <a class="js-scroll-trigger" href="/logout">ログアウト</a>
@@ -24,7 +24,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         {% block input %}{% endblock%}
-        <button class="btn btn-info btn-block mt-5 mb-4" type="submit" onclick='update()'>{% block message %}{% endblock%}</button>
+        <button class="btn btn-info btn-block mt-5 mb-4" type="submit">{% block message %}{% endblock%}</button>
         <a class="btn btn-success btn-block text-light" href="{% block url %}{% endblock %}">{% block name %}{% endblock%}をやめて戻る</a>
     </form>
 {% endblock %}

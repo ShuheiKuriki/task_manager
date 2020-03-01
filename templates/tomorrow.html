@@ -40,7 +40,7 @@
                   </form>
                 </td>
                 <td>
-                  <form method="POST" action="/edit_view">
+                  <form method="POST" action="/edit">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ task.id }}"/>
                       <button type="submit" class='small'>edit</button>

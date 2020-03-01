@@ -99,7 +99,7 @@
                 <td>{% if done.urgent == True %}○{% else %}✖️{% endif %}</td>
                 <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
                 <td>
-                  <form method="POST" action="/done_edit_view">
+                  <form method="POST" action="/done_edit">
                       {%csrf_token%}
                       <input name='id' type="hidden" value="{{ done.id }}"/>
                       <button type="submit" class='small'>edit</button>

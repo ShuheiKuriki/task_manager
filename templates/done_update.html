@@ -2,8 +2,8 @@
 {% block title2 %}完了日編集フォーム{% endblock %}
 {% block h2 %}完了日編集フォーム{% endblock %}
 {% block active_done %}active{% endblock %}
-{% block action %}/done_edit{% endblock%}
+{% block action %}/done_update{% endblock%}
 {% block input %}<input name='id' type="hidden" value="{{ id }}"/>{% endblock%}
 {% block message %}更新{% endblock%}
-{% block url %}{% url 'done_view' user.pk %}{% endblock%}
+{% block url %}{% url 'done_list' user.pk %}{% endblock%}
 {% block name %}編集{% endblock%}

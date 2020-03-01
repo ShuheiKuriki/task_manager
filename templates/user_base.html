@@ -27,7 +27,7 @@
             {% if user.is_authenticated %}
             <ul class="navbar-nav mr-5">
                 <li class="nav-item active">
-                    <a href="/post" class="nav-link">タスク追加</a>
+                    <a href="create" class="nav-link">タスク追加</a>
                 </li>
             </ul>
             <ul class="navbar-nav mr-auto">
@@ -38,7 +38,7 @@
                     <a class="nav-link" href="{% url 'tomorrow' user.pk %}">明日</a>
                 </li>
                 <li class="nav-item {% block active_done %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'done_view' user.pk %}">レポート</a>
+                    <a class="nav-link" href="{% url 'done_list' user.pk %}">レポート</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
@@ -54,7 +54,7 @@
             </ul>
             {%else%}
             <span class="navbar-text">
-                <a href="/accounts/logint" class="nav-link">ログイン</a>
+                <a href="/accounts/login" class="nav-link">ログイン</a>
             </span>
             {%endif%}
         </div>

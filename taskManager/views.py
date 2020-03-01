@@ -6,15 +6,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+
 from .forms import TaskForm, UserForm, DoneEditForm
 from .models import Task, LinePush
+
 import datetime
-from django.views.decorators.csrf import csrf_exempt
 import json
-from linebot import LineBotApi, WebhookHandler
-from linebot.models import TextSendMessage
 import os
 import logging
+
+from linebot import LineBotApi, WebhookHandler
+from linebot.models import TextSendMessage
 
 logger = logging.getLogger(__name__)
 
@@ -25,128 +29,21 @@ class Taskinfo:
         self.num = len(tasks)
         self.level = (self.num-1)//10+1
 
+# 全ユーザー共通のページを表示
 def index(request):
     return render(request, 'index.html')
 
 def sample(request):
     return render(request, 'index_sample.html')
 
-def login_view(request):
-    user=authenticate(
-        username=request.POST.get('username'),
-        password=request.POST.get('password')
-    )
-    if user is not None:
-        login(request,user)
-        url='/'+str(request.user.id)
-        return redirect(url)
-    else:
-        return redirect('accounts/login')
-
-def create_user_view(request):
-    form=UserForm()
-    return render(request,'create_user_view.html', {'form':form})
-
-def create_user(request):
-    user = UserForm(request.POST)
-    if user.is_valid():
-        user=User.objects.create_user(
-        request.POST.get('username'),
-        request.POST.get('email'),
-        request.POST.get('password')
-    )
-        user.save()
-        return redirect('/accounts/login/')
-    else:
-        return redirect('/create_user_view')
-
 @login_required
 def logout_view(request):
     logout(request)
     return redirect('/')
+def notice(request):
+    return render(request, 'notice.html')
 
-@login_required
-def post(request):
-    num = str(request.user.id)
-    url = '/'+num
-    form_url = '/'+num+'/form'
-    if request.method != 'POST':
-        return redirect(to=form_url)
-    form = TaskForm(request.POST)
-    if form.is_valid():
-        task=Task.objects.create(
-            name=request.POST.get('name'),
-            deadline=request.POST.get('deadline'),
-            when=request.POST.get('when'),
-            important=form.cleaned_data['important'],
-            urgent=form.cleaned_data['urgent'],
-            user=request.user
-            )
-        task.save()
-        return redirect(to=url)
-    else:
-        return redirect(to=form_url)
-
-@login_required
-def delete(request):
-    if request.method == 'POST' and request.POST['id']:
-        task = Task.objects.get(id=request.POST['id'])
-        task.delete()
-    return redirect(to='/'+str(request.user.id))
-
-@login_required
-def done(request):
-    if request.method == 'POST' and request.POST['id']:
-        task = Task.objects.get(id=request.POST['id'])
-        task.done_or_not = True
-        task.done_date = datetime.date.today()
-        task.save()
-    return redirect(to='/'+str(request.user.id)+'/done_view')
-
-@login_required
-def done_edit(request):
-    if request.method != 'POST':
-        return redirect(to='/'+str(request.user.id)+'/done_view')
-    form = DoneEditForm(request.POST)
-    if form.is_valid():
-        task = Task.objects.get(id=request.POST['id'])
-        task.done_date = request.POST['done_date']
-        task.save()
-    return redirect(to='/'+str(request.user.id)+'/done_view')
-
-@login_required
-def recover(request):
-    if request.method == 'POST' and request.POST['id']:
-        task = Task.objects.get(id=request.POST['id'])
-        task.done_or_not = False
-        task.save()
-    return redirect('/'+str(request.user.id))
-
-@login_required
-def edit(request):
-    if request.method == 'POST' and request.POST['id']:
-        form = TaskForm(request.POST)
-        if form.is_valid():
-            task = Task.objects.get(id=request.POST['id'])
-            if request.POST['name']!="":
-                task.name = request.POST['name']
-            if request.POST['deadline']!="":
-                task.deadline = request.POST['deadline']
-            if request.POST['when']!="":
-                task.when = request.POST['when']
-            task.important = request.POST['important']
-            task.urgent = request.POST['urgent']
-            task.save()
-    return redirect(to='/'+str(request.user.id))
-# class UserOnlyMixin(UserPassesTestMixin):
-#     raise_exception = True
-#
-#     def test_func(self):
-#         user = self.request.user
-#         return user.pk == self.kwargs['pk'] or user.is_superuser
-#
-# class OnlyYouMixin(UserOnlyMixin):
-
+# ユーザーに固有の一覧ページ
 def list(request,pk):
     if request.user.pk != pk:
         return redirect('login')
@@ -166,37 +63,6 @@ def list(request,pk):
     infos = [today, tom, other]
     return render(request, 'list.html', {'infos':infos})
 
-def form(request,pk):
-    if request.user.pk != pk:
-        return redirect('login')
-    form = TaskForm()
-    return render(request, 'form.html', {'form': form})
-
-def done_view(request,pk):
-    if request.user.pk != pk:
-        return redirect('login')
-    dones = Task.objects.all().filter(user=request.user, done_or_not=True).order_by('-done_date')
-    week = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7)))
-    data = []
-    for i in range(7):
-        info = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i)))
-        data.append(info.num)
-    return render(request, 'done.html', {'week':week, 'today':data[0], 'data':data})
-
-def done_edit_view(request):
-    if request.method == 'POST' and request.POST.get('id'):
-        id = request.POST['id']
-        form = DoneEditForm()
-        return render(request, 'done_edit.html', {'form': form, 'id': id})
-    return redirect('login')
-
-def edit_view(request):
-    if request.method == 'POST' and request.POST.get('id'):
-        id = request.POST['id']
-        form = TaskForm()
-        return render(request, 'edit.html', {'form': form, 'id': id})
-    return redirect('login')
-
 def today(request,pk):
     if request.user.pk != pk:
         return redirect('login')
@@ -211,8 +77,56 @@ def tomorrow(request,pk):
     num = len(tasks)
     return render(request, 'tomorrow.html', {'tasks':tasks,'num':num})
 
-def notice(request):
-    return render(request, 'notice.html')
+def done_list(request,pk):
+    if request.user.pk != pk:
+        return redirect('login')
+    dones = Task.objects.all().filter(user=request.user, done_or_not=True).order_by('-done_date')
+    week = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7)))
+    data = []
+    for i in range(7):
+        info = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i)))
+        data.append(info.num)
+    return render(request, 'done.html', {'week':week, 'today':data[0], 'data':data})
+
+
+def edit(request):
+    if request.method == 'POST' and request.POST.get('id'):
+        id = request.POST['id']
+        form = TaskForm()
+        return render(request, 'update.html', {'form': form, 'id': id})
+    return redirect('login')
+
+@login_required
+def update(request):
+    if request.method == 'POST' and request.POST['id']:
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            task = Task.objects.get(id=request.POST['id'])
+            if request.POST['name']!="":
+                task.name = request.POST['name']
+            if request.POST['deadline']!="":
+                task.deadline = request.POST['deadline']
+            if request.POST['when']!="":
+                task.when = request.POST['when']
+            task.important = request.POST['important']
+            task.urgent = request.POST['urgent']
+            task.save()
+    return redirect(to='/'+str(request.user.id))
+
+@login_required
+def later(request):
+    if request.method == 'POST' and request.POST['id']:
+        task = Task.objects.get(id=request.POST['id'])
+        task.when += datetime.timedelta(days=1)
+        task.save()
+    return redirect(to='/'+str(request.user.id))
+
+@login_required
+def delete(request):
+    if request.method == 'POST' and request.POST['id']:
+        task = Task.objects.get(id=request.POST['id'])
+        task.delete()
+    return redirect(to='/'+str(request.user.id))
 
 @csrf_exempt
 def sort(request):
@@ -222,6 +136,85 @@ def sort(request):
         task.save()
     return HttpResponse('')
 
+
+# 完了タスク関連の操作
+@login_required
+def done(request):
+    if request.method == 'POST' and request.POST['id']:
+        task = Task.objects.get(id=request.POST['id'])
+        task.done_or_not = True
+        task.done_date = datetime.date.today()
+        task.save()
+    return redirect(to='/'+str(request.user.id)+'/done_list')
+
+def done_edit(request):
+    if request.method == 'POST' and request.POST.get('id'):
+        id = request.POST['id']
+        form = DoneEditForm()
+        return render(request, 'done_update.html', {'form': form, 'id': id})
+    return redirect('login')
+
+@login_required
+def done_update(request):
+    if request.method != 'POST':
+        return redirect(to='/'+str(request.user.id)+'/done_list')
+    form = DoneEditForm(request.POST)
+    if form.is_valid():
+        task = Task.objects.get(id=request.POST['id'])
+        task.done_date = request.POST.get('done_date')
+        task.save()
+    return redirect(to='/'+str(request.user.id)+'/done_list')
+
+@login_required
+def recover(request):
+    if request.method == 'POST' and request.POST['id']:
+        task = Task.objects.get(id=request.POST['id'])
+        task.done_or_not = False
+        task.save()
+    return redirect('/'+str(request.user.id))
+
+
+# ユーザー情報関連
+def login_view(request):
+    user=authenticate(
+        username=request.POST.get('username'),
+        password=request.POST.get('password')
+    )
+    if user is not None:
+        login(request,user)
+        url='/'+str(request.user.id)
+        return redirect(url)
+    else:
+        return redirect('accounts/login')
+
+def create_user_form(request):
+    form=UserForm()
+    return render(request,'create_user_form.html', {'form':form})
+
+def create_user(request):
+    user = UserForm(request.POST)
+    if user.is_valid():
+        user=User.objects.create_user(
+        request.POST.get('username'),
+        request.POST.get('email'),
+        request.POST.get('password')
+    )
+        user.save()
+        return redirect('/accounts/login/')
+    else:
+        return redirect('/create_user_form')
+
+
+# class UserOnlyMixin(UserPassesTestMixin):
+#     raise_exception = True
+#
+#     def test_func(self):
+#         user = self.request.user
+#         return user.pk == self.kwargs['pk'] or user.is_superuser
+#
+# class OnlyYouMixin(UserOnlyMixin):
+
+# LINE関連
 @login_required
 def line(request):
     return render(request, 'add_line.html')
@@ -327,3 +320,4 @@ def notify(request, when):
             logger.error("message ready")
             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
         return HttpResponse("送信しました")
+

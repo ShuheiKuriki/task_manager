@@ -22,31 +22,48 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('auth/', include('allauth.urls')),     # 追加
+
+    # 全ユーザー共通のページを表示
     path('', views.index, name='index'),
     path('sample', views.sample),
-    path('<int:pk>', views.list, name='list'),
-    path('<int:pk>/form', views.form, name='form'),
-    path('post', views.post),
-    path('delete', views.delete),
-    path('done', views.done),
-    path('<int:pk>/done_view', views.done_view, name='done_view'),
-    path('done_edit', views.done_edit),
-    path('done_edit_view', views.done_edit_view),
-    path('edit', views.edit),
-    path('edit_view', views.edit_view),
-    path('recover', views.recover),
     path('notice', views.notice, name='notice'),
-    path('notify/<str:when>', views.notify, name='notify'),
+
+    # ユーザーに固有の一覧ページ
+    path('<int:pk>', views.list, name='list'),
     path('<int:pk>/today', views.today, name='today'),
     path('<int:pk>/tomorrow', views.tomorrow, name='tomorrow'),
-    path('login_view', views.login_view, name='login'),
-    path('create_user/', views.create_user, name='create_user'),
-    path('create_user_view/', views.create_user_view),
-    path('logout/',views.logout_view),
-    path('accounts/login/', LoginView.as_view(template_name='login_view.html')),
+    path('<int:pk>/done_list', views.done_list, name='done_list'),
+
+    # ユーザー固有のタスク追加フォーム
+    # path('<int:pk>/add', views.add, name='add'),
+
+        ## 編集フォームに遷移
+    path('edit', views.edit),
+        ## 更新
+    path('update', views.update),
+    path('delete', views.delete),
+    path('later', views.later),
     path('sort', views.sort, name='sort'),
+
+    # 完了タスク関連の操作
+    path('done', views.done),
+        ## 完了編集画面に遷移
+    path('done_edit', views.done_edit),
+        ## 完了更新
+    path('done_update', views.done_update),
+    path('recover', views.recover),
+
+    # ユーザー情報関連
+    path('accounts/login/', LoginView.as_view(template_name='login_view.html')),
+    path('login_view', views.login_view, name='login'),
+    path('create_user_form/', views.create_user_form),
+    path('create_user/', views.create_user, name='create_user'),
+    path('logout/',views.logout_view),
+
+    # LINE関連
     path('callback/', views.callback, name='callback'),
     path('line/', views.line, name='line'),
+    path('notify/<str:when>', views.notify, name='notify'),
     path('test', views.test)
 ]
 
