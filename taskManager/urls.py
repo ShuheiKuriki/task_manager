@@ -29,41 +29,22 @@ urlpatterns = [
     path('notice', views.notice, name='notice'),
 
     # ユーザーに固有の一覧ページ
-    path('<int:pk>', views.list, name='list'),
-    path('<int:pk>/today', views.today, name='today'),
-    path('<int:pk>/tomorrow', views.tomorrow, name='tomorrow'),
-    path('<int:pk>/done_list', views.done_list, name='done_list'),
-
-    # ユーザー固有のタスク追加フォーム
-    # path('<int:pk>/add', views.add, name='add'),
+    # path('<int:pk>', views.list, name='list'),
+    # path('<int:pk>/today', views.today, name='today'),
+    # path('<int:pk>/tomorrow', views.tomorrow, name='tomorrow'),
+    # path('<int:pk>/done_list', views.done_list, name='done_list'),
 
     # 未完了タスク関連の操作
     path('create', views.TaskCreateView.as_view()),
-    # path('create', views.create),
-    path('update', views.TaskUpdateView.as_view()),
-        ## 編集フォームに遷移
-    # path('edit', views.edit),
-        ## 更新
-    # path('update', views.update),
-    path('delete', views.delete),
-    path('later', views.later),
+    path('update/<int:pk>', views.TaskUpdateView.as_view(), name='update'),
+    path('delete/<int:pk>', views.TaskDeleteView.as_view(), name='delete'),
+    path('later/<int:pk>', views.later, name='later'),
     path('sort', views.sort, name='sort'),
 
     # 完了タスク関連の操作
-    path('done', views.done),
-        ## 完了編集画面に遷移
-    path('done_edit', views.done_edit),
-        ## 完了更新
-    path('done_update', views.done_update),
-    path('recover', views.recover),
-
-    # ユーザー情報関連
-    path('accounts/login/', LoginView.as_view(template_name='Form/login.html')),
-    path('login_view', views.login_view, name='login'),
-    path('create_user_form/', views.create_user_form),
-    path('create_user/', views.create_user, name='create_user'),
-    # path('logout/',views.logout_view),
-    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path('done/<int:pk>', views.done, name='done'),
+    path('done_update/<int:pk>', views.DoneUpdateView.as_view(), name='done_update'),
+    path('recover/<int:pk>', views.recover, name='recover'),
 
     # LINE関連
     path('callback/', views.callback, name='callback'),

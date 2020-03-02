@@ -20,11 +20,8 @@
 
 {% block header %}
     <h2>{% block h2 %}{% endblock %}</h2>
-    <form class='col-xl-6 col-md-8 col-lg-6 col-sm-12 mx-auto m-5' method="POST" action='{% block action %}{% endblock%}'>
+    <form class='col-xl-6 col-md-8 col-lg-6 col-sm-12 mx-auto m-5' method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        {% block input %}{% endblock%}
-        <button class="btn btn-info btn-block mt-5 mb-4" type="submit">{% block message %}{% endblock%}</button>
-        <a class="btn btn-success btn-block text-light" href="{% block url %}{% endblock %}">{% block name %}{% endblock%}をやめて戻る</a>
+        {% block form %}{% endblock%}
     </form>
 {% endblock %}

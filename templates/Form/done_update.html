@@ -2,8 +2,10 @@
 {% block title2 %}完了日編集フォーム{% endblock %}
 {% block h2 %}完了日編集フォーム{% endblock %}
 {% block active_done %}active{% endblock %}
-{% block action %}/done_update{% endblock%}
-{% block input %}<input name='id' type="hidden" value="{{ id }}"/>{% endblock%}
-{% block message %}更新{% endblock%}
-{% block url %}{% url 'done_list' user.pk %}{% endblock%}
-{% block name %}編集{% endblock%}
+<!-- {% block action %}/done_update{% endblock%} -->
+<!-- {% block input %}<input name='id' type="hidden" value="{{ id }}"/>{% endblock%} -->
+{% block form %}
+  {{ form.as_p }}
+  <button class="btn btn-info btn-block mt-5 mb-4" type="submit">更新</button>
+  <a class="btn btn-success btn-block text-light" href="% url 'done_list' user.pk %}">編集をやめて戻る</a>
+{% endblock%}

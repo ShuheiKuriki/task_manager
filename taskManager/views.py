@@ -4,11 +4,12 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.views import LoginView
 from django.template.loader import render_to_string
 from django.conf import settings
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import TaskForm, UserForm, DoneEditForm
@@ -97,51 +98,30 @@ class TaskCreateView(CreateView):
         return super(TaskCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('list', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('list', kwargs={'pk': self.request.user.id})
 
 @method_decorator(login_required, name='dispatch')
 class TaskUpdateView(UpdateView):
+    model = Task
     form_class = TaskForm
     template_name = 'Form/update.html'
 
+    def get_success_url(self):
+        return reverse_lazy('list', kwargs={'pk': self.request.user.id})
 
-def edit(request):
-    if request.method == 'POST' and request.POST.get('id'):
-        id = request.POST['id']
-        form = TaskForm()
-        return render(request, 'Form/update.html', {'form': form, 'id': id})
-    return redirect('login')
+@method_decorator(login_required, name='dispatch')
+class TaskDeleteView(DeleteView):
+    model = Task
+    template_name = 'Form/delete.html'
 
-@login_required
-def update(request):
-    if request.method == 'POST' and request.POST['id']:
-        form = TaskForm(request.POST)
-        if form.is_valid():
-            task = Task.objects.get(id=request.POST['id'])
-            if request.POST['name']!="":
-                task.name = request.POST['name']
-            if request.POST['deadline']!="":
-                task.deadline = request.POST['deadline']
-            if request.POST['when']!="":
-                task.when = request.POST['when']
-            task.important = request.POST.get('important')
-            task.urgent = request.POST['urgent']
-            task.save()
-    return redirect(to='/'+str(request.user.id))
+    def get_success_url(self):
+        return reverse_lazy('list', kwargs={'pk': self.request.user.id})
 
 @login_required
-def later(request):
-    if request.method == 'POST' and request.POST['id']:
-        task = Task.objects.get(id=request.POST['id'])
-        task.when += datetime.timedelta(days=1)
-        task.save()
-    return redirect(to='/'+str(request.user.id))
-
-@login_required
-def delete(request):
-    if request.method == 'POST' and request.POST['id']:
-        task = Task.objects.get(id=request.POST['id'])
-        task.delete()
+def later(request, pk):
+    task = Task.objects.get(id=pk)
+    task.when += datetime.timedelta(days=1)
+    task.save()
     return redirect(to='/'+str(request.user.id))
 
 @csrf_exempt
@@ -155,38 +135,27 @@ def sort(request):
 
 # 完了タスク関連の操作
 @login_required
-def done(request):
-    if request.method == 'POST' and request.POST['id']:
-        task = Task.objects.get(id=request.POST['id'])
-        task.done_or_not = True
-        task.done_date = datetime.date.today()
-        task.save()
+def done(request, pk):
+    task = Task.objects.get(id=pk)
+    task.done_or_not = True
+    task.done_date = datetime.date.today()
+    task.save()
     return redirect(to='/'+str(request.user.id)+'/done_list')
 
-def done_edit(request):
-    if request.method == 'POST' and request.POST.get('id'):
-        id = request.POST['id']
-        form = DoneEditForm()
-        return render(request, 'Form/done_update.html', {'form': form, 'id': id})
-    return redirect('login')
+@method_decorator(login_required, name='dispatch')
+class DoneUpdateView(UpdateView):
+    model = Task
+    form_class = DoneEditForm
+    template_name = 'Form/done_update.html'
+
+    def get_success_url(self):
+        return reverse_lazy('done_list', kwargs={'pk': self.request.user.id})
 
 @login_required
-def done_update(request):
-    if request.method != 'POST':
-        return redirect(to='/'+str(request.user.id)+'/done_list')
-    form = DoneEditForm(request.POST)
-    if form.is_valid():
-        task = Task.objects.get(id=request.POST['id'])
-        task.done_date = request.POST.get('done_date')
-        task.save()
-    return redirect(to='/'+str(request.user.id)+'/done_list')
-
-@login_required
-def recover(request):
-    if request.method == 'POST' and request.POST['id']:
-        task = Task.objects.get(id=request.POST['id'])
-        task.done_or_not = False
-        task.save()
+def recover(request, pk):
+    task = Task.objects.get(id=pk)
+    task.done_or_not = False
+    task.save()
     return redirect('/'+str(request.user.id))
 
 
@@ -371,3 +340,52 @@ def notify(request, when):
 #         return redirect(to=url)
 #     else:
 #         return redirect(to=form_url)
+
+# def delete(request):
+#     if request.method == 'POST' and request.POST['id']:
+#         task = Task.objects.get(id=request.POST['id'])
+#         task.delete()
+#     return redirect(to='/'+str(request.user.id))
+
+# def edit(request):
+#     if request.method == 'POST' and request.POST.get('id'):
+#         id = request.POST['id']
+#         form = TaskForm()
+#         return render(request, 'Form/update.html', {'form': form, 'id': id})
+#     return redirect('login')
+#
+# @login_required
+# def update(request):
+#     if request.method == 'POST' and request.POST['id']:
+#         form = TaskForm(request.POST)
+#         if form.is_valid():
+#             task = Task.objects.get(id=request.POST['id'])
+#             if request.POST['name']!="":
+#                 task.name = request.POST['name']
+#             if request.POST['deadline']!="":
+#                 task.deadline = request.POST['deadline']
+#             if request.POST['when']!="":
+#                 task.when = request.POST['when']
+#             task.important = request.POST.get('important')
+#             task.urgent = request.POST['urgent']
+#             task.save()
+#     return redirect(to='/'+str(request.user.id))
+
+# def done_edit(request):
+#     if request.method == 'POST' and request.POST.get('id'):
+#         id = request.POST['id']
+#         form = DoneEditForm()
+#         return render(request, 'Form/done_update.html', {'form': form, 'id': id})
+#     return redirect('login')
+#
+# @login_required
+# def done_update(request):
+#     if request.method != 'POST':
+#         return redirect(to='/'+str(request.user.id)+'/done_list')
+#     form = DoneEditForm(request.POST)
+#     if form.is_valid():
+#         task = Task.objects.get(id=request.POST['id'])
+#         task.done_date = request.POST.get('done_date')
+#         task.save()
+#     return redirect(to='/'+str(request.user.id)+'/done_list')
+

@@ -26,28 +26,10 @@
                 <td>{{ task.name }}</td>
                 <td>{% if task.important == True %}○{% else %}✖️{% endif %}/{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
                 <td>{{ task.when.month }}/{{ task.when.day }}</td>
-                <td>
-                  <form method="POST" action="/later">
-                      {%csrf_token%}
-                      <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit" class='small'>later</button>
-                  </form>
-                </td>
+                <td><a href="{% url 'later' task.id %}">翌日へ</a></td>
                 <td>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
-                <td>
-                  <form method="POST" action="/edit">
-                      {%csrf_token%}
-                      <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit" class='small'>edit</button>
-                  </form>
-                </td>
-                <td>
-                  <form method="POST" action="/delete">
-                      {%csrf_token%}
-                      <input name='id' type="hidden" value="{{ task.id }}"/>
-                      <button type="submit" class='small'>del</button>
-                  </form>
-                </td>
+                <td><a href="{% url 'update' task.id %}">edit</a></td>
+                <td><a href="{% url 'delete' task.id %}">del</a></td>
               </tr>
             {% endfor %}
           </tbody>
