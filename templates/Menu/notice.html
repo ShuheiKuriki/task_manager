@@ -1,25 +1,5 @@
-{% extends "base.html" %}
+{% extends "logoned_base.html" %}
 {% block title %}お知らせ{% endblock %}
-{% block li %}
-  {% if user.is_authenticated %}
-    <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'accounts:index' user.pk %}">一覧</a>
-    </li>
-    <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'accounts:today' user.pk %}">今日のタスク</a>
-    </li>
-    <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'accounts:tomorrow' user.pk %}">明日のタスク</a>
-    </li>
-    <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'accounts:done_list' user.pk %}">完了済み</a>
-    </li>
-    <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'accounts:logout' %}">ログアウト</a>
-    </li>
-  {% else %}
-  {% endif %}
-{% endblock %}
 
 {% block header %}
     <h2>〜お知らせ〜</h2>
