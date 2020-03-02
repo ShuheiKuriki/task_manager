@@ -24,8 +24,19 @@
             </tr>
         </table> -->
 
-        <table class='mx-auto my-3'>
-          {{ form.as_table}}
+        <!-- <table class='mx-auto my-3'> -->
+        {{ form.non_field_errors }}
+          {% for field in form %}
+            <div class="field my-5">
+              {{ field.label_tag }}
+              {{ field }}
+              <br>
+              {% if field.help_text %}
+                <span class="helptext text-danger">{{ field.help_text }}</span>
+              {% endif %}
+              {{ field.errors }}
+            </div>
+          {% endfor %}
             <!-- {% for field in form %}
               <tr class='my-1'>
               {{ field }}
@@ -38,8 +49,8 @@
                 <p>{{ error }}</p>
               </div>
 　　　　　　　{% endfor %} -->
-        </table>
-        <button class="btn btn-primary btn-block mt-5 mb-4" type="submit" onclick="create_user()">Sign Up</button>
+        <!-- </table> -->
+        <button class="btn btn-primary btn-block mt-5 mb-4" type="submit">Sign Up</button>
         <a class="btn btn-success btn-block" href="{% url 'accounts:login' %}">登録済みの方はこちら</a>
     </form>
 {% endblock %}
