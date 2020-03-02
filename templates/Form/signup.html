@@ -2,7 +2,7 @@
 {% block title %}ログインフォーム{% endblock %}
 {% block li %}
     <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="/accounts/login">ログイン</a>
+      <a class="js-scroll-trigger" href="{% url 'accounts:login' %}">ログイン</a>
     </li>
 {% endblock %}
 {% block header %}
@@ -40,6 +40,6 @@
 　　　　　　　{% endfor %} -->
         </table>
         <button class="btn btn-primary btn-block mt-5 mb-4" type="submit" onclick="create_user()">Sign Up</button>
-        <a class="btn btn-success btn-block" href="/accounts/login">登録済みの方はこちら</a>
+        <a class="btn btn-success btn-block" href="{% url 'accounts:login' %}">登録済みの方はこちら</a>
     </form>
 {% endblock %}

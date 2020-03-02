@@ -32,7 +32,7 @@ urlpatterns = [
     path('notice', views.notice, name='notice'),
 
     # 未完了タスク関連の操作
-    path('create', views.TaskCreateView.as_view()),
+    path('create', views.TaskCreateView.as_view(),name='create'),
     path('update/<int:pk>', views.TaskUpdateView.as_view(), name='update'),
     path('delete/<int:pk>', views.TaskDeleteView.as_view(), name='delete'),
     path('later/<int:pk>', views.later, name='later'),

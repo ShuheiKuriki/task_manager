@@ -15,7 +15,7 @@
       <a class="js-scroll-trigger" href="{% url 'accounts:done_list' user.pk %}">完了済み</a>
     </li>
     <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="/accounts/logout">ログアウト</a>
+      <a class="js-scroll-trigger" href="{% url 'accounts:logout' %}">ログアウト</a>
     </li>
 {% endblock %}
 {% block header %}

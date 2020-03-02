@@ -40,7 +40,7 @@
       </li>
       {% if user.is_authenticated %}
         <li class="sidebar-nav-item">
-          <a class="js-scroll-trigger" href="accounts/logout">ログアウト</a>
+          <a class="js-scroll-trigger" href="{% url 'accounts:logout' %}">ログアウト</a>
         </li>
       {% endif %}
     </ul>
@@ -51,7 +51,7 @@
   <header class="masthead">
       <div class='mt-3 mb-4 mx-3'>
         {% if user.is_authenticated %}
-          <a class="text-dark text-left btn btn-dark" href='{% url 'accounts:index' user.pk %}'>Task Scheduler</a>
+          <a class="text-dark text-left btn btn-dark" href="{% url 'accounts:index' user.pk %}">Task Scheduler</a>
         {% else %}
           <a class="text-dark text-left btn btn-dark" href="/">Task Scheduler</a>
         {% endif %}
