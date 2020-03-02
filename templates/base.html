@@ -38,6 +38,11 @@
       <li class="sidebar-nav-item">
         <a class="js-scroll-trigger" href="/notice">お知らせ</a>
       </li>
+      {% if user.is_authenticated %}
+        <li class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="accounts/logout">ログアウト</a>
+        </li>
+      {% endif %}
     </ul>
   </nav>
   <!-- Navigation -->

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.line',
     'taskManager',
     'bootstrap4',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -105,9 +106,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
+
+LOGIN_URL='/'
+LOGOUT_REDIRECT_URL = '/'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

@@ -172,22 +172,35 @@ def login_view(request):
     else:
         return redirect('accounts/login')
 
-def create_user_form(request):
-    form=UserForm()
-    return render(request,'Form/create_user.html', {'form':form})
+class MyLoginView(LoginView):
+    template_name = 'Form/login.html'
 
-def create_user(request):
-    user = UserForm(request.POST)
-    if user.is_valid():
-        user=User.objects.create_user(
-        request.POST.get('username'),
-        request.POST.get('email'),
-        request.POST.get('password')
-    )
-        user.save()
-        return redirect('/accounts/login/')
-    else:
-        return redirect('/create_user_form')
+    def get_success_url(self):
+        # return reverse('index')
+        return reverse_lazy('list', kwargs={'pk': self.request.user.id})
+
+class UserCreateView(CreateView):
+    model = User
+    form_class = UserForm
+    template_name = 'Form/create_user.html'
+    success_url = reverse_lazy('accounts:login')
+
+# def create_user_form(request):
+#     form=UserForm()
+#     return render(request,'Form/create_user.html', {'form':form})
+
+# def create_user(request):
+#     user = UserForm(request.POST)
+#     if user.is_valid():
+#         user=User.objects.create_user(
+#         request.POST.get('username'),
+#         request.POST.get('email'),
+#         request.POST.get('password')
+#     )
+#         user.save()
+#         return redirect('/accounts/login/')
+#     else:
+#         return redirect('/create_user_form')
 
 # @login_required
 # def logout_view(request):

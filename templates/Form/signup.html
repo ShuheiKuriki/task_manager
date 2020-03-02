@@ -1,4 +1,4 @@
-{% extends "Form/base.html" %}
+{% extends "base.html" %}
 {% block title %}ログインフォーム{% endblock %}
 {% block li %}
     <li class="sidebar-nav-item">
@@ -7,9 +7,9 @@
 {% endblock %}
 {% block header %}
     <h2 class='pt-5'>新規登録フォーム</h2>
-    <form class='col-xl-6 col-md-8 col-lg-6 col-sm-12 mx-auto m-5' method="POST" action="/create_user/">
+    <form class='col-xl-6 col-md-8 col-lg-6 col-sm-12 mx-auto m-5' method="POST">
         {%csrf_token%}
-        <table class='mx-auto'>
+        <!-- <table class='mx-auto'>
             <tr>
                 <td>{{form.username.label_tag}}</td>
                 <td>{{form.username}}</td>
@@ -22,8 +22,24 @@
                 <td>{{form.password.label_tag}}</td>
                 <td>{{form.password}}</td>
             </tr>
+        </table> -->
+
+        <table class='mx-auto my-3'>
+          {{ form.as_table}}
+            <!-- {% for field in form %}
+              <tr class='my-1'>
+              {{ field }}
+              <hr>
+              </tr>
+　　         {% endfor %}
+
+　　　　     {% for error in form.non_field_errors %}
+              <div class="alert alert-danger" role="alert">
+                <p>{{ error }}</p>
+              </div>
+　　　　　　　{% endfor %} -->
         </table>
-        <input class="btn btn-primary btn-block mt-5 mb-4" value="Sign up" type="submit" onclick="create_user()"/>
+        <button class="btn btn-primary btn-block mt-5 mb-4" type="submit" onclick="create_user()">Sign Up</button>
         <a class="btn btn-success btn-block" href="/accounts/login">登録済みの方はこちら</a>
     </form>
 {% endblock %}
