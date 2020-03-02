@@ -10,20 +10,28 @@
     <h2 class='pt-5'>ログインフォーム</h2>
     <form class='col-xl-6 col-md-8 col-lg-6 col-sm-12 mx-auto m-5' method="POST">
         {%csrf_token%}
-        <table class='mx-auto my-3'>
-            {% for field in form %}
+        <!-- <table class='mx-auto my-3'> -->
+            <!-- {% for field in form %}
               <tr class='my-1'>
               {{ field }}
               <hr>
               </tr>
-　　         {% endfor %}
+　　         {% endfor %} -->
+            {% for field in form %}
+              <div class="field my-5">
+                {{ field.label_tag }}
+                {{ field }}
+                <br>
+                {{ field.errors }}
+              </div>
+            {% endfor %}
 
 　　　　     {% for error in form.non_field_errors %}
               <div class="alert alert-danger" role="alert">
                 <p>{{ error }}</p>
               </div>
 　　　　　　　{% endfor %}
-        </table>
+        <!-- </table> -->
         <button class="btn btn-info btn-block mt-5 mb-4" type="submit">login</button>
         <input type="hidden" name="next" value="{{ next }}" />
         <a class="btn btn-success btn-block" href="{% url 'accounts:signup' %}">新規登録はこちら</a>
