@@ -5,17 +5,17 @@
 {% block li %}
     {% if user.is_authenticated %}
     <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'list' user.pk %}">タスク管理を始める</a>
+      <a class="js-scroll-trigger" href="{% url 'accounts:index' user.pk %}">タスク管理を始める</a>
     </li>
     <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="/logout">ログアウト</a>
+      <a class="js-scroll-trigger" href="/accounts/logout">ログアウト</a>
     </li>
     {%else%}
     <li class="sidebar-nav-item">
       <a class="js-scroll-trigger" href="/accounts/login">ログイン</a>
     </li>
     <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="/create_user_form">新規登録</a>
+      <a class="js-scroll-trigger" href="/accounts/signup">新規登録</a>
     </li>
     {%endif%}
 {% endblock %}
@@ -27,10 +27,10 @@
   </h3>
   <div class="row my-5">
     <div class="ml-auto">
-      <a class="btn btn-primary btn-xl js-scroll-trigger" href="/login_view">ログイン</a>
+      <a class="btn btn-primary btn-xl js-scroll-trigger" href="/accounts/login">ログイン</a>
     </div>
     <div class="mx-4">
-      <a class="btn btn-success btn-xl js-scroll-trigger" href="/create_user_form">新規登録</a>
+      <a class="btn btn-success btn-xl js-scroll-trigger" href="/accounts/signup">新規登録</a>
     </div>
     <div class="mr-auto">
       <a class="btn btn-info btn-xl js-scroll-trigger" href="#about">もっと見る</a>
@@ -45,7 +45,7 @@
         <h3>今日何をするべきか、悩むことはありませんか？</h3>
         <h3>このアプリはそんなあなたをサポートします！</h3>
         <p class="lead mb-5">あなたはタスクが増えたときに入力するだけ！</p>
-        <a class="btn btn-primary btn-xl js-scroll-trigger" href="/create_user_view">使い始める</a>
+        <a class="btn btn-primary btn-xl js-scroll-trigger" href="/accounts/signup">使い始める</a>
       </div>
     </div>
   </div>
@@ -61,7 +61,7 @@
     <div class="collapse navbar-collapse" id="navbarText">
         {% if user.is_authenticated %}
         <span class="navbar-text">
-            <a href="{% url 'list' user.pk %}" class="btn btn-primary mr-2">タスク管理を始める</a>
+            <a href="{% url 'accounts:index' user.pk %}" class="btn btn-primary mr-2">タスク管理を始める</a>
             <a href="/logout" class="btn btn-primary">ログアウト</a>
         </span>
         {%else%}

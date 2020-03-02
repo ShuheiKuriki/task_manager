@@ -31,12 +31,6 @@ urlpatterns = [
     path('sample', views.sample),
     path('notice', views.notice, name='notice'),
 
-    # ユーザーに固有の一覧ページ
-    # path('<int:pk>', views.list, name='list'),
-    # path('<int:pk>/today', views.today, name='today'),
-    # path('<int:pk>/tomorrow', views.tomorrow, name='tomorrow'),
-    # path('<int:pk>/done_list', views.done_list, name='done_list'),
-
     # 未完了タスク関連の操作
     path('create', views.TaskCreateView.as_view()),
     path('update/<int:pk>', views.TaskUpdateView.as_view(), name='update'),

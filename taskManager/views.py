@@ -42,51 +42,6 @@ def sample(request):
 def notice(request):
     return render(request, 'Menu/notice.html')
 
-# ユーザーに固有の一覧ページ
-def list(request,pk):
-    if request.user.pk != pk:
-        return redirect('login')
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
-    today = Taskinfo(
-        name="今日",
-        tasks=tasks.filter(when__lte=datetime.date.today()).order_by('order')
-    )
-    tom = Taskinfo(
-        name="明日",
-        tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
-    )
-    other = Taskinfo(
-        name="明日以降",
-        tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when')
-    )
-    infos = [today, tom, other]
-    return render(request, 'Menu/list.html', {'infos':infos})
-
-def today(request,pk):
-    if request.user.pk != pk:
-        return redirect('login')
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__lte=datetime.date.today()).order_by('order')
-    num = len(tasks)
-    return render(request, 'Menu/today.html', {'tasks':tasks,'num':num})
-
-def tomorrow(request,pk):
-    if request.user.pk != pk:
-        return redirect('login')
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
-    num = len(tasks)
-    return render(request, 'Menu/tomorrow.html', {'tasks':tasks,'num':num})
-
-def done_list(request,pk):
-    if request.user.pk != pk:
-        return redirect('login')
-    dones = Task.objects.all().filter(user=request.user, done_or_not=True).order_by('-done_date')
-    week = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7)))
-    data = []
-    for i in range(7):
-        info = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i)))
-        data.append(info.num)
-    return render(request, 'Menu/done.html', {'week':week, 'today':data[0], 'data':data})
-
 # 未完了タスク関連の操作
 @method_decorator(login_required, name='dispatch')
 class TaskCreateView(CreateView):
@@ -98,7 +53,7 @@ class TaskCreateView(CreateView):
         return super(TaskCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('list', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
 
 @method_decorator(login_required, name='dispatch')
 class TaskUpdateView(UpdateView):
@@ -107,7 +62,7 @@ class TaskUpdateView(UpdateView):
     template_name = 'Form/update.html'
 
     def get_success_url(self):
-        return reverse_lazy('list', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
 
 @method_decorator(login_required, name='dispatch')
 class TaskDeleteView(DeleteView):
@@ -115,14 +70,14 @@ class TaskDeleteView(DeleteView):
     template_name = 'Form/delete.html'
 
     def get_success_url(self):
-        return reverse_lazy('list', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
 
 @login_required
 def later(request, pk):
     task = Task.objects.get(id=pk)
     task.when += datetime.timedelta(days=1)
     task.save()
-    return redirect(to='/'+str(request.user.id))
+    return redirect(to='/accounts/'+str(request.user.id))
 
 @csrf_exempt
 def sort(request):
@@ -140,7 +95,7 @@ def done(request, pk):
     task.done_or_not = True
     task.done_date = datetime.date.today()
     task.save()
-    return redirect(to='/'+str(request.user.id)+'/done_list')
+    return redirect(to='/accounts/'+str(request.user.id)+'/done_list')
 
 @method_decorator(login_required, name='dispatch')
 class DoneUpdateView(UpdateView):
@@ -149,14 +104,14 @@ class DoneUpdateView(UpdateView):
     template_name = 'Form/done_update.html'
 
     def get_success_url(self):
-        return reverse_lazy('done_list', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('accounts:done_list', kwargs={'pk': self.request.user.id})
 
 @login_required
 def recover(request, pk):
     task = Task.objects.get(id=pk)
     task.done_or_not = False
     task.save()
-    return redirect('/'+str(request.user.id))
+    return redirect('/accounts/'+str(request.user.id))
 
 
 # ユーザー情報関連
@@ -177,44 +132,13 @@ class MyLoginView(LoginView):
 
     def get_success_url(self):
         # return reverse('index')
-        return reverse_lazy('list', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
 
 class UserCreateView(CreateView):
     model = User
     form_class = UserForm
     template_name = 'Form/create_user.html'
     success_url = reverse_lazy('accounts:login')
-
-# def create_user_form(request):
-#     form=UserForm()
-#     return render(request,'Form/create_user.html', {'form':form})
-
-# def create_user(request):
-#     user = UserForm(request.POST)
-#     if user.is_valid():
-#         user=User.objects.create_user(
-#         request.POST.get('username'),
-#         request.POST.get('email'),
-#         request.POST.get('password')
-#     )
-#         user.save()
-#         return redirect('/accounts/login/')
-#     else:
-#         return redirect('/create_user_form')
-
-# @login_required
-# def logout_view(request):
-#     logout(request)
-#     return redirect('/')
-
-# class UserOnlyMixin(UserPassesTestMixin):
-#     raise_exception = True
-#
-#     def test_func(self):
-#         user = self.request.user
-#         return user.pk == self.kwargs['pk'] or user.is_superuser
-#
-# class OnlyYouMixin(UserOnlyMixin):
 
 # LINE関連
 @login_required
@@ -322,83 +246,3 @@ def notify(request, when):
             logger.error("message ready")
             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
         return HttpResponse("送信しました")
-
-# ユーザー固有のタスク追加フォーム
-# def add(request,pk):
-#     if request.user.pk != pk:
-#         return redirect('login')
-#     form = TaskForm()
-#     return render(request, 'Form/create.html', {'form': form})
-
-# @login_required
-# def create(request):
-#     num = str(request.user.id)
-#     url = '/'+num
-#     form_url = '/'+num+'/add'
-#     if request.method != 'POST':
-#         return redirect(to=form_url)
-#     form = TaskForm(request.POST)
-#     if form.is_valid():
-#         # if form.cleaned_data['important'] == False:
-#         #     return HttpResponse("javascript:alert('登録しました！');")
-#         task=Task.objects.create(
-#             name=request.POST.get('name'),
-#             deadline=request.POST.get('deadline'),
-#             when=request.POST.get('when'),
-#             important=form.cleaned_data['important'],
-#             urgent=form.cleaned_data['urgent'],
-#             user=request.user
-#             )
-#         task.save()
-#         return redirect(to=url)
-#     else:
-#         return redirect(to=form_url)
-
-# def delete(request):
-#     if request.method == 'POST' and request.POST['id']:
-#         task = Task.objects.get(id=request.POST['id'])
-#         task.delete()
-#     return redirect(to='/'+str(request.user.id))
-
-# def edit(request):
-#     if request.method == 'POST' and request.POST.get('id'):
-#         id = request.POST['id']
-#         form = TaskForm()
-#         return render(request, 'Form/update.html', {'form': form, 'id': id})
-#     return redirect('login')
-#
-# @login_required
-# def update(request):
-#     if request.method == 'POST' and request.POST['id']:
-#         form = TaskForm(request.POST)
-#         if form.is_valid():
-#             task = Task.objects.get(id=request.POST['id'])
-#             if request.POST['name']!="":
-#                 task.name = request.POST['name']
-#             if request.POST['deadline']!="":
-#                 task.deadline = request.POST['deadline']
-#             if request.POST['when']!="":
-#                 task.when = request.POST['when']
-#             task.important = request.POST.get('important')
-#             task.urgent = request.POST['urgent']
-#             task.save()
-#     return redirect(to='/'+str(request.user.id))
-
-# def done_edit(request):
-#     if request.method == 'POST' and request.POST.get('id'):
-#         id = request.POST['id']
-#         form = DoneEditForm()
-#         return render(request, 'Form/done_update.html', {'form': form, 'id': id})
-#     return redirect('login')
-#
-# @login_required
-# def done_update(request):
-#     if request.method != 'POST':
-#         return redirect(to='/'+str(request.user.id)+'/done_list')
-#     form = DoneEditForm(request.POST)
-#     if form.is_valid():
-#         task = Task.objects.get(id=request.POST['id'])
-#         task.done_date = request.POST.get('done_date')
-#         task.save()
-#     return redirect(to='/'+str(request.user.id)+'/done_list')
-
