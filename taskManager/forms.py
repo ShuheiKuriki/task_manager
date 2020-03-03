@@ -33,7 +33,7 @@ class TaskForm(ModelForm):
 class DoneEditForm(ModelForm):
     class Meta:
         model = Task
-        fields = ['done_date']
+        fields = ['name','done_date']
         widgets = {
             'done_date': DateInput()
         }

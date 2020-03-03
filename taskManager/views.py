@@ -96,6 +96,20 @@ class DoneUpdateView(UpdateView):
         return reverse_lazy('accounts:done_list', kwargs={'pk': self.request.user.id})
 
 @login_required
+def done_before(request, pk):
+    task = Task.objects.get(id=pk)
+    task.done_date -= datetime.timedelta(days=1)
+    task.save()
+    return redirect(to='/accounts/'+str(request.user.id)+'/done_list')
+
+@login_required
+def done_after(request, pk):
+    task = Task.objects.get(id=pk)
+    task.done_date += datetime.timedelta(days=1)
+    task.save()
+    return redirect(to='/accounts/'+str(request.user.id)+'/done_list')
+
+@login_required
 def recover(request, pk):
     task = Task.objects.get(id=pk)
     task.done_or_not = False

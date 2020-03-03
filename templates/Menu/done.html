@@ -83,9 +83,10 @@
             <tr>
               <th scope='col'></th>
               <th scope='col'>タスク名</th>
-              <th scope='col'>重要</th>
-              <th scope='col'>緊急</th>
+              <th scope='col'>重/急</th>
               <th scope='col'>完了日</th>
+              <th scope='col'>1日前</th>
+              <th scope='col'>1日後</th>
               <th scope='col'>編集</th>
               <th scope='col'>元に戻す</th>
             </tr>
@@ -95,9 +96,10 @@
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ done.name }}</td>
-                <td>{% if done.important == True %}○{% else %}✖️{% endif %}</td>
-                <td>{% if done.urgent == True %}○{% else %}✖️{% endif %}</td>
+                <td>{% if task.important == True %}○{% else %}×{% endif %}/{% if task.urgent == True %}○{% else %}×{% endif %}</td>
                 <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
+                <td><a href="{% url 'done_before' done.id %}">前</a></td>
+                <td><a href="{% url 'done_after' done.id %}">後</a></td>
                 <td><a href="{% url 'done_update' done.id %}">edit</a></td>
                 <td><a href="{% url 'recover' done.id %}">return</a></td>
               </tr>

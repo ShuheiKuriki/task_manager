@@ -41,6 +41,8 @@ urlpatterns = [
 
     # 完了タスク関連の操作
     path('done/<int:pk>', views.done, name='done'),
+    path('done_before/<int:pk>', views.done_before, name='done_before'),
+    path('done_after/<int:pk>', views.done_after, name='done_after'),
     path('done_update/<int:pk>', views.DoneUpdateView.as_view(), name='done_update'),
     path('recover/<int:pk>', views.recover, name='recover'),
 ]
