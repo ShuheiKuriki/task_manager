@@ -35,7 +35,7 @@ def callback(request):
     handler = WebhookHandler(CHANNEL_SECRET)
     # logger.error(handler)
     # リクエストヘッダーから署名検証のための値を取得
-    # signature = request.META['HTTP_X_LINE_SIGNATURE']
+    signature = request.META['HTTP_X_LINE_SIGNATURE']
     # logger.error(signature)
     # リクエストボディを取得
     # body = request.body.decode('utf-8')
