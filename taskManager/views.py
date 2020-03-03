@@ -1,17 +1,13 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.contrib.auth import authenticate,login,logout
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.views import LoginView
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import TaskForm, UserForm, DoneEditForm
-from .models import Task, LinePush
+from .models import Task
 
 import datetime
 import logging
@@ -27,10 +23,10 @@ class Taskinfo:
 
 # 全ユーザー共通のページを表示
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'Menu/index.html')
 
 def sample(request):
-    return render(request, 'index_sample.html')
+    return render(request, 'Menu/index_sample.html')
 
 def notice(request):
     return render(request, 'Menu/notice.html')
