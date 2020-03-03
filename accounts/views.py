@@ -47,7 +47,7 @@ def index(request,pk):
         tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when')
     )
     infos = [today, tom, other]
-    return render(request, 'Menu/all_list.html', {'infos':infos})
+    return render(request, 'Menu/list/all_list.html', {'infos':infos})
 
 def today(request,pk):
     if request.user.pk != pk:
@@ -55,7 +55,7 @@ def today(request,pk):
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
     info = Taskinfo(tasks=tasks.filter(when__lte=datetime.date.today()).order_by('order'))
     infos = [info]
-    return render(request, 'Menu/today.html', {'infos':infos})
+    return render(request, 'Menu/list/today.html', {'infos':infos})
 
 def tomorrow(request,pk):
     if request.user.pk != pk:
@@ -63,7 +63,7 @@ def tomorrow(request,pk):
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
     info = Taskinfo(tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order'))
     infos = [info]
-    return render(request, 'Menu/tomorrow.html', {'infos':infos})
+    return render(request, 'Menu/list/tomorrow.html', {'infos':infos})
 
 def done_list(request,pk):
     if request.user.pk != pk:
