@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'taskManager',
     'bootstrap4',
     'accounts.apps.AccountsConfig',
+    'notify.apps.NotifyConfig',
 ]
 
 MIDDLEWARE = [

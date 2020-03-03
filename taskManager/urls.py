@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('notify/', include('notify.urls')),
     # path('auth/', include('allauth.urls')),     # 追加
 
     # 全ユーザー共通のページを表示
@@ -42,12 +43,6 @@ urlpatterns = [
     path('done/<int:pk>', views.done, name='done'),
     path('done_update/<int:pk>', views.DoneUpdateView.as_view(), name='done_update'),
     path('recover/<int:pk>', views.recover, name='recover'),
-
-    # LINE関連
-    path('callback/', views.callback, name='callback'),
-    path('line/', views.line, name='line'),
-    path('notify/<str:when>', views.notify, name='notify'),
-    path('test', views.test)
 ]
 
 # if settings.DEBUG:    # この if 文 (5STEP) を追加します。
