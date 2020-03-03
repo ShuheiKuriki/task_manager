@@ -14,8 +14,6 @@ from .forms import TaskForm, UserForm, DoneEditForm
 from .models import Task, LinePush
 
 import datetime
-import json
-import os
 import logging
 
 logger = logging.getLogger(__name__)
@@ -107,30 +105,3 @@ def recover(request, pk):
     task.done_or_not = False
     task.save()
     return redirect('/accounts/'+str(request.user.id))
-
-
-# ユーザー情報関連
-def login_view(request):
-    user=authenticate(
-        username=request.POST.get('username'),
-        password=request.POST.get('password')
-    )
-    if user is not None:
-        login(request,user)
-        url='/'+str(request.user.id)
-        return redirect(url)
-    else:
-        return redirect('accounts/login')
-
-class MyLoginView(LoginView):
-    template_name = 'Form/login.html'
-
-    def get_success_url(self):
-        # return reverse('index')
-        return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
-
-class UserCreateView(CreateView):
-    model = User
-    form_class = UserForm
-    template_name = 'Form/create_user.html'
-    success_url = reverse_lazy('accounts:login')
