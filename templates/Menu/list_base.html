@@ -1,20 +1,20 @@
 {% extends "user_base.html" %}
-{% block title %}一覧ページ{% endblock %}
-{% block active_list %}active{% endblock %}
-{% block content %}
-<h1>{{user.username}}さん 今日も頑張りましょう！</h1>
-{% endblock %}
+{% block title %}{% block title_1 %}{% endblock %}{% endblock %}
+{% block active_today %}{% block active_today1 %}{% endblock %}{% endblock %}
+{% block active_tomorrow %}{% block active_tomorrow1 %}{% endblock %}{% endblock %}
+{% block content %}{% block content_1 %}{% endblock %}{% endblock %}
 {% block content2 %}
     {% for info in infos %}
         <table class='table border col-12'>
           <thead>
             <tr>
               <th scope='col'></th>
-              <th scope='col'>{{info.name}}のタスク : <span class='text-danger'>{{info.num}}個</span></th>
+              {% block name %}{% endblock %}
               <th scope='col'>重/急</th>
               <th scope='col'>実行</th>
               <th scope='col'>1日後</th>
               <th scope='col'>期限</th>
+              <th scope='col'>完了</th>
               <th scope='col'>編集</th>
               <th scope='col'>削除</th>
             </tr>
@@ -24,10 +24,11 @@
               <tr id="task_{{ task.id }}">
                 <th name="num_data" scope='row'>{{ forloop.counter }}</th>
                 <td>{{ task.name }}</td>
-                <td>{% if task.important == True %}○{% else %}✖️{% endif %}/{% if task.urgent == True %}○{% else %}✖️{% endif %}</td>
+                <td>{% if task.important == True %}○{% else %}×{% endif %}/{% if task.urgent == True %}○{% else %}×{% endif %}</td>
                 <td>{{ task.when.month }}/{{ task.when.day }}</td>
-                <td><a href="{% url 'later' task.id %}">翌日へ</a></td>
+                <td><a href="{% url 'later' task.id %}">翌日</a></td>
                 <td>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+                <td><a href="{% url 'done' task.id %}">done</a></td>
                 <td><a href="{% url 'update' task.id %}">edit</a></td>
                 <td><a href="{% url 'delete' task.id %}">del</a></td>
               </tr>
