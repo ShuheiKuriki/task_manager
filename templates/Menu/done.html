@@ -96,12 +96,12 @@
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ done.name }}</td>
-                <td>{% if task.important == True %}○{% else %}×{% endif %}/{% if task.urgent == True %}○{% else %}×{% endif %}</td>
+                <td>{% if done.important == True %}○{% else %}×{% endif %}/{% if done.urgent == True %}○{% else %}×{% endif %}</td>
                 <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
-                <td><a href="{% url 'done_before' done.id %}">前</a></td>
-                <td><a href="{% url 'done_after' done.id %}">後</a></td>
-                <td><a href="{% url 'done_update' done.id %}">edit</a></td>
-                <td><a href="{% url 'recover' done.id %}">return</a></td>
+                <td><a href="{% url 'task:done_before' done.id %}">前</a></td>
+                <td><a href="{% url 'task:done_after' done.id %}">後</a></td>
+                <td><a href="{% url 'task:done_update' done.id %}">edit</a></td>
+                <td><a href="{% url 'task:recover' done.id %}">return</a></td>
               </tr>
             {% endfor %}
           </tbody>

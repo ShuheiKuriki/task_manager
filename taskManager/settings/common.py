@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'accounts.apps.AccountsConfig',
     'notify.apps.NotifyConfig',
+    'task.apps.TaskConfig',
 ]
 
 MIDDLEWARE = [

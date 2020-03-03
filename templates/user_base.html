@@ -27,7 +27,7 @@
             {% if user.is_authenticated %}
             <ul class="navbar-nav mr-5">
                 <li class="nav-item active">
-                    <a href="{% url 'create' %}" class="nav-link">タスク追加</a>
+                    <a href="{% url 'task:create' %}" class="nav-link">タスク追加</a>
                 </li>
             </ul>
             <ul class="navbar-nav mr-auto">
@@ -100,7 +100,7 @@
               update: function(event, ui) {
                 var serial = $('.sortable').sortable('serialize');
                 $.ajax({
-                  url: "{% url 'sort'%}",
+                  url: "{% url 'task:sort'%}",
                   type: "post",
                   data: serial
                 });
