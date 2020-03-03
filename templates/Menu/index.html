@@ -7,9 +7,6 @@
     <li class="sidebar-nav-item">
       <a class="js-scroll-trigger" href="{% url 'accounts:index' user.pk %}">タスク管理を始める</a>
     </li>
-    <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'accounts:logout' %}">ログアウト</a>
-    </li>
     {%else%}
     <li class="sidebar-nav-item">
       <a class="js-scroll-trigger" href="{% url 'accounts:login' %}">ログイン</a>
