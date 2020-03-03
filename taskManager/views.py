@@ -5,7 +5,11 @@ class Taskinfo:
         self.name = name
         self.tasks = tasks
         self.num = len(tasks)
-        self.level = (self.num-1)//10+1
+        n = int((self.num*2)**(1/2))
+        if n*(n+1)/2 <= self.num:
+            self.level = n
+        else:
+            self.level = n-1
 
 # 全ユーザー共通のページを表示
 def index(request):
