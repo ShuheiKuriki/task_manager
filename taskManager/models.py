@@ -9,6 +9,7 @@ class Task(models.Model):
     important = models.BooleanField('重要')
     urgent = models.BooleanField('緊急')
     when = models.DateField('実行予定日', default=now, blank=True)
+    period = models.IntegerField('時間帯', default=0)
     done_or_not = models.BooleanField(default=False)
     done_date = models.DateField('完了した日', default=now, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

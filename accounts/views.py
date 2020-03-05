@@ -52,18 +52,26 @@ def index(request,pk):
 def today(request,pk):
     if request.user.pk != pk:
         return redirect('login')
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
-    info = Taskinfo(tasks=tasks.filter(when__lte=datetime.date.today()).order_by('order'))
-    infos = [info]
-    return render(request, 'Menu/list/today.html', {'infos':infos})
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__lte=datetime.date.today())
+    num = len(tasks)
+    names = ['~12時','12~15時','15~18時','18~21時','21~24時']
+    infos = []
+    for i, name in enumerate(names):
+        info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
+        infos.append(info)
+    return render(request, 'Menu/list/today.html', {'infos':infos, 'num':num})
 
 def tomorrow(request,pk):
     if request.user.pk != pk:
         return redirect('login')
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
-    info = Taskinfo(tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order'))
-    infos = [info]
-    return render(request, 'Menu/list/tomorrow.html', {'infos':infos})
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1))
+    num = len(tasks)
+    names = ['~12時','12~15時','15~18時','18~21時','21~24時']
+    infos = []
+    for i, name in enumerate(names):
+        info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
+        infos.append(info)
+    return render(request, 'Menu/list/tomorrow.html', {'infos':infos, 'num':num})
 
 def done_list(request,pk):
     if request.user.pk != pk:

@@ -10,6 +10,8 @@ path('create', views.TaskCreateView.as_view(),name='create'),
 path('<int:pk>/update', views.TaskUpdateView.as_view(), name='update'),
 path('<int:pk>/delete', views.TaskDeleteView.as_view(), name='delete'),
 path('<int:pk>/later', views.later, name='later'),
+path('<int:pk>/period_before', views.period_before, name='period_before'),
+path('<int:pk>/period_after', views.period_after, name='period_after'),
 path('sort', views.sort, name='sort'),
 
 # 完了タスク関連の操作

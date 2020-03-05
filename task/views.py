@@ -48,7 +48,26 @@ def later(request, pk):
     task = Task.objects.get(id=pk)
     task.when += datetime.timedelta(days=1)
     task.save()
-    return redirect(to='/accounts/'+str(request.user.id))
+    return redirect('accounts:index', pk=request.user.id)
+
+@login_required
+def period_before(request, pk):
+    task = Task.objects.get(id=pk)
+    if task.period > 0:
+        task.period -= 1
+    task.save()
+    return redirect('accounts:today', pk=request.user.id)
+
+@login_required
+def period_after(request, pk):
+    task = Task.objects.get(id=pk)
+    if task.period == 4:
+        task.when += datetime.timedelta(days=1)
+        task.period = 0
+    else:
+        task.period += 1
+    task.save()
+    return redirect('accounts:today', pk=request.user.id)
 
 @csrf_exempt
 def sort(request):
@@ -66,7 +85,7 @@ def done(request, pk):
     task.done_or_not = True
     task.done_date = datetime.date.today()
     task.save()
-    return redirect(to='/accounts/'+str(request.user.id)+'/done_list')
+    return redirect('accounts:done_list', pk=request.user.id)
 
 @method_decorator(login_required, name='dispatch')
 class DoneUpdateView(UpdateView):
@@ -82,19 +101,19 @@ def done_before(request, pk):
     task = Task.objects.get(id=pk)
     task.done_date -= datetime.timedelta(days=1)
     task.save()
-    return redirect(to='/accounts/'+str(request.user.id)+'/done_list')
+    return redirect('accounts:done_list', pk=request.user.id)
 
 @login_required
 def done_after(request, pk):
     task = Task.objects.get(id=pk)
     task.done_date += datetime.timedelta(days=1)
     task.save()
-    return redirect(to='/accounts/'+str(request.user.id)+'/done_list')
+    return redirect('accounts:done_list', pk=request.user.id)
 
 @login_required
 def recover(request, pk):
     task = Task.objects.get(id=pk)
     task.done_or_not = False
     task.save()
-    return redirect('/accounts/'+str(request.user.id))
+    return redirect('accounts:index', pk=request.user.id)
 

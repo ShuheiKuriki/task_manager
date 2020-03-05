@@ -2,13 +2,20 @@
 {% block title_1 %}今日のタスクページ{% endblock %}
 {% block active_today1 %}active{% endblock %}
 {% block content_1 %}
-  {% for info in infos %}
-    {% if info.num == 0 %}
-          <h1>今日のタスクは完了です！ゆっくり休みましょう！</h1>
-    {% else %}
-          <h1>今日のタスクはあと{{info.num}}個です！</h1>
-          <h2>ドラッグ＆ドロップで優先順に並び替えましょう！</h2>
-    {% endif %}
-  {% endfor %}
+  {% if num == 0 %}
+    <h1>今日のタスクは完了です！ゆっくり休みましょう！</h1>
+  {% else %}
+    <h1>今日のタスクはあと{{num}}個です！</h1>
+    <h2>ドラッグ＆ドロップで優先順に並び替えましょう！</h2>
+  {% endif %}
 {% endblock %}
-{% block name %}<th scope='col'>タスク名</th>{% endblock %}
+{% block name %}<th scope='col'>{{ info.name }}</th>{% endblock %}
+{% block change %}
+  <th scope='col'>時間帯</th>
+{% endblock %}
+{% block change_button %}
+  <td>
+    <a href="{% url 'task:period_before' task.id %}">前</a>
+    <a href="{% url 'task:period_after' task.id %}">後</a>
+  </td>
+{% endblock %}
