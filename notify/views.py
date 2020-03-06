@@ -4,16 +4,14 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
+
 from taskManager.models import Task, LinePush
 from taskManager.views import Taskinfo
 
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import TextSendMessage
 
-import datetime
-import logging
-import json
-import os
+import datetime, logging, json, os
 
 logger = logging.getLogger(__name__)
 
