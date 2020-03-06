@@ -29,7 +29,7 @@ class Update(models.Model):
         message = render_to_string('Message/notify_update.txt', context, request)
         try:
             CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
-            logger.error(CHANNEL_ACCESS_TOKEN)
+            print(CHANNEL_ACCESS_TOKEN)
         except:
             CHANNEL_ACCESS_TOKEN = getattr(settings, "CHANNEL_ACCESS_TOKEN", None)
             logger.error(CHANNEL_ACCESS_TOKEN)
