@@ -15,7 +15,9 @@
 {% endblock %}
 {% block change_button %}
   <td>
-    <a href="{% url 'task:period_before' task.id %}">前</a>
-    <a href="{% url 'task:period_after' task.id %}">後</a>
+    {% if not forloop.parentloop.first %}
+      <a href="{% url 'task:period_before' task.id %}">↑</a>
+    {% endif %}
+    <a href="{% url 'task:period_after' task.id %}">↓</a>
   </td>
 {% endblock %}
