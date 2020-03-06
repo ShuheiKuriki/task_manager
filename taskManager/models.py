@@ -15,9 +15,15 @@ class Task(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order = models.IntegerField('順番', default=0)
 
+    def __str__(self):
+        return self.name
+
 class LinePush(models.Model):
     line_id = models.CharField('ユーザーID', max_length=100, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.user
 
 
 

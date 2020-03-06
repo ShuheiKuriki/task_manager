@@ -104,7 +104,6 @@ def send(request, when):
             context = {
                 'today': today,
                 'tom': tom,
-                "id" : push.user.id
             }
             logger.error(context)
             if when == 'report':

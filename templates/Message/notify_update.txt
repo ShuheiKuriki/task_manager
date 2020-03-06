@@ -1,0 +1,11 @@
+みなさんこんにちは！
+このたび新しい機能を追加しましたのでお知らせします！
+
+追加した機能は
+「{{ update.title }}」
+です。
+
+{{ update.description }}
+
+ぜひログインして試してみてください。
+https://tasks-day-scheduler.herokuapp.com/accounts/login

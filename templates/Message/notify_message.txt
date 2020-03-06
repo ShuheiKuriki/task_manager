@@ -4,4 +4,4 @@
 {% endfor %}
 
 必要に応じてタスクを変更しましょう
-https://tasks-day-scheduler.herokuapp.com/{{id}}
+https://tasks-day-scheduler.herokuapp.com/accounts/login
