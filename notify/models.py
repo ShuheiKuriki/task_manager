@@ -29,8 +29,10 @@ class Update(models.Model):
         message = render_to_string('Message/notify_update.txt', context, request)
         try:
             CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
+            logger.error(CHANNEL_ACCESS_TOKEN)
         except:
             CHANNEL_ACCESS_TOKEN = getattr(settings, "CHANNEL_ACCESS_TOKEN", None)
+            logger.error(CHANNEL_ACCESS_TOKEN)
         line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
         for push in LinePush.objects.all():
             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
