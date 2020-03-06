@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from linebot import LineBotApi
 from linebot.models import TextSendMessage
 from taskManager.models import LinePush
-import logging
+import logging, os
 
 logger = logging.getLogger(__name__)
 
