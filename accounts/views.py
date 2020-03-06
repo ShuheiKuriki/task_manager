@@ -1,5 +1,4 @@
 # Create your views here.
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
@@ -22,7 +21,7 @@ class Logout(LoginRequiredMixin, LogoutView):
     template_name = 'Form/login.html'
 
 def profile(request):
-    return redirect('/accounts/'+str(request.user.id))
+    return redirect('accounts:index', pk=request.user.id)
 
 class SignUpView(CreateView):
     form_class = UserCreationForm

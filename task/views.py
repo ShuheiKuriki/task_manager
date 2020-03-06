@@ -3,8 +3,10 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.http import is_safe_url
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 from .forms import TaskForm, DoneEditForm
 from taskManager.models import Task
@@ -14,6 +16,27 @@ import datetime
 # Create your views here.
 
 # 未完了タスク関連の操作
+
+def redirect_to_origin(request):
+    redirect_to = request.GET.get('next')
+    url_is_safe = is_safe_url(
+        url=redirect_to,
+        allowed_hosts=settings.ALLOWED_HOSTS,
+        require_https=request.is_secure(),
+    )
+    if url_is_safe and redirect_to:
+        return redirect(redirect_to)
+
+def original_url(self):
+    url = self.request.GET.get('next')
+    url_is_safe = is_safe_url(
+        url=url,
+        allowed_hosts=settings.ALLOWED_HOSTS,
+        require_https=self.request.is_secure(),
+    )
+    if url_is_safe and url:
+        return url
+
 @method_decorator(login_required, name='dispatch')
 class TaskCreateView(CreateView):
     form_class = TaskForm
@@ -24,7 +47,10 @@ class TaskCreateView(CreateView):
         return super(TaskCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
+        try:
+            return original_url(self)
+        except:
+            return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
 
 @method_decorator(login_required, name='dispatch')
 class TaskUpdateView(UpdateView):
@@ -33,7 +59,10 @@ class TaskUpdateView(UpdateView):
     template_name = 'Form/update.html'
 
     def get_success_url(self):
-        return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
+        try:
+            return original_url(self)
+        except:
+            return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
 
 @method_decorator(login_required, name='dispatch')
 class TaskDeleteView(DeleteView):
@@ -41,7 +70,10 @@ class TaskDeleteView(DeleteView):
     template_name = 'Form/delete.html'
 
     def get_success_url(self):
-        return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
+        try:
+            return original_url(self)
+        except:
+            return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
 
 @login_required
 def later(request, pk):
@@ -56,7 +88,10 @@ def period_before(request, pk):
     if task.period > 0:
         task.period -= 1
     task.save()
-    return redirect('accounts:today', pk=request.user.id)
+    try:
+        return redirect_to_origin(request)
+    except:
+        return redirect('accounts:today', pk=request.user.id)
 
 @login_required
 def period_after(request, pk):
@@ -67,7 +102,10 @@ def period_after(request, pk):
     else:
         task.period += 1
     task.save()
-    return redirect('accounts:today', pk=request.user.id)
+    try:
+        return redirect_to_origin(request)
+    except:
+        return redirect('accounts:today', pk=request.user.id)
 
 @csrf_exempt
 def sort(request):

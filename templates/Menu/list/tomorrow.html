@@ -16,8 +16,8 @@
 {% block change_button %}
   <td>
     {% if not forloop.parentloop.first %}
-      <a href="{% url 'task:period_before' task.id %}">↑</a>
+      <a href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">↑</a>
     {% endif %}
-    <a href="{% url 'task:period_after' task.id %}">↓</a>
+    <a href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">↓</a>
   </td>
 {% endblock %}

@@ -33,7 +33,7 @@
 　　　　　　　{% endfor %}
         <!-- </table> -->
         <button class="btn btn-info btn-block mt-5 mb-4" type="submit">login</button>
-        <input type="hidden" name="next" value="{{ next }}" />
+        <input type="hidden" name="next" value="{{ next }}"/>
         <a class="btn btn-success btn-block" href="{% url 'accounts:signup' %}">新規登録はこちら</a>
     </form>
 {% endblock %}

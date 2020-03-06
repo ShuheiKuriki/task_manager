@@ -27,7 +27,7 @@
             {% if user.is_authenticated %}
             <ul class="navbar-nav mr-5">
                 <li class="nav-item active">
-                    <a href="{% url 'task:create' %}" class="nav-link">タスク追加</a>
+                    <a href="{% url 'task:create' %}?next={{ request.get_full_path }}" class="nav-link">タスク追加</a>
                 </li>
             </ul>
             <ul class="navbar-nav mr-auto">
