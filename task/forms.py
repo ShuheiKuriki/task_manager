@@ -11,7 +11,7 @@ class TaskForm(ModelForm):
     # when = forms.DateField(input_formats = '%m/%d/%Y')
     class Meta:
         model = Task
-        fields = ['name','when','deadline','important','urgent']
+        fields = ['name','when','period','deadline','important','urgent']
         forms.CheckboxInput(attrs={'class': 'check'})
         widgets = {
             'deadline': DateInput(),
