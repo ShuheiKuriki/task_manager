@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
-from .forms import TaskForm, DoneEditForm
+from .forms import TaskCreateForm, TaskUpdateForm, DoneEditForm
 from taskManager.models import Task
 from taskManager.views import Taskinfo
 
@@ -37,25 +37,55 @@ def original_url(self):
     if url_is_safe and url:
         return url
 
-@method_decorator(login_required, name='dispatch')
-class TaskCreateView(CreateView):
-    form_class = TaskForm
-    template_name = 'Form/create.html'
+# @method_decorator(login_required, name='dispatch')
+# class TaskCreateView(CreateView):
+#     form_class = TaskCreateForm
+#     template_name = 'Form/create.html'
+#
+#     def form_valid(self, form):
+#         form.instance.user_id = self.request.user.id
+#         return super(TaskCreateView, self).form_valid(form)
+#
+#     def get_success_url(self):
+#         try:
+#             return original_url(self)
+#         except:
+#             return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
 
-    def form_valid(self, form):
-        form.instance.user_id = self.request.user.id
-        return super(TaskCreateView, self).form_valid(form)
-
-    def get_success_url(self):
+def create(request):
+    if request.method == 'GET':
+        form = TaskCreateForm()
+        return render(request, 'Form/create.html', {'form': form})
+    if request.method == 'POST':
+        form = TaskCreateForm(request.POST)
+        repeat = int(request.POST.get('repeat'))
+        num = int(request.POST.get('num'))
+        deadline = datetime.datetime.strptime(request.POST.get('deadline'), '%Y-%m-%d')
+        when = datetime.datetime.strptime(request.POST.get('when'), '%Y-%m-%d')
+        tasks = []
+        if form.is_valid():
+            for i in range(num):
+                task=Task(
+                    name=request.POST.get('name'),
+                    deadline=deadline.strftime('%Y-%m-%d'),
+                    when=when.strftime('%Y-%m-%d'),
+                    important=form.cleaned_data['important'],
+                    urgent=form.cleaned_data['urgent'],
+                    user=request.user
+                )
+                tasks.append(task)
+                when += datetime.timedelta(days=repeat)
+                deadline += datetime.timedelta(days=repeat)
+        Task.objects.bulk_create(tasks)
         try:
-            return original_url(self)
+            return redirect_to_origin(request)
         except:
-            return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
+            return redirect('accounts:index', pk=request.user.id)
 
 @method_decorator(login_required, name='dispatch')
 class TaskUpdateView(UpdateView):
     model = Task
-    form_class = TaskForm
+    form_class = TaskUpdateForm
     template_name = 'Form/update.html'
 
     def get_success_url(self):

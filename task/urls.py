@@ -6,7 +6,7 @@ app_name = 'task'
 urlpatterns = [
 
 # 未完了タスク関連の操作
-path('create', views.TaskCreateView.as_view(),name='create'),
+path('create', views.create, name='create'),
 path('<int:pk>/update', views.TaskUpdateView.as_view(), name='update'),
 path('<int:pk>/delete', views.TaskDeleteView.as_view(), name='delete'),
 path('<int:pk>/later', views.later, name='later'),

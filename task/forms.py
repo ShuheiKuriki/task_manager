@@ -6,9 +6,12 @@ from taskManager.models import Task
 class DateInput(forms.DateInput):
     input_type = 'date'
 
-class TaskForm(ModelForm):
+class TaskCreateForm(ModelForm):
     # deadline = forms.DateField(input_formats = '%m/%d/%Y')
     # when = forms.DateField(input_formats = '%m/%d/%Y')
+    rep_type = [('0', 'なし'),('1', '毎日'),('7', '毎週'),('14', '2週間ごと')]
+    repeat =  forms.ChoiceField(label='繰り返し', choices=rep_type)
+    num =  forms.ChoiceField(label='繰り返し回数', choices=[(str(i),str(i)) for i in range(1,11)])
     class Meta:
         model = Task
         fields = ['name','when','period','deadline','important','urgent']
@@ -23,6 +26,15 @@ class TaskForm(ModelForm):
             'deadline': ['%d %B %Y'],
             'when': ['%d %B %Y']
         }
+class TaskUpdateForm(ModelForm):
+    class Meta:
+        model = Task
+        fields = ['name','when','period','deadline','important','urgent']
+        forms.CheckboxInput(attrs={'class': 'check'})
+        widgets = {
+            'deadline': DateInput(),
+            'when': DateInput(),
+            }
 
 class DoneEditForm(ModelForm):
     class Meta:
