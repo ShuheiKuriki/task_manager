@@ -4,3 +4,4 @@ db.sqlite3
 dev.py
 lib
 bin
+.envrc

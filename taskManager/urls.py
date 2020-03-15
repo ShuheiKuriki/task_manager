@@ -32,8 +32,8 @@ urlpatterns = [
     path('notice', views.notice, name='notice'),
 ]
 
-# if settings.DEBUG:    # この if 文 (5STEP) を追加します。
+#if settings.DEBUG:    # この if 文 (5STEP) を追加します。
 import debug_toolbar
 urlpatterns = [
-    path('__debug__/', include(debug_toolbar.urls))
-    ] + urlpatterns
+  path('__debug__/', include(debug_toolbar.urls))
+  ] + urlpatterns
