@@ -17,26 +17,6 @@ import datetime
 
 # 未完了タスク関連の操作
 
-def redirect_to_origin(request):
-    redirect_to = request.GET.get('next')
-    url_is_safe = is_safe_url(
-        url=redirect_to,
-        allowed_hosts=settings.ALLOWED_HOSTS,
-        require_https=request.is_secure(),
-    )
-    if url_is_safe and redirect_to:
-        return redirect(redirect_to)
-
-def original_url(self):
-    url = self.request.GET.get('next')
-    url_is_safe = is_safe_url(
-        url=url,
-        allowed_hosts=settings.ALLOWED_HOSTS,
-        require_https=self.request.is_secure(),
-    )
-    if url_is_safe and url:
-        return url
-
 # @method_decorator(login_required, name='dispatch')
 # class TaskCreateView(CreateView):
 #     form_class = TaskCreateForm
@@ -55,7 +35,7 @@ def original_url(self):
 def create(request):
     if request.method == 'GET':
         form = TaskCreateForm()
-        return render(request, 'Form/create.html', {'form': form})
+        return render(request, 'task/create.html', {'form': form})
     if request.method == 'POST':
         form = TaskCreateForm(request.POST)
         repeat = int(request.POST.get('repeat'))
@@ -86,7 +66,7 @@ def create(request):
 class TaskUpdateView(UpdateView):
     model = Task
     form_class = TaskUpdateForm
-    template_name = 'Form/update.html'
+    template_name = 'task/update.html'
 
     def get_success_url(self):
         try:
@@ -97,7 +77,7 @@ class TaskUpdateView(UpdateView):
 @method_decorator(login_required, name='dispatch')
 class TaskDeleteView(DeleteView):
     model = Task
-    template_name = 'Form/delete.html'
+    template_name = 'task/delete.html'
 
     def get_success_url(self):
         try:
@@ -159,7 +139,7 @@ def done(request, pk):
 class DoneUpdateView(UpdateView):
     model = Task
     form_class = DoneEditForm
-    template_name = 'Form/done_update.html'
+    template_name = 'task/done_update.html'
 
     def get_success_url(self):
         return reverse_lazy('accounts:done_list', kwargs={'pk': self.request.user.id})
@@ -185,3 +165,22 @@ def recover(request, pk):
     task.save()
     return redirect('accounts:index', pk=request.user.id)
 
+def redirect_to_origin(request):
+    redirect_to = request.GET.get('next')
+    url_is_safe = is_safe_url(
+        url=redirect_to,
+        allowed_hosts=settings.ALLOWED_HOSTS,
+        require_https=request.is_secure(),
+    )
+    if url_is_safe and redirect_to:
+        return redirect(redirect_to)
+
+def original_url(self):
+    url = self.request.GET.get('next')
+    url_is_safe = is_safe_url(
+        url=url,
+        allowed_hosts=settings.ALLOWED_HOSTS,
+        require_https=self.request.is_secure(),
+    )
+    if url_is_safe and url:
+        return url

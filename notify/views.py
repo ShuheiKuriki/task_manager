@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 # LINE関連
 @login_required
 def line(request):
-    return render(request, 'Menu/add_line.html')
+    return render(request, 'menu/add_line.html')
 
 @csrf_exempt
 def callback(request):
@@ -105,7 +105,7 @@ def send(request, when):
             }
             logger.error(context)
             if when == 'report':
-                text = "Message/notify_report.txt"
+                text = "message/notify_report.txt"
                 dones = Task.objects.all().filter(user=push.user, done_or_not=True).order_by('-done_date')
                 done_today = Taskinfo(
                         tasks = dones.filter(done_date=datetime.date.today())
@@ -116,7 +116,7 @@ def send(request, when):
                 context["done_today"]=done_today
                 context["done_week"]=done_week
             else:
-                text = "Message/notify_message.txt"
+                text = "message/notify_message.txt"
             message = render_to_string(text, context, request)
             logger.error("message ready")
             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))

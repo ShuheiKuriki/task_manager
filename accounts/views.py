@@ -14,11 +14,11 @@ import datetime
 class Login(LoginView):
     #ログインページ
     form_class = LoginForm
-    template_name = 'Form/login.html'
+    template_name = 'account/login.html'
 
 class Logout(LoginRequiredMixin, LogoutView):
     #ログアウトページ
-    template_name = 'Form/login.html'
+    template_name = 'account/login.html'
 
 def profile(request):
     return redirect('accounts:index', pk=request.user.id)
@@ -26,7 +26,7 @@ def profile(request):
 class SignUpView(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('accounts:login')
-    template_name = 'Form/signup.html'
+    template_name = 'account/signup.html'
 
 # ユーザーに固有の一覧ページ
 def index(request,pk):
@@ -46,7 +46,7 @@ def index(request,pk):
         tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when')
     )
     infos = [today, tom, other]
-    return render(request, 'Menu/list/all_list.html', {'infos':infos})
+    return render(request, 'task/list/all_list.html', {'infos':infos})
 
 def today(request,pk):
     if request.user.pk != pk:
@@ -58,7 +58,7 @@ def today(request,pk):
     for i, name in enumerate(names):
         info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
         infos.append(info)
-    return render(request, 'Menu/list/today.html', {'infos':infos, 'num':num})
+    return render(request, 'task/list/today.html', {'infos':infos, 'num':num})
 
 def tomorrow(request,pk):
     if request.user.pk != pk:
@@ -70,7 +70,7 @@ def tomorrow(request,pk):
     for i, name in enumerate(names):
         info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
         infos.append(info)
-    return render(request, 'Menu/list/tomorrow.html', {'infos':infos, 'num':num})
+    return render(request, 'task/list/tomorrow.html', {'infos':infos, 'num':num})
 
 def done_list(request,pk):
     if request.user.pk != pk:
@@ -81,4 +81,4 @@ def done_list(request,pk):
     for i in range(7):
         info = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i)))
         data.append(info.num)
-    return render(request, 'Menu/done.html', {'week':week, 'today':data[0], 'data':data})
+    return render(request, 'task/done.html', {'week':week, 'today':data[0], 'data':data})

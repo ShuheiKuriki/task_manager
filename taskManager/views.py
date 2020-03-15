@@ -13,10 +13,10 @@ class Taskinfo:
 
 # 全ユーザー共通のページを表示
 def index(request):
-    return render(request, 'Menu/index.html')
+    return render(request, 'menu/index.html')
 
 def sample(request):
-    return render(request, 'Menu/index_sample.html')
+    return render(request, 'menu/index_sample.html')
 
 def notice(request):
-    return render(request, 'Menu/notice.html')
+    return render(request, 'menu/notice.html')
