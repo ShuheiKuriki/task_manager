@@ -3,5 +3,5 @@
 {% block form %}
   <p>削除します。よろしいですか？</p>
   <input class="btn btn-danger btn-block mt-5 mb-4" type="submit" value="削除する">
-  <a class="btn btn-success btn-block text-light" href="{% url 'accounts:index' user.pk %}">削除をやめて戻る</a>
+  <a class="btn btn-success btn-block text-light" href="{% url 'task:list' user.pk %}">削除をやめて戻る</a>
 {% endblock %}

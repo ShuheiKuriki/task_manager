@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 
 from taskManager.models import Task, LinePush
-from taskManager.views import Taskinfo
+from task.views import Taskinfo
 
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import TextSendMessage

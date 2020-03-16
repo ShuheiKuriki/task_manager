@@ -17,7 +17,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="{% url 'accounts:index' user.pk %}">Task Scheduler</a>
+        <a class="navbar-brand" href="{% url 'task:list' user.pk %}">Task Scheduler</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarText" aria-controls="navbarText"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -32,13 +32,13 @@
             </ul>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item {% block active_today %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'accounts:today' user.pk %}">今日</a>
+                    <a class="nav-link" href="{% url 'task:today' user.pk %}">今日</a>
                 </li>
                 <li class="nav-item {% block active_tomorrow %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'accounts:tomorrow' user.pk %}">明日</a>
+                    <a class="nav-link" href="{% url 'task:tomorrow' user.pk %}">明日</a>
                 </li>
                 <li class="nav-item {% block active_done %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'accounts:done_list' user.pk %}">レポート</a>
+                    <a class="nav-link" href="{% url 'task:done_list' user.pk %}">レポート</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
@@ -49,12 +49,12 @@
                   <a class="nav-link" href="{% url 'notify:line' %}">LINE通知</a>
               </li>
               <li class="nav-item active">
-                  <a href="{% url 'accounts:logout' %}" class="nav-link">ログアウト</a>
+                  <a href="{% url 'account_logout' %}" class="nav-link">ログアウト</a>
               </li>
             </ul>
             {%else%}
             <span class="navbar-text">
-                <a href="{% url 'accounts:login' %}" class="nav-link">ログイン</a>
+                <a href="{% url 'account_login' %}" class="nav-link">ログイン</a>
             </span>
             {%endif%}
         </div>

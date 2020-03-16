@@ -5,18 +5,18 @@
 {% block li %}
     {% if user.is_authenticated %}
     <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'accounts:index' user.pk %}">タスク管理を始める</a>
+      <a class="js-scroll-trigger" href="{% url 'task:list' user.pk %}">タスク管理を始める</a>
     </li>
     {%else%}
     <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'accounts:login' %}">ログイン</a>
+      <a class="js-scroll-trigger" href="{% url 'account_login' %}">ログイン</a>
     </li>
     <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'accounts:signup' %}">新規登録</a>
+      <a class="js-scroll-trigger" href="{% url 'account_signup' %}">新規登録</a>
     </li>
     {%endif%}
 {% endblock %}
-{% block header %}
+{% block content %}
   <br>
   <h1 class="mb-1 pt-5">Today's<br>Task Scheduler</h1>
   <h3 class="mb-5">
@@ -24,17 +24,17 @@
   </h3>
   <div class="row mx-auto col-md-10 col-lg-7 col-xl-6">
     <div class="my-3 col-md mx-auto">
-      <a class="btn btn-primary btn-block js-scroll-trigger" href="{% url 'accounts:login' %}">ログイン</a>
+      <a class="btn btn-primary btn-block js-scroll-trigger" href="{% url 'account_login' %}">ログイン</a>
     </div>
     <div class="my-3 col-md mx-auto">
-      <a class="btn btn-success btn-block js-scroll-trigger" href="{% url 'accounts:signup' %}">新規登録</a>
+      <a class="btn btn-success btn-block js-scroll-trigger" href="{% url 'account_signup' %}">新規登録</a>
     </div>
     <div class="my-3 col-md mx-auto">
       <a class="btn btn-info btn-block js-scroll-trigger" href="#about">もっと見る</a>
     </div>
   </div>
 {% endblock %}
-{% block content %}
+{% block content2 %}
 <section class="content-section bg-light" id="about">
   <div class="container text-center">
     <div class="row">
@@ -42,7 +42,7 @@
         <h3>今日何をするべきか、悩むことはありませんか？</h3>
         <h3>このアプリはそんなあなたをサポートします！</h3>
         <p class="lead mb-5">あなたはタスクが増えたときに入力するだけ！</p>
-        <a class="btn btn-primary btn-xl js-scroll-trigger" href="/accounts/signup">使い始める</a>
+        <a class="btn btn-primary btn-xl js-scroll-trigger" href="{% url 'account_signup' %}">使い始める</a>
       </div>
     </div>
   </div>

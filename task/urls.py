@@ -4,6 +4,11 @@ from . import views
 app_name = 'task'
 
 urlpatterns = [
+#リスト
+path('<int:pk>', views.index, name='list'),
+path('<int:pk>/today', views.today, name='today'),
+path('<int:pk>/tomorrow', views.tomorrow, name='tomorrow'),
+path('<int:pk>/done_list', views.done_list, name='done_list'),
 
 # 未完了タスク関連の操作
 path('create', views.create, name='create'),
@@ -20,5 +25,4 @@ path('<int:pk>/done_before', views.done_before, name='done_before'),
 path('<int:pk>/done_after', views.done_after, name='done_after'),
 path('<int:pk>/done_update', views.DoneUpdateView.as_view(), name='done_update'),
 path('<int:pk>/recover', views.recover, name='recover'),
-
 ]

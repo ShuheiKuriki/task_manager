@@ -10,28 +10,69 @@ from django.conf import settings
 
 from .forms import TaskCreateForm, TaskUpdateForm, DoneEditForm
 from taskManager.models import Task
-from taskManager.views import Taskinfo
 
 import datetime
 # Create your views here.
+class Taskinfo:
+    def __init__(self, tasks, name=""):
+        self.name = name
+        self.tasks = tasks
+        self.num = len(tasks)
+        n = int((self.num*2)**(1/2))
+        if n*(n+1)/2 <= self.num:
+            self.level = n
+        else:
+            self.level = n-1
 
-# 未完了タスク関連の操作
+def index(request,pk):
+    if request.user.pk != pk:
+        return redirect('account_login')
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
+    today = Taskinfo(name="今日",
+        tasks=tasks.filter(when__lte=datetime.date.today()).order_by('order'))
+    tom = Taskinfo(name="明日",
+        tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order'))
+    other = Taskinfo(name="明日以降",
+        tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when'))
+    infos = [today, tom, other]
+    return render(request, 'task/list/all_list.html', {'infos':infos})
 
-# @method_decorator(login_required, name='dispatch')
-# class TaskCreateView(CreateView):
-#     form_class = TaskCreateForm
-#     template_name = 'Form/create.html'
-#
-#     def form_valid(self, form):
-#         form.instance.user_id = self.request.user.id
-#         return super(TaskCreateView, self).form_valid(form)
-#
-#     def get_success_url(self):
-#         try:
-#             return original_url(self)
-#         except:
-#             return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
+def today(request,pk):
+    if request.user.pk != pk:
+        return redirect('account_login')
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__lte=datetime.date.today())
+    num = len(tasks)
+    names = ['~12時','12~15時','15~18時','18~21時','21時~']
+    infos = []
+    for i, name in enumerate(names):
+        info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
+        infos.append(info)
+    return render(request, 'task/list/today.html', {'infos':infos, 'num':num})
 
+def tomorrow(request,pk):
+    if request.user.pk != pk:
+        return redirect('account_login')
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1))
+    num = len(tasks)
+    names = ['~12時','12~15時','15~18時','18~21時','21時~']
+    infos = []
+    for i, name in enumerate(names):
+        info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
+        infos.append(info)
+    return render(request, 'task/list/tomorrow.html', {'infos':infos, 'num':num})
+
+def done_list(request,pk):
+    if request.user.pk != pk:
+        return redirect('account_login')
+    dones = Task.objects.all().filter(user=request.user, done_or_not=True).order_by('-done_date')
+    week = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7)))
+    data = []
+    for i in range(7):
+        info = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i)))
+        data.append(info.num)
+    return render(request, 'task/done.html', {'week':week, 'today':data[0], 'data':data})
+
+#未完了タスク関連
 def create(request):
     if request.method == 'GET':
         form = TaskCreateForm()
@@ -58,10 +99,7 @@ def create(request):
                 when += datetime.timedelta(days=repeat)
                 deadline += datetime.timedelta(days=repeat)
         Task.objects.bulk_create(tasks)
-        try:
-            return redirect_to_origin(request)
-        except:
-            return redirect('accounts:index', pk=request.user.id)
+        return redirect_to_origin(request)
 
 @method_decorator(login_required, name='dispatch')
 class TaskUpdateView(UpdateView):
@@ -70,10 +108,7 @@ class TaskUpdateView(UpdateView):
     template_name = 'task/update.html'
 
     def get_success_url(self):
-        try:
-            return original_url(self)
-        except:
-            return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
+        return original_url(self)
 
 @method_decorator(login_required, name='dispatch')
 class TaskDeleteView(DeleteView):
@@ -81,17 +116,14 @@ class TaskDeleteView(DeleteView):
     template_name = 'task/delete.html'
 
     def get_success_url(self):
-        try:
-            return original_url(self)
-        except:
-            return reverse_lazy('accounts:index', kwargs={'pk': self.request.user.id})
+        return original_url(self)
 
 @login_required
 def later(request, pk):
     task = Task.objects.get(id=pk)
     task.when += datetime.timedelta(days=1)
     task.save()
-    return redirect('accounts:index', pk=request.user.id)
+    return redirect('task:list', pk=request.user.id)
 
 @login_required
 def period_before(request, pk):
@@ -102,7 +134,7 @@ def period_before(request, pk):
     try:
         return redirect_to_origin(request)
     except:
-        return redirect('accounts:today', pk=request.user.id)
+        return redirect('task:today', pk=request.user.id)
 
 @login_required
 def period_after(request, pk):
@@ -116,7 +148,7 @@ def period_after(request, pk):
     try:
         return redirect_to_origin(request)
     except:
-        return redirect('accounts:today', pk=request.user.id)
+        return redirect('task:today', pk=request.user.id)
 
 @csrf_exempt
 def sort(request):
@@ -134,7 +166,7 @@ def done(request, pk):
     task.done_or_not = True
     task.done_date = datetime.date.today()
     task.save()
-    return redirect('accounts:done_list', pk=request.user.id)
+    return redirect('task:done_list', pk=request.user.id)
 
 @method_decorator(login_required, name='dispatch')
 class DoneUpdateView(UpdateView):
@@ -143,28 +175,28 @@ class DoneUpdateView(UpdateView):
     template_name = 'task/done_update.html'
 
     def get_success_url(self):
-        return reverse_lazy('accounts:done_list', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('task:done_list', kwargs={'pk': self.request.user.id})
 
 @login_required
 def done_before(request, pk):
     task = Task.objects.get(id=pk)
     task.done_date -= datetime.timedelta(days=1)
     task.save()
-    return redirect('accounts:done_list', pk=request.user.id)
+    return redirect('task:done_list', pk=request.user.id)
 
 @login_required
 def done_after(request, pk):
     task = Task.objects.get(id=pk)
     task.done_date += datetime.timedelta(days=1)
     task.save()
-    return redirect('accounts:done_list', pk=request.user.id)
+    return redirect('task:done_list', pk=request.user.id)
 
 @login_required
 def recover(request, pk):
     task = Task.objects.get(id=pk)
     task.done_or_not = False
     task.save()
-    return redirect('accounts:index', pk=request.user.id)
+    return redirect('task:index', pk=request.user.id)
 
 def redirect_to_origin(request):
     redirect_to = request.GET.get('next')

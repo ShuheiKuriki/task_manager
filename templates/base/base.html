@@ -31,16 +31,16 @@
   <nav id="sidebar-wrapper">
     <ul class="sidebar-nav">
       <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="/">Home</a>
+        <a class="js-scroll-trigger" href="{% url 'index' %}">Home</a>
       </li>
       {% block li %}
       {% endblock %}
       <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="/notice">お知らせ</a>
+        <a class="js-scroll-trigger" href="{% url 'notice' %}">お知らせ</a>
       </li>
       {% if user.is_authenticated %}
         <li class="sidebar-nav-item">
-          <a class="js-scroll-trigger" href="{% url 'accounts:logout' %}">ログアウト</a>
+          <a class="js-scroll-trigger" href="{% url 'account_logout' %}">ログアウト</a>
         </li>
       {% endif %}
     </ul>
@@ -51,21 +51,25 @@
   <header class="masthead">
       <div class='mt-3 mb-4 mx-3'>
         {% if user.is_authenticated %}
-          <a class="text-dark text-left btn btn-dark" href="{% url 'accounts:index' user.pk %}">Task Scheduler</a>
+          <a class="text-dark text-left btn btn-dark" href="{% url 'task:list' user.pk %}">Task Scheduler</a>
         {% else %}
-          <a class="text-dark text-left btn btn-dark" href="/">Task Scheduler</a>
+          <a class="text-dark text-left btn btn-dark" href="{% url 'index' %}">Task Scheduler</a>
         {% endif %}
       </div>
       <div class='container text-center'>
-        {% block header %}
+        {% block content %}
         {% endblock %}
       </div>
     <div class="overlay"></div>
   </header>
 
   <!-- About -->
-  {% block content %}
-  {% endblock %}
+  <div class="container">
+    <div class="m-4">
+      {% block content2 %}
+      {% endblock %}
+    </div>
+  </div>
 
   <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">

@@ -1,60 +1,21 @@
 {% extends "base/base.html" %}
-{% block title %}ログインフォーム{% endblock %}
-{% block li %}
-    <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'accounts:login' %}">ログイン</a>
-    </li>
-{% endblock %}
-{% block header %}
-    <h2 class='pt-5'>新規登録フォーム</h2>
-    <form class='col-xl-6 col-md-8 col-lg-6 col-sm-12 mx-auto m-5' method="POST">
-        {%csrf_token%}
-        <!-- <table class='mx-auto'>
-            <tr>
-                <td>{{form.username.label_tag}}</td>
-                <td>{{form.username}}</td>
-            </tr>
-            <tr>
-                <td>{{form.email.label_tag}}</td>
-                <td>{{form.email}}</td>
-            </tr>
-            <tr>
-                <td>{{form.password.label_tag}}</td>
-                <td>{{form.password}}</td>
-            </tr>
-        </table> -->
 
-        <!-- <table class='mx-auto my-3'> -->
-          {% for field in form %}
-            <div class="field my-4">
-              {{ field.label_tag }}
-              {{ field }}
-              <br>
-              {% if field.help_text %}
-                <span class="helptext text-danger">{{ field.help_text }}</span>
-              {% endif %}
-              {{ field.errors }}
-            </div>
-          {% endfor %}
-          {% for error in form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
-              <p>{{ error }}</p>
-            </div>
-          {% endfor %}
-            <!-- {% for field in form %}
-              <tr class='my-1'>
-              {{ field }}
-              <hr>
-              </tr>
-　　         {% endfor %}
+{% load i18n %}
 
-　　　　     {% for error in form.non_field_errors %}
-              <div class="alert alert-danger" role="alert">
-                <p>{{ error }}</p>
-              </div>
-　　　　　　　{% endfor %} -->
-        <!-- </table> -->
-        <button class="btn btn-primary btn-block mt-5 mb-4" type="submit">Sign Up</button>
-        <a class="btn btn-success btn-block" href="{% url 'accounts:login' %}">登録済みの方はこちら</a>
-    </form>
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+<div class='mb-4'><h2>{% trans "Sign Up" %}</h2></div>
+
+<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+
+<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <a class='mt-4 btn-lg btn-primary text-light' type="submit">{% trans "Sign Up" %}</a>
+</form>
+
 {% endblock %}

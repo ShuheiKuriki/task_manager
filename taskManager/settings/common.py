@@ -31,10 +31,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.contrib.sites',                         #追加
-    # 'allauth',                                      #追加
-    # 'allauth.account',                              #追加
-    # 'allauth.socialaccount',                        #追加
+    'django.contrib.sites',                         #追加
+    'allauth',                                      #追加
+    'allauth.account',                              #追加
+    'allauth.socialaccount',                        #追加
     # 'allauth.socialaccount.providers.line',
     'taskManager',
     'bootstrap4',
@@ -111,8 +111,35 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-LOGIN_URL='/'
-LOGOUT_REDIRECT_URL = '/'
+# LOGIN_URL='/'
+# LOGOUT_REDIRECT_URL = '/'
+
+# Don't forget this little dude.
+SITE_ID = 1
+
+# ログインのリダイレクトURL
+# LOGIN_REDIRECT_URL = '/accounts/'
+#
+# # ログアウトのリダイレクトURL
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+#
+# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = True #ユーザー登録画⾯で必須項⽬に
+
+AUTHENTICATION_BACKENDS = (
+    # 'djago.contrib.auth.backends.ModelBackend',
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+#認証⽅式を 「メールアドレスとパスワード」 に変更
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
