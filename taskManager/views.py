@@ -20,3 +20,4 @@ def sample(request):
 
 def notice(request):
     return render(request, 'menu/notice.html')
+

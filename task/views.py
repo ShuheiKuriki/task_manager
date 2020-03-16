@@ -48,6 +48,7 @@ def create(request):
                 task=Task(
                     name=request.POST.get('name'),
                     deadline=deadline.strftime('%Y-%m-%d'),
+                    period=request.POST.get('period'),
                     when=when.strftime('%Y-%m-%d'),
                     important=form.cleaned_data['important'],
                     urgent=form.cleaned_data['urgent'],
