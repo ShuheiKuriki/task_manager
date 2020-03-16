@@ -17,6 +17,7 @@ class Update(models.Model):
     title = models.CharField('機能名', default='',max_length=255, blank=True)
     description = models.TextField('機能追加の説明', default='', blank=True)
     updated_at = models.DateField('追加日', default=now, blank=True)
+    updated_or_not = models.BooleanField('更新済み', default=False)
 
     def __str__(self):
         return self.title
@@ -26,7 +27,7 @@ class Update(models.Model):
         context = {
             'update': self,
         }
-        message = render_to_string('Message/notify_update.txt', context, request)
+        message = render_to_string('notify/message/notify_update.txt', context, request)
         try:
             CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
         except:

@@ -29,7 +29,6 @@ urlpatterns = [
     # 全ユーザー共通のページを表示
     path('', views.index, name='index'),
     path('sample', views.sample),
-    path('notice', views.notice, name='notice'),
 ]
 
 #if settings.DEBUG:    # この if 文 (5STEP) を追加します。

@@ -6,7 +6,3 @@ def index(request):
 
 def sample(request):
     return render(request, 'menu/index_sample.html')
-
-def notice(request):
-    return render(request, 'menu/notice.html')
-

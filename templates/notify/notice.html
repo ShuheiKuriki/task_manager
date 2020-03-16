@@ -1,0 +1,20 @@
+{% extends "base/logoned_base.html" %}
+{% block title %}お知らせ{% endblock %}
+
+{% block content %}
+    <h2>〜お知らせ〜</h2>
+    <h3 class='my-5'>近日中に以下の機能を追加します</h3>
+    <div class='container mx-auto pt-3 pb-1 my-5 col-xl-5 col-md-8 col-lg-6 col-sm-12 bg-white'>
+      <ul>
+        {% for update in update_list %}
+          {% if update.updated_or_not == True %}
+          <li class='text-left'>{{update.title}}(→{{update.updated_at}}に追加済)</li>
+          {% else %}
+          <li class='text-left text-danger'>{{update.title}}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+    <h3>他にも欲しい機能がありましたら<br>開発者までお気軽にご要望ください</h3>
+
+{% endblock %}

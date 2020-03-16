@@ -4,13 +4,14 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-
+from django.views.generic import ListView
 from taskManager.models import Task, LinePush
 from task.views import Taskinfo
 
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import TextSendMessage
 
+from .models import Update
 import datetime, logging, json, os
 
 logger = logging.getLogger(__name__)
@@ -20,6 +21,13 @@ logger = logging.getLogger(__name__)
 @login_required
 def line(request):
     return render(request, 'menu/add_line.html')
+
+class UpdateListView(ListView):
+    model = Update
+    template_name = 'notify/notice.html'
+
+    def get_queryset(self):
+        return Update.objects.all().order_by('-updated_or_not')
 
 @csrf_exempt
 def callback(request):
@@ -105,7 +113,7 @@ def send(request, when):
             }
             logger.error(context)
             if when == 'report':
-                text = "message/notify_report.txt"
+                text = "notify/message/notify_report.txt"
                 dones = Task.objects.all().filter(user=push.user, done_or_not=True).order_by('-done_date')
                 done_today = Taskinfo(
                         tasks = dones.filter(done_date=datetime.date.today())
@@ -116,7 +124,7 @@ def send(request, when):
                 context["done_today"]=done_today
                 context["done_week"]=done_week
             else:
-                text = "message/notify_message.txt"
+                text = "notify/message/notify_message.txt"
             message = render_to_string(text, context, request)
             logger.error("message ready")
             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))

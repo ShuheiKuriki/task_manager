@@ -36,7 +36,7 @@
       {% block li %}
       {% endblock %}
       <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="{% url 'notice' %}">お知らせ</a>
+        <a class="js-scroll-trigger" href="{% url 'notify:notice' %}">お知らせ</a>
       </li>
       {% if user.is_authenticated %}
         <li class="sidebar-nav-item">
