@@ -53,7 +53,7 @@ def today(request,pk):
         return redirect('login')
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__lte=datetime.date.today())
     num = len(tasks)
-    names = ['~12時','12~15時','15~18時','18~21時','21~24時']
+    names = ['~12時','12~15時','15~18時','18~21時','21時~']
     infos = []
     for i, name in enumerate(names):
         info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
@@ -65,7 +65,7 @@ def tomorrow(request,pk):
         return redirect('login')
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1))
     num = len(tasks)
-    names = ['~12時','12~15時','15~18時','18~21時','21~24時']
+    names = ['~12時','12~15時','15~18時','18~21時','21時~']
     infos = []
     for i, name in enumerate(names):
         info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))

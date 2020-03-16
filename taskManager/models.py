@@ -3,7 +3,7 @@ from django.utils.timezone import now
 from django.contrib.auth.models import User
 
 class Task(models.Model):
-    periods = ['~12時','12~15時','15~18時','18~21時','21~24時']
+    periods = ['~12時','12~15時','15~18時','18~21時','21時~']
     choices=[(i,period) for i,period in enumerate(periods)]
     name = models.CharField('タスク名', max_length=256, blank=True)
     # id = models.AutoField(primary_key=True)
