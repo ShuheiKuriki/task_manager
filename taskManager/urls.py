@@ -27,8 +27,8 @@ urlpatterns = [
     # path('auth/', include('allauth.urls')),     # 追加
 
     # 全ユーザー共通のページを表示
-    path('', views.index, name='index'),
-    path('sample', views.sample),
+    path('', views.IndexView.as_view()),
+    path('sample', views.IndexSampleView.as_view()),
 ]
 
 #if settings.DEBUG:    # この if 文 (5STEP) を追加します。

@@ -1,8 +1,8 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
 
-# 全ユーザー共通のページを表示
-def index(request):
-    return render(request, 'menu/index.html')
+class IndexView(TemplateView):
+    template_name = 'menu/index.html'
 
-def sample(request):
-    return render(request, 'menu/index_sample.html')
+class IndexSampleView(TemplateView):
+    template_name = 'menu/index_sample.html'
