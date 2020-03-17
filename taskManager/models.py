@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 class Task(models.Model):
     periods = ['~12時','12~15時','15~18時','18~21時','21時~']
     choices=[(i,period) for i,period in enumerate(periods)]
+
     name = models.CharField('タスク名', max_length=256, blank=True)
-    # id = models.AutoField(primary_key=True)
     deadline = models.DateField('期限', default=now, blank=True, null=True)
     important = models.BooleanField('重要')
     urgent = models.BooleanField('緊急')
@@ -20,6 +20,13 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_list(self):
+        important = '○' if self.important == True else '×'
+        urgent = '○' if self.urgent == True else '×'
+        return {'タスク名':self.name, '実行予定日':self.when, '時間帯':self.periods[self.period],
+                '期限':self.deadline, '重要': important, '緊急':urgent}
+
 
 class LinePush(models.Model):
     line_id = models.CharField('ユーザーID', max_length=100, unique=True)

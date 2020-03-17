@@ -4,6 +4,7 @@ from . import views
 app_name = 'task'
 
 urlpatterns = [
+path('redirect', views.redirect_to_origin, name='redirect'),
 #リスト
 path('<int:pk>', views.index, name='list'),
 path('<int:pk>/today', views.today, name='today'),

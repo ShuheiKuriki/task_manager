@@ -28,8 +28,12 @@ def index(request,pk):
     if request.user.pk != pk:
         return redirect('account_login')
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
+    past_tasks = tasks.filter(when__lt=datetime.date.today())
+    for past_task in past_tasks:
+        past_task.when = datetime.date.today()
+        past_task.save()
     today = Taskinfo(name="今日",
-        tasks=tasks.filter(when__lte=datetime.date.today()).order_by('order'))
+        tasks=tasks.filter(when=datetime.date.today()).order_by('order'))
     tom = Taskinfo(name="明日",
         tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order'))
     other = Taskinfo(name="明日以降",
@@ -41,10 +45,13 @@ def today(request,pk):
     if request.user.pk != pk:
         return redirect('account_login')
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__lte=datetime.date.today())
+    for task in tasks:
+        task.when = datetime.date.today()
+        task.save()
     num = len(tasks)
     names = ['~12時','12~15時','15~18時','18~21時','21時~']
     infos = []
-    for i, name in enumerate(names):
+    for i,name in enumerate(names):
         info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
         infos.append(info)
     return render(request, 'task/list/today.html', {'infos':infos, 'num':num})
@@ -56,7 +63,7 @@ def tomorrow(request,pk):
     num = len(tasks)
     names = ['~12時','12~15時','15~18時','18~21時','21時~']
     infos = []
-    for i, name in enumerate(names):
+    for i,name in enumerate(names):
         info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
         infos.append(info)
     return render(request, 'task/list/tomorrow.html', {'infos':infos, 'num':num})
@@ -76,7 +83,8 @@ def done_list(request,pk):
 def create(request):
     if request.method == 'GET':
         form = TaskCreateForm()
-        return render(request, 'task/create.html', {'form': form})
+        next = request.GET.get('next')
+        return render(request, 'task/create.html', {'form': form,'next': next})
     if request.method == 'POST':
         form = TaskCreateForm(request.POST)
         repeat = int(request.POST.get('repeat'))
@@ -107,6 +115,11 @@ class TaskUpdateView(UpdateView):
     form_class = TaskUpdateForm
     template_name = 'task/update.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['next'] = self.request.GET.get('next')
+        return context
+
     def get_success_url(self):
         return original_url(self)
 
@@ -114,6 +127,12 @@ class TaskUpdateView(UpdateView):
 class TaskDeleteView(DeleteView):
     model = Task
     template_name = 'task/delete.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['next'] = self.request.GET.get('next')
+        context['task'] = context['object'].get_list()
+        return context
 
     def get_success_url(self):
         return original_url(self)
