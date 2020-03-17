@@ -32,12 +32,15 @@ def index(request,pk):
     for past_task in past_tasks:
         past_task.when = datetime.date.today()
         past_task.save()
+    for task in tasks:
+        task.expired = True if task.deadline<datetime.date.today() else False
+        task.save()
     today = Taskinfo(name="今日",
         tasks=tasks.filter(when=datetime.date.today()).order_by('order'))
     tom = Taskinfo(name="明日",
-        tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order'))
+        tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('expired').order_by('order'))
     other = Taskinfo(name="明日以降",
-        tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when'))
+        tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('expired').order_by('when'))
     infos = [today, tom, other]
     return render(request, 'task/list/all_list.html', {'infos':infos})
 
@@ -47,6 +50,9 @@ def today(request,pk):
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__lte=datetime.date.today())
     for task in tasks:
         task.when = datetime.date.today()
+        task.save()
+    for task in tasks:
+        task.expired = True if task.deadline<datetime.date.today() else False
         task.save()
     num = len(tasks)
     names = ['~12時','12~15時','15~18時','18~21時','21時~']
@@ -60,6 +66,9 @@ def tomorrow(request,pk):
     if request.user.pk != pk:
         return redirect('account_login')
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1))
+    for task in tasks:
+        task.expired = True if task.deadline<datetime.date.today() else False
+        task.save()
     num = len(tasks)
     names = ['~12時','12~15時','15~18時','18~21時','21時~']
     infos = []
@@ -176,7 +185,6 @@ def sort(request):
         task.order = order
         task.save()
     return HttpResponse('')
-
 
 # 完了タスク関連の操作
 @login_required

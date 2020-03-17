@@ -9,6 +9,7 @@ class Task(models.Model):
     name = models.CharField('タスク名', max_length=256, blank=True)
     deadline = models.DateField('期限', default=now, blank=True, null=True)
     important = models.BooleanField('重要')
+    expired = models.BooleanField('期限切れ', default=False)
     urgent = models.BooleanField('緊急')
     when = models.DateField('実行予定日', default=now, blank=True)
     period = models.IntegerField('時間帯', choices=choices, default=0)

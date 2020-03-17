@@ -19,15 +19,15 @@
               <th scope='col'>削除</th>
             </tr>
           </thead>
-          <tbody class='sortable'>
+          <tbody class='sortable{{ forloop.counter }}'>
             {% for task in info.tasks %}
               <tr id="task_{{ task.id }}">
-                <th name="num_data" scope='row'>{{ forloop.counter }}</th>
-                <td>{{ task.name }}</td>
+                <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>{{ forloop.counter }}</th>
+                <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
                 <td>{% if task.important == True %}○{% else %}×{% endif %}/{% if task.urgent == True %}○{% else %}×{% endif %}</td>
                 <td>{{ task.when.month }}/{{ task.when.day }}</td>
                 {% block change_button %}{% endblock %}
-                <td>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+                <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td><a href="{% url 'task:done' task.id %}" onclick=done_alert()>done</a></td>
                 <td><a href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">edit</a></td>
                 <td><a href="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">del</a></td>
