@@ -196,7 +196,7 @@ def recover(request, pk):
     task = Task.objects.get(id=pk)
     task.done_or_not = False
     task.save()
-    return redirect('task:index', pk=request.user.id)
+    return redirect('task:list', pk=request.user.id)
 
 def redirect_to_origin(request):
     redirect_to = request.GET.get('next')

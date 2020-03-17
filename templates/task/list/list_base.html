@@ -28,7 +28,7 @@
                 <td>{{ task.when.month }}/{{ task.when.day }}</td>
                 {% block change_button %}{% endblock %}
                 <td>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
-                <td><a href="{% url 'task:done' task.id %}">done</a></td>
+                <td><a href="{% url 'task:done' task.id %}" onclick=done_alert()>done</a></td>
                 <td><a href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">edit</a></td>
                 <td><a href="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">del</a></td>
               </tr>
