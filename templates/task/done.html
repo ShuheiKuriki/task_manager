@@ -78,17 +78,14 @@
 {% endblock %}
 
 {% block content4 %}
-        <table class='table border col-12'>
+        <table class='table border col-lg-8 col-12'>
           <thead>
             <tr>
               <th scope='col'></th>
               <th scope='col'>タスク名</th>
               <th scope='col'>重/急</th>
               <th scope='col'>完了日</th>
-              <th scope='col'>1日前</th>
-              <th scope='col'>1日後</th>
-              <th scope='col'>編集</th>
-              <th scope='col'>元に戻す</th>
+              <th scope='col'>menu</th>
             </tr>
           </thead>
           <tbody>
@@ -98,10 +95,17 @@
                 <td>{{ done.name }}</td>
                 <td>{% if done.important == True %}○{% else %}×{% endif %}/{% if done.urgent == True %}○{% else %}×{% endif %}</td>
                 <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
-                <td><a href="{% url 'task:done_before' done.id %}">前</a></td>
-                <td><a href="{% url 'task:done_after' done.id %}">後</a></td>
-                <td><a href="{% url 'task:done_update' done.id %}">edit</a></td>
-                <td><a href="{% url 'task:recover' done.id %}">return</a></td>
+                <td>
+                  <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
+                      <li><a href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
+                      <li><a href="{% url 'task:done_update' done.id %}">編集</a></li>
+                      <li><a href="{% url 'task:recover' done.id %}">未完了にする</a></li>
+                    </ul>
+                  </div>
+                </td>
               </tr>
             {% endfor %}
           </tbody>

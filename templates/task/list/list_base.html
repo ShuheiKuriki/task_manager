@@ -1,18 +1,15 @@
 {% extends "base/user_base.html" %}
 {% block content2 %}
     {% for info in infos %}
-        <table class='table border col-12'>
+        <table class='table border col-lg-8 col-12'>
           <thead>
             <tr>
               <th scope='col'></th>
               {% block name %}{% endblock %}
               <th scope='col'>重/急</th>
               <th scope='col'>実行</th>
-              {% block change %}{% endblock %}
               <th scope='col'>期限</th>
-              <th scope='col'>完了</th>
-              <th scope='col'>編集</th>
-              <th scope='col'>削除</th>
+              <th scope='col'>メニュー</th>
             </tr>
           </thead>
           <tbody class='sortable{{ forloop.counter }}'>
@@ -22,11 +19,18 @@
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
                 <td>{% if task.important == True %}○{% else %}×{% endif %}/{% if task.urgent == True %}○{% else %}×{% endif %}</td>
                 <td>{{ task.when.month }}/{{ task.when.day }}</td>
-                {% block change_button %}{% endblock %}
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
-                <td><a href="{% url 'task:done' task.id %}" onclick=done_alert()>done</a></td>
-                <td><a href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">edit</a></td>
-                <td><a href="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">del</a></td>
+                <td>
+                  <div class="dropdown">
+	                   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                  	 <ul class="dropdown-menu" role="menu">
+                       {% block button %}{% endblock %}
+                  		 <li><a href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
+                  		 <li><a href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                  		 <li><a href="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">削除</a></li>
+                  	 </ul>
+                  </div>
+                </td>
               </tr>
             {% endfor %}
           </tbody>

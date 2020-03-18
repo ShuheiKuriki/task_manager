@@ -14,11 +14,9 @@
   <th scope='col'>時間帯</th>
   <!-- <th scope='col'>後</th> -->
 {% endblock %}
-{% block change_button %}
-  <td>
+{% block button %}
     {% if not forloop.parentloop.first %}
-      <a href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">↑</a>
+      <li><a href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
     {% endif %}
-    <a href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">↓</a>
-  </td>
+    <li><a href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
 {% endblock %}
