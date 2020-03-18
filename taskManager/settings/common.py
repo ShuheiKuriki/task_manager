@@ -125,6 +125,8 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 #
 # ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True #ユーザー登録画⾯で必須項⽬に
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
 
 AUTHENTICATION_BACKENDS = (
     # 'djago.contrib.auth.backends.ModelBackend',
@@ -133,13 +135,14 @@ AUTHENTICATION_BACKENDS = (
 
 #認証⽅式を 「メールアドレスとパスワード」 に変更
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_USERNAME_REQUIRED = True 
 
-EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
-
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+#
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_HOST_USER = 'apikey'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
