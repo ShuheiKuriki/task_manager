@@ -16,7 +16,7 @@
 {% endblock %}
 {% block button %}
     {% if not forloop.parentloop.first %}
-      <li><a href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
+      <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
     {% endif %}
-    <li><a href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
+    <li><a class='btn btn-success btn-block my-1' href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
 {% endblock %}

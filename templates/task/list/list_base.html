@@ -21,16 +21,16 @@
                 <td>{{ task.when.month }}/{{ task.when.day }}</td>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td>
-                  <div class="dropdown">
-	                   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-                  	 <ul class="dropdown-menu" role="menu">
-                       {% block button %}{% endblock %}
-                  		 <li><a href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
-                  		 <li><a href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
-                  		 <li><a href="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">削除</a></li>
-                  	 </ul>
-                  </div>
-                </td>
+                    <div class="dropdown">
+                       <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                       <ul class="dropdown-menu" role="menu">
+                         {% block button %}{% endblock %}
+                         <li><a class='btn btn-warning btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
+                         <li><a class='btn btn-info btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                         <li><a class='btn btn-danger btn-block mt-1' href="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">削除</a></li>
+                       </ul>
+                    </div>
+                  </td>
               </tr>
             {% endfor %}
           </tbody>

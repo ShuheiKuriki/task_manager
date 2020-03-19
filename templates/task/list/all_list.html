@@ -5,4 +5,4 @@
 <th scope='col'>{{info.name}}のタスク : <span class='text-danger'>{{info.num}}個</span></th>
 {% endblock %}
 {% block change %}<th scope='col'>1日後</th>{% endblock %}
-{% block button %}<li><a href="{% url 'task:later' task.id %}">実行日を翌日に</a></li>{% endblock %}
+{% block button %}<li><a class='btn btn-success btn-block' href="{% url 'task:later' task.id %}">実行日を翌日に</a></li>{% endblock %}
