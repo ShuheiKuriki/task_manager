@@ -99,10 +99,10 @@
                   <div class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                      <li><a href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
-                      <li><a href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
-                      <li><a href="{% url 'task:done_update' done.id %}">編集</a></li>
-                      <li><a href="{% url 'task:recover' done.id %}">未完了にする</a></li>
+                      <li><a class='btn btn-success btn-block my-1' href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
+                      <li><a class='btn btn-warning btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
+                      <li><a class='btn btn-info btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
+                      <li><a class='btn btn-danger btn-block my-1' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
                     </ul>
                   </div>
                 </td>
