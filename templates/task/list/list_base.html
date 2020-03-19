@@ -1,12 +1,12 @@
 {% extends "base/user_base.html" %}
 {% block content2 %}
     {% for info in infos %}
+    <!-- xs -->
         <table class='table d-block d-lg-none'>
           <thead class='border'>
             <tr>
               <th scope='col'></th>
               {% block name-xs %}{% endblock %}
-              <th scope='col'>重/急</th>
               <th scope='col'>実行</th>
               <th scope='col'>期限</th>
               <th scope='col'>メニュー</th>
@@ -17,7 +17,6 @@
               <tr id="task_{{ task.id }}">
                 <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>{{ forloop.counter }}</th>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-                <td scope='col'>{% if task.important == True %}○{% else %}×{% endif %}/{% if task.urgent == True %}○{% else %}×{% endif %}</td>
                 <td>{{ task.when.month }}/{{ task.when.day }}</td>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td><div class="dropleft">
@@ -33,6 +32,7 @@
             {% endfor %}
           </tbody>
         </table>
+    <!-- lg -->
         <table class='table d-none d-lg-block'>
           <thead class='border'>
             <tr>
