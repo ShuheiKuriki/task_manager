@@ -56,10 +56,13 @@ def today(request,pk):
         task.save()
     num = len(tasks)
     names = ['~12時','12~15時','15~18時','18~21時','21時~']
+    h = datetime.datetime.now().hour
+    p = max(h//3-3,0)
     infos = []
     for i,name in enumerate(names):
         info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
-        infos.append(info)
+        if info.num>0:
+            infos.append(info)
     return render(request, 'task/list/today.html', {'infos':infos, 'num':num})
 
 def tomorrow(request,pk):
@@ -74,7 +77,8 @@ def tomorrow(request,pk):
     infos = []
     for i,name in enumerate(names):
         info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
-        infos.append(info)
+        if info.num>0:
+            infos.append(info)
     return render(request, 'task/list/tomorrow.html', {'infos':infos, 'num':num})
 
 def done_list(request,pk):
