@@ -1,8 +1,6 @@
 {% extends "task/list/list_base.html" %}
 {% block title %}一覧ページ{% endblock %}
 {% block content %}<h1>{{user.username}}さん 今日も頑張りましょう！</h1>{% endblock %}
-{% block name-lg %}<th scope='col'>{{info.name}}: <span class='text-danger'>{{info.num}}個</span></th>{% endblock %}
-{% block name-xs %}<th scope='col'>{{info.name}}: <span class='text-danger'>{{info.num}}個</span></th>{% endblock %}
 {% block change %}<th scope='col'>1日後</th>{% endblock %}
 {% block button-lg %}<li><a class='btn btn-success btn-block' href="{% url 'task:later' task.id %}">実行日を翌日に</a></li>{% endblock %}
 {% block button-xs %}<li><a class='btn btn-success btn-block' href="{% url 'task:later' task.id %}">実行日を翌日に</a></li>{% endblock %}
