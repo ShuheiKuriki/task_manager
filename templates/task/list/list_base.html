@@ -6,7 +6,9 @@
             <tr>
               <th scope='col'></th>
               {% block name %}{% endblock %}
-              <th scope='col'>重/急</th>
+              <th scope='col'><div class="d-block d-lg-none">重/急</div></th>
+              <th scope='col'><div class="d-none d-lg-block">重要</div></th>
+              <th scope='col'><div class="d-none d-lg-block">緊急</div></th>
               <th scope='col'>実行</th>
               <th scope='col'>期限</th>
               <th scope='col'>メニュー</th>
@@ -17,14 +19,25 @@
               <tr id="task_{{ task.id }}">
                 <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>{{ forloop.counter }}</th>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-                <td>{% if task.important == True %}○{% else %}×{% endif %}/{% if task.urgent == True %}○{% else %}×{% endif %}</td>
+                <td scope='col'><div class="d-block d-lg-none">{% if task.important == True %}○{% else %}×{% endif %}/{% if task.urgent == True %}○{% else %}×{% endif %}</div></td>
+                <td scope='col'><div class="d-none d-lg-block">{% if task.important == True %}○{% else %}×{% endif %}</div></td>
+                <td scope='col'><div class="d-none d-lg-block">{% if task.important == True %}○{% else %}×{% endif %}</div></td>
                 <td>{{ task.when.month }}/{{ task.when.day }}</td>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td>
-                    <div class="dropdown">
+                    <div class="d-none d-lg-block dropdown">
                        <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
                        <ul class="dropdown-menu" role="menu">
-                         {% block button %}{% endblock %}
+                         {% block button-lg %}{% endblock %}
+                         <li><a class='btn btn-warning btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
+                         <li><a class='btn btn-info btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                         <li><a class='btn btn-danger btn-block mt-1' href="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">削除</a></li>
+                       </ul>
+                    </div>
+                    <div class="d-block d-lg-none dropleft">
+                       <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                       <ul class="dropdown-menu" role="menu">
+                         {% block button-xs %}{% endblock %}
                          <li><a class='btn btn-warning btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
                          <li><a class='btn btn-info btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
                          <li><a class='btn btn-danger btn-block mt-1' href="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">削除</a></li>
