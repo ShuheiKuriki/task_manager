@@ -2,7 +2,7 @@
 {% block content2 %}
     {% for info in infos %}
     <!-- md -->
-        <table class='table table-striped table-bordered d-none d-md-block'>
+        <table class='table table-striped table-bordered d-none d-md-block text-center'>
           <thead>
             <tr class='table-primary'>
               <th class=""></th>
@@ -19,10 +19,10 @@
               <tr id="task_{{ task.id }}">
                 <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>{{ forloop.counter }}</th>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-                <td>{% if task.important == True %}○　　{% else %}×　　{% endif %}</td>
-                <td>{% if task.urgent == True %}○　　{% else %}×　　{% endif %}</td>
-                <td>{{ task.when.month }}/{{ task.when.day }}　</td>
-                <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}　</td>
+                <td>{% if task.important == True %}○　{% else %}×　{% endif %}</td>
+                <td>{% if task.urgent == True %}○　{% else %}×　{% endif %}</td>
+                <td>{{ task.when.month }}/{{ task.when.day }}</td>
+                <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td><div class="dropdown">
                        <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
                        <ul class="dropdown-menu" role="menu">
@@ -37,14 +37,14 @@
           </tbody>
         </table>
     <!-- xs -->
-        <table class='table table-sm table-bordered table-striped table-responsive d-block d-md-none'>
+        <table class='table table-sm table-bordered table-striped table-responsive d-block d-md-none text-center'>
           <thead>
             <tr class='table-primary'>
               <th scope='col'></th>
               <th class="w-50" scope='col'>{{info.name}}: <span class=''>{{info.num}}個</span></th>
               <th scope='col'>実行</th>
               <th scope='col'>期限</th>
-              <th class="w-25" scope='col'>メニュー</th>
+              <th class="w-25" scope='col'>menu</th>
             </tr>
           </thead>
           <tbody class='sortable{{ forloop.counter }}'>
