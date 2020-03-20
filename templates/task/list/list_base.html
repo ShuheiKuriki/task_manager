@@ -6,7 +6,7 @@
           <thead>
             <tr class='table-primary'>
               <th class=""></th>
-              <th class="w-50">{{info.name}} : <span class=''>{{info.num}}個</span></th>
+              <th class="w-50">{{info.name}} : {{info.num}}個</th>
               <th class="">重要</th>
               <th class="">緊急</th>
               <th class="">実行</th>
@@ -39,9 +39,9 @@
     <!-- xs -->
         <table class='table table-sm table-bordered table-striped table-responsive d-block d-md-none'>
           <thead>
-            <tr class='table-success'>
+            <tr class='table-primary'>
               <th scope='col'></th>
-              <th class="w-50" scope='col'>{{info.name}}: <span class='text-danger'>{{info.num}}個</span></th>
+              <th class="w-50" scope='col'>{{info.name}}: <span class=''>{{info.num}}個</span></th>
               <th scope='col'>実行</th>
               <th scope='col'>期限</th>
               <th class="w-25" scope='col'>メニュー</th>
@@ -55,11 +55,11 @@
                 <td>{{ task.when.month }}/{{ task.when.day }}</td>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td><div class="dropdown">
-                       <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                       <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
                        <ul class="dropdown-menu" role="menu">
                          {% block button-xs %}{% endblock %}
                          <li><a class='btn btn-warning btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
-                         <li><a class='btn btn-info btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                         <li><a class='btn btn-secondary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
                          <li><a class='btn btn-danger btn-block mt-1' href="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">削除</a></li>
                        </ul>
                 </div></td>
