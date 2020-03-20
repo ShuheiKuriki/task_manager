@@ -3,8 +3,8 @@
     {% for info in infos %}
     <!-- xs -->
         <table class='table table-sm table-bordered table-striped table-responsive d-block d-md-none'>
-          <thead class='border'>
-            <tr>
+          <thead>
+            <tr class='table-success'>
               <th scope='col'></th>
               <th class="w-50" scope='col'>{{info.name}}: <span class='text-danger'>{{info.num}}個</span></th>
               <th scope='col'>実行</th>
@@ -12,7 +12,7 @@
               <th class="w-25" scope='col'>メニュー</th>
             </tr>
           </thead>
-          <tbody class='sortable{{ forloop.counter }} border'>
+          <tbody class='sortable{{ forloop.counter }}'>
             {% for task in info.tasks %}
               <tr id="task_{{ task.id }}">
                 <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>{{ forloop.counter }}</th>
@@ -35,7 +35,7 @@
     <!-- md -->
         <table class='table table-striped table-bordered d-none d-md-block'>
           <thead>
-            <tr>
+            <tr class='table-success'>
               <th class=""></th>
               <th class="w-50">{{info.name}} : <span class='text-danger'>{{info.num}}個</span></th>
               <th class="">重要</th>
