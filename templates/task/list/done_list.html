@@ -2,7 +2,10 @@
 {% block title %}レポート{% endblock %}
 {% block active_done %}active{% endblock %}
 {% block content %}
-  <h1>今日完了したタスク : {{ today }}個　お疲れ様でした！</h1>
+  <h1 class='d-none d-md-block'>今日完了したタスク : {{ today }}個　お疲れ様でした！</h1>
+{% endblock %}
+{% block content-xs %}
+  <h4 class='d-block d-md-none'>今日完了したタスク : {{ today }}個<br>お疲れ様でした！</h4>
 {% endblock %}
 {% block content2 %}
   <!-- <table class='table border col-12'>
@@ -74,40 +77,78 @@
 {% endblock %}
 
 {% block content3 %}
-  <h1>今週完了したタスク : {{ week.num }}個　<span class='text-info'>レベル : {{ week.level }}</span></h1>
+  <h1 class='d-none d-md-block'>今週完了したタスク : {{ week.num }}個　<span class='text-info'>レベル : {{ week.level }}</span></h1>
+{% endblock %}
+
+{% block content3-xs %}
+  <h4 class='d-block d-md-none'>今週完了したタスク : {{ week.num }}個　<span class='text-info'>レベル : {{ week.level }}</span></h4>
 {% endblock %}
 
 {% block content4 %}
-        <table class='table border col-lg-8 col-12'>
-          <thead>
-            <tr>
+<!-- md -->
+    <table class='table table-striped table-bordered d-none d-md-block text-center'>
+      <thead>
+        <tr class='table-primary'>
               <th scope='col'></th>
-              <th scope='col'>タスク名</th>
-              <th scope='col'>重/急</th>
+              <th class="w-50" scope='col'>タスク名</th>
+              <th scope='col'>重要</th>
+              <th scope='col'>緊急</th>
               <th scope='col'>完了日</th>
-              <th scope='col'>menu</th>
+              <th class="w-25" scope='col'>メニュー</th>
+        </tr>
+      </thead>
+      <tbody>
+            {% for done in week.tasks %}
+              <tr>
+                <th scope='row'>{{ forloop.counter }}</th>
+                <td>{{ done.name }}</td>
+                <td>{% if task.important == True %}○　　{% else %}×　　{% endif %}</td>
+                <td>{% if task.urgent == True %}○　　{% else %}×　　{% endif %}</td>
+                <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
+                <td>
+                  <div class="dropdown">
+                    <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a class='btn btn-primary btn-block' href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
+                      <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
+                      <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
+                      <li><a class='btn btn-primary btn-block' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+      </tbody>
+    </table>
+<!-- xs -->
+    <table class='table table-sm table-bordered table-striped table-responsive d-block d-md-none text-center'>
+        <thead>
+            <tr class='table-primary'>
+              <th scope='col'></th>
+              <th class='' scope='col'>タスク名</th>
+              <th scope='col'>完了日</th>
+              <th class="w-25" scope='col'>menu</th>
             </tr>
-          </thead>
+        </thead>
           <tbody>
             {% for done in week.tasks %}
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ done.name }}</td>
-                <td>{% if done.important == True %}○{% else %}×{% endif %}/{% if done.urgent == True %}○{% else %}×{% endif %}</td>
                 <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
                 <td>
                   <div class="dropdown">
-                    <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                    <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
                     <ul class="dropdown-menu" role="menu">
-                      <li><a class='btn btn-success btn-block my-1' href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
-                      <li><a class='btn btn-warning btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
-                      <li><a class='btn btn-info btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
-                      <li><a class='btn btn-danger btn-block my-1' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
+                      <li><a class='btn btn-primary btn-block' href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
+                      <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
+                      <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
+                      <li><a class='btn btn-primary btn-block' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
                     </ul>
                   </div>
                 </td>
               </tr>
             {% endfor %}
           </tbody>
-        </table>
+    </table>
 {% endblock %}
