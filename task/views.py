@@ -38,9 +38,9 @@ def index(request,pk):
     today = Taskinfo(name="今日",
         tasks=tasks.filter(when=datetime.date.today()).order_by('order'))
     tom = Taskinfo(name="明日",
-        tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('expired').order_by('order'))
+        tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order'))
     other = Taskinfo(name="明日以降",
-        tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('expired').order_by('when'))
+        tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when'))
     infos = [today, tom, other]
     return render(request, 'task/list/all_list.html', {'infos':infos})
 
@@ -188,7 +188,7 @@ def period_after(request, pk):
 @csrf_exempt
 def sort(request):
     for order, id in enumerate(request.POST.getlist('task[]')):
-        print(sort)
+        print('sort')
         print(order,id)
         task = Task.objects.get(id=id)
         task.order = order
