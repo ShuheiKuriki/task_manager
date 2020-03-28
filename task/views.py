@@ -188,6 +188,8 @@ def period_after(request, pk):
 @csrf_exempt
 def sort(request):
     for order, id in enumerate(request.POST.getlist('task[]')):
+        print(sort)
+        print(order,id)
         task = Task.objects.get(id=id)
         task.order = order
         task.save()
