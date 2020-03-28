@@ -165,7 +165,7 @@ def later(request, pk):
     task = Task.objects.get(id=pk)
     task.when += datetime.timedelta(days=1)
     task.save()
-    return redirect('task:list', pk=request.user.id)
+    return redirect_to_origin(request)
 
 @login_required
 def period_before(request, pk):
