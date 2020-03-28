@@ -60,7 +60,12 @@ def today(request,pk):
     p = max(h//3-3,0)
     infos = []
     for i,name in enumerate(names):
-        info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
+        if i<p:
+            continue
+        elif i==p:
+            info = Taskinfo(name=name, tasks=tasks.filter(period__lte=i).order_by('order'))
+        else:
+            info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
         if info.num>0:
             infos.append(info)
     return render(request, 'task/list/today.html', {'infos':infos, 'num':num})
@@ -126,6 +131,7 @@ def create(request):
 class TaskUpdateView(UpdateView):
     model = Task
     form_class = TaskUpdateForm
+    template_name = 'task/task_update.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -138,6 +144,7 @@ class TaskUpdateView(UpdateView):
 @method_decorator(login_required, name='dispatch')
 class TaskDeleteView(DeleteView):
     model = Task
+    template_name = 'task/task_confirm_delete.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -163,8 +170,8 @@ def later(request, pk):
 @login_required
 def period_before(request, pk):
     task = Task.objects.get(id=pk)
-    if task.period > 0:
-        task.period -= 1
+    task.period -= 1
+    task.period %= 5
     task.save()
     try:
         return redirect_to_origin(request)
@@ -174,11 +181,13 @@ def period_before(request, pk):
 @login_required
 def period_after(request, pk):
     task = Task.objects.get(id=pk)
-    if task.period == 4:
-        task.when += datetime.timedelta(days=1)
-        task.period = 0
-    else:
-        task.period += 1
+    if task.when == datetime.date.today():
+        h = datetime.datetime.now().hour
+        p = max(h//3-3,0)
+        if task.period < p:
+            task.period = p
+    task.period += 1
+    task.period %= 5
     task.save()
     try:
         return redirect_to_origin(request)
@@ -188,8 +197,6 @@ def period_after(request, pk):
 @csrf_exempt
 def sort(request):
     for order, id in enumerate(request.POST.getlist('task[]')):
-        print('sort')
-        print(order,id)
         task = Task.objects.get(id=id)
         task.order = order
         task.save()

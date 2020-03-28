@@ -3,5 +3,3 @@
 {% block content %}<h1 class='d-none d-md-block'>{{user.username}}さん 今日も頑張りましょう！</h1>{% endblock %}
 {% block content-xs %}<h4 class='d-block d-md-none'>{{user.username}}さん<br>今日も頑張りましょう！</h4>{% endblock %}
 {% block change %}<th scope='col'>1日後</th>{% endblock %}
-{% block button-md %}<li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}">実行日を翌日に</a></li>{% endblock %}
-{% block button-xs %}<li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}">実行日を翌日に</a></li>{% endblock %}
