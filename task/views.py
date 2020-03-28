@@ -97,7 +97,7 @@ def create(request):
     if request.method == 'GET':
         form = TaskCreateForm()
         next = request.GET.get('next')
-        return render(request, 'task/create.html', {'form': form,'next': next})
+        return render(request, 'task/task_create.html', {'form': form,'next': next})
     if request.method == 'POST':
         form = TaskCreateForm(request.POST)
         repeat = int(request.POST.get('repeat'))
@@ -126,7 +126,6 @@ def create(request):
 class TaskUpdateView(UpdateView):
     model = Task
     form_class = TaskUpdateForm
-    template_name = 'task/update.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -139,12 +138,16 @@ class TaskUpdateView(UpdateView):
 @method_decorator(login_required, name='dispatch')
 class TaskDeleteView(DeleteView):
     model = Task
-    template_name = 'task/delete.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['next'] = self.request.GET.get('next')
-        context['task'] = context['object'].get_list()
+        meta_fields = Task._meta.get_fields()
+        dic = {}
+        for field in meta_fields:
+            if field.name != 'id' and field.name != 'user':
+                exec('dic[field.verbose_name]=context["object"].{}'.format(field.name))
+        context['task'] = dic
         return context
 
     def get_success_url(self):
