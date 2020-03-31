@@ -9,7 +9,7 @@
               <th class="w-50">{{info.name}} : {{info.num}}個</th>
               <th class="">重要</th>
               <th class="">緊急</th>
-              <th class="">実行</th>
+              {% block excute %}{% endblock %}
               <th class="">期限</th>
               <th class="w-25">メニュー</th>
             </tr>
@@ -21,7 +21,7 @@
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
                 <td>{% if task.important == True %}○　　{% else %}×　　{% endif %}</td>
                 <td>{% if task.urgent == True %}○　　{% else %}×　　{% endif %}</td>
-                <td>{{ task.when.month }}/{{ task.when.day }}</td>
+                {% block excute-when %}{% endblock %}
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td><div class="dropdown">
                        <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
@@ -43,7 +43,7 @@
             <tr class='table-primary'>
               <th scope='col'></th>
               <th class="w-50" scope='col'>{{info.name}}: <span class=''>{{info.num}}個</span></th>
-              <th scope='col'>実行</th>
+              {% block excute-xs %}{% endblock %}
               <th scope='col'>期限</th>
               <th class="w-25" scope='col'>menu</th>
             </tr>
@@ -53,7 +53,7 @@
               <tr id="task_{{ task.id }}">
                 <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>{{ forloop.counter }}</th>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-                <td>{{ task.when.month }}/{{ task.when.day }}</td>
+                {% block excute-when-xs %}{% endblock %}
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td><div class="dropdown">
                        <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
