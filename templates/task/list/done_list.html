@@ -102,8 +102,8 @@
               <tr>
                 <th scope='row'>{{ forloop.counter }}</th>
                 <td>{{ done.name }}</td>
-                <td>{% if task.important == True %}○　　{% else %}×　　{% endif %}</td>
-                <td>{% if task.urgent == True %}○　　{% else %}×　　{% endif %}</td>
+                <td>{% if done.important == True %}○　　{% else %}×　　{% endif %}</td>
+                <td>{% if done.urgent == True %}○　　{% else %}×　　{% endif %}</td>
                 <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
                 <td>
                   <div class="dropdown">
