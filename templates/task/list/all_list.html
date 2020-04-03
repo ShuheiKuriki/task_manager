@@ -2,7 +2,5 @@
 {% block title %}一覧ページ{% endblock %}
 {% block content %}<h1 class='d-none d-md-block'>{{user.username}}さん 今日も頑張りましょう！</h1>{% endblock %}
 {% block content-xs %}<h4 class='d-block d-md-none'>{{user.username}}さん<br>今日も頑張りましょう！</h4>{% endblock %}
-{% block excute %}<th class="">実行</th>{% endblock %}
-{% block excute-xs %}<th class="">実行</th>{% endblock %}
-{% block excute-when %}{{ task.when.month }}/{{ task.when.day }}{% endblock %}
-{% block excute-when-xs %}{{ task.when.month }}/{{ task.when.day }}{% endblock %}
+{% block excute %}{{ task.when.month }}/{{ task.when.day }}{% endblock %}
+{% block excute-xs %}{{ task.when.month }}/{{ task.when.day }}{% endblock %}

@@ -14,10 +14,11 @@
               <th class="w-25">メニュー</th>
             </tr>
           </thead>
-          <tbody class='sortable{{ forloop.counter }}'>
+          <tbody {% if info.name != '明日以降' %}class='sortable{{ forloop.counter }}'{% endif %}>
             {% for task in info.tasks %}
               <tr id="task_{{ task.id }}">
-                <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>{{ forloop.counter }}</th>
+                <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>
+                  {% if info.name != '明日以降' %}{{ forloop.counter }}{% else %}{% block excute %}{% endblock %}{% endif %}</th>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
                 <td>{% if task.important == True %}○　　{% else %}×　　{% endif %}</td>
                 <td>{% if task.urgent == True %}○　　{% else %}×　　{% endif %}</td>
@@ -47,11 +48,11 @@
               <th class="w-25" scope='col'>menu</th>
             </tr>
           </thead>
-          <tbody class='sortable{{ forloop.counter }}'>
+          <tbody {% if info.name != '明日以降' %}class='sortable{{ forloop.counter }}'{% endif %}>
             {% for task in info.tasks %}
               <tr id="task_{{ task.id }}">
                 <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>
-                {% if info.name != '明日以降' %}{{ forloop.counter }}{% else %}{% block excute-when-xs %}{% endblock %}{% endif %}</th>
+                {% if info.name != '明日以降' %}{{ forloop.counter }}{% else %}{% block excute-xs %}{% endblock %}{% endif %}</th>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td><div class="dropdown">
