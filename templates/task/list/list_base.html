@@ -3,13 +3,13 @@
     {% for info in infos %}
     <!-- md -->
         <table class='table table-striped table-bordered d-none d-md-block text-center'>
+          <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
           <thead>
             <tr class='table-primary'>
               <th class=""></th>
-              <th class="w-50">{{info.name}} : {{info.num}}個</th>
+              <th class="w-50">タスク名</th>
               <th class="">重要</th>
               <th class="">緊急</th>
-              {% block excute %}{% endblock %}
               <th class="">期限</th>
               <th class="w-25">メニュー</th>
             </tr>
@@ -21,7 +21,6 @@
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
                 <td>{% if task.important == True %}○　　{% else %}×　　{% endif %}</td>
                 <td>{% if task.urgent == True %}○　　{% else %}×　　{% endif %}</td>
-                {% block excute-when %}{% endblock %}
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td><div class="dropdown">
                        <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
@@ -39,11 +38,11 @@
         </table>
     <!-- xs -->
         <table class='table table-sm table-bordered table-striped table-responsive d-block d-md-none text-center'>
+          <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
           <thead>
             <tr class='table-primary'>
               <th scope='col'></th>
-              <th class="w-50" scope='col'>{{info.name}}: <span class=''>{{info.num}}個</span></th>
-              {% block excute-xs %}{% endblock %}
+              <th class="w-50">タスク名</th>
               <th scope='col'>期限</th>
               <th class="w-25" scope='col'>menu</th>
             </tr>
@@ -51,9 +50,9 @@
           <tbody class='sortable{{ forloop.counter }}'>
             {% for task in info.tasks %}
               <tr id="task_{{ task.id }}">
-                <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>{{ forloop.counter }}</th>
+                <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>
+                {% if info.name != '明日以降' %}{{ forloop.counter }}{% else %}{% block excute-when-xs %}{% endblock %}{% endif %}</th>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-                {% block excute-when-xs %}{% endblock %}
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td><div class="dropdown">
                        <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>

@@ -12,12 +12,19 @@ from .forms import TaskCreateForm, TaskUpdateForm, DoneEditForm
 from taskManager.models import Task
 
 import datetime
+from datetime import date
 # Create your views here.
 class Taskinfo:
-    def __init__(self, tasks, name=""):
+    def __init__(self, tasks, name="", day=''):
         self.name = name
         self.tasks = tasks
         self.num = len(tasks)
+        if day=='':
+            self.date=''
+        else:
+            day_delta = date.today()+datetime.timedelta(days=day)
+            week_day = ['月', '火', '水','木','金','土','日']
+            self.date = "{}/{}({})".format(day_delta.month, day_delta.day, week_day[day_delta.weekday()])
         n = int((self.num*2)**(1/2))
         if n*(n+1)/2 <= self.num:
             self.level = n
@@ -35,9 +42,9 @@ def index(request,pk):
     for task in tasks:
         task.expired = True if task.deadline<datetime.date.today() else False
         task.save()
-    today = Taskinfo(name="今日",
+    today = Taskinfo(name="今日", day=0,
         tasks=tasks.filter(when=datetime.date.today()).order_by('order'))
-    tom = Taskinfo(name="明日",
+    tom = Taskinfo(name="明日", day=1,
         tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order'))
     other = Taskinfo(name="明日以降",
         tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when'))
