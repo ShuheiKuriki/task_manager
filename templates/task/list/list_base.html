@@ -1,8 +1,8 @@
 {% extends "base/user_base.html" %}
 {% block content2 %}
     {% for info in infos %}
-    <!-- md -->
-        <table class='table table-striped table-bordered d-none d-md-block text-center'>
+    <!-- sm -->
+        <table class='table table-striped table-bordered d-none d-sm-block text-center'>
           <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
           <thead>
             <tr class='table-primary'>
@@ -27,7 +27,7 @@
                        <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
                        <ul class="dropdown-menu" role="menu">
                          <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
-                         {% block button-md %}{% endblock %}
+                         {% block button-sm %}{% endblock %}
                          <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
                          <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
                          <li><a class='btn btn-primary btn-block' href="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">削除</a></li>
@@ -38,7 +38,7 @@
           </tbody>
         </table>
     <!-- xs -->
-        <table class='table table-sm table-bordered table-striped d-block d-md-none text-center'>
+        <table class='table table-sm table-bordered table-striped d-block d-sm-none text-center'>
           <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
           <thead>
             <tr class='table-primary'>
@@ -55,7 +55,7 @@
                 {% if info.name != '明日以降' %}{{ forloop.counter }}{% else %}{% block excute-xs %}{% endblock %}{% endif %}</th>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
-                <td><div class="dropleft">
+                <td><div {% if forloop.parentloop.last %}class="dropup"{% else %}class="dropleft"{% endif %}>
                        <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
                        <ul class="dropdown-menu" role="menu">
                          <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>

@@ -3,23 +3,23 @@
 {% block active_today %}active{% endblock %}
 {% block content %}
   {% if num == 0 %}
-    <h1 class='d-none d-md-block'>今日のタスクは完了です！ゆっくり休みましょう！</h1>
+    <h1 class='d-none d-sm-block'>今日のタスクは完了です！ゆっくり休みましょう！</h1>
   {% else %}
-    <h1 class='d-none d-md-block'>今日のタスクはあと{{num}}個です！</h1>
+    <h1 class='d-none d-sm-block'>今日のタスクはあと{{num}}個です！</h1>
   {% endif %}
 {% endblock %}
 {% block content-xs %}
   {% if num == 0 %}
-    <h4 class='d-block d-md-none'>今日のタスクは完了です！ゆっくり休みましょう！</h4>
+    <h4 class='d-block d-sm-none'>今日のタスクは完了です！ゆっくり休みましょう！</h4>
   {% else %}
-    <h4 class='d-block d-md-none'>今日のタスクはあと{{num}}個です！</h4>
+    <h4 class='d-block d-sm-none'>今日のタスクはあと{{num}}個です！</h4>
   {% endif %}
 {% endblock %}
 {% block change %}
   <th scope='col'>時間帯</th>
   <!-- <th scope='col'>後</th> -->
 {% endblock %}
-{% block button-md %}
+{% block button-sm %}
     <li><a class='btn btn-primary btn-block' href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
 {% endblock %}
