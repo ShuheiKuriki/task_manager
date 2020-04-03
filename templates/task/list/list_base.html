@@ -1,16 +1,16 @@
 {% extends "base/user_base.html" %}
 {% block content2 %}
     {% for info in infos %}
-    <!-- sm -->
-        <table class='table table-striped table-bordered d-none d-sm-block text-center'>
+    <!-- md -->
+        <table class='table table-striped table-bordered d-none d-md-block text-center'>
           <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
           <thead>
             <tr class='table-primary'>
               <th class=""></th>
               <th class="w-50">タスク名</th>
-              <th class="">重要</th>
-              <th class="">緊急</th>
-              <th class="">期限</th>
+              <th class="">要</th>
+              <th class="">急</th>
+              <th class="w-25">期限</th>
               <th class="w-25">メニュー</th>
             </tr>
           </thead>
@@ -20,8 +20,44 @@
                 <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>
                   {% if info.name != '明日以降' %}{{ forloop.counter }}{% else %}{% block excute %}{% endblock %}{% endif %}</th>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-                <td>{% if task.important == True %}○　　{% else %}×　　{% endif %}</td>
-                <td>{% if task.urgent == True %}○　　{% else %}×　　{% endif %}</td>
+                <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
+                <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
+                <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+                <td><div class="dropdown">
+                       <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                       <ul class="dropdown-menu" role="menu">
+                         <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
+                         {% block button %}{% endblock %}
+                         <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
+                         <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                         <li><a class='btn btn-primary btn-block' href="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">削除</a></li>
+                       </ul>
+                </div></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    <!-- sm -->
+        <table class='table table-sm table-striped table-bordered d-none d-sm-block d-md-none text-center'>
+          <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
+          <thead>
+            <tr class='table-primary'>
+              <th class=""></th>
+              <th class="w-50">タスク名</th>
+              <th class="">要</th>
+              <th class="">急</th>
+              <th class="w-25">期限</th>
+              <th class="w-25">メニュー</th>
+            </tr>
+          </thead>
+          <tbody {% if info.name != '明日以降' %}class='sortable{{ forloop.counter }}'{% endif %}>
+            {% for task in info.tasks %}
+              <tr id="task_{{ task.id }}">
+                <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>
+                  {% if info.name != '明日以降' %}{{ forloop.counter }}{% else %}{% block excute-sm %}{% endblock %}{% endif %}</th>
+                <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
+                <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
+                <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
                 <td><div class="dropdown">
                        <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
@@ -55,7 +91,7 @@
                 {% if info.name != '明日以降' %}{{ forloop.counter }}{% else %}{% block excute-xs %}{% endblock %}{% endif %}</th>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
                 <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
-                <td><div {% if forloop.parentloop.last %}class="dropup"{% else %}class="dropleft"{% endif %}>
+                <td><div class="dropdown">
                        <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
                        <ul class="dropdown-menu" role="menu">
                          <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>

@@ -18,6 +18,10 @@
 {% block change %}
   <th scope='col'>時間帯</th>
 {% endblock %}
+{% block button %}
+    <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
+    <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
+{% endblock %}
 {% block button-sm %}
     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
