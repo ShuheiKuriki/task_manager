@@ -15,7 +15,7 @@
         {% for update in update_list %}
           <tr>
             <th>{{update.title}}</th>
-            {% if update.updated_or_not == True %}
+            {% if update.updated_at is not None %}
               <td>{{update.updated_at}}</td>
             {% else %}
               <td>今後実装予定</td>

@@ -17,7 +17,6 @@ class Update(models.Model):
     title = models.CharField('機能名', default='',max_length=255, blank=True,null=True)
     description = models.TextField('機能追加の説明', default='', blank=True, null=True)
     updated_at = models.DateField('追加日', default=now, blank=True,null=True)
-    updated_or_not = models.BooleanField('更新済み', default=False)
 
     def __str__(self):
         return self.title
