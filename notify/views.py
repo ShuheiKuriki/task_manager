@@ -27,7 +27,7 @@ class UpdateListView(ListView):
     template_name = 'notify/notice.html'
 
     def get_queryset(self):
-        return Update.objects.all().order_by('updated_at').order_by('-updated_or_not')
+        return Update.objects.all().order_by('updated_at')
 
 @csrf_exempt
 def callback(request):
