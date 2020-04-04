@@ -9,7 +9,11 @@
 今日もお疲れ様でした！
 レベルアップ目指して明日も頑張りましょう！
 
-明日のタスクは{{ tom.num }}個あります。
+明日のタスクは{{ tom_num }}個あります。
 
-{% for task in tom.tasks %}・{{ task.name }}
+{% for period in tom_info %}
+  ◆ {{period.name}} ◆
+
+  {% for task in period.tasks %}・{{ task.name }}
+  {% endfor %}
 {% endfor %}

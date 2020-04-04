@@ -119,8 +119,15 @@ def send(request, when):
             print(context)
             if when == 'report':
                 text = "notify/message/notify_report.txt"
-                tom = Taskinfo(name = "明日", tasks = tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order'))
-                context["tom"]=tom
+                tomorrow = tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1))
+                tom_num = len(tomorrow)
+                context["tom_num"]=tom_num
+                tom_info = []
+                for i,name in enumerate(names):
+                    info = Taskinfo(name=name, tasks=tomorrow.filter(period=i).order_by('order'))
+                    if info.num>0:
+                        tom_info.append(info)
+                context['tom_info']=tom_info
                 dones = Task.objects.all().filter(user=push.user, done_or_not=True).order_by('-done_date')
                 done_today = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()))
                 done_week = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7)))
