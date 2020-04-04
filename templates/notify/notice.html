@@ -3,26 +3,27 @@
 
 {% block content %}
     <h2>〜お知らせ〜</h2>
-    <h3 class='my-5'>過去のアップデート</h3>
-    <div class='container mx-auto pt-3 pb-1 my-5 col-xl-5 col-md-8 col-lg-6 col-sm-12 bg-white'>
-      <ul>
+    <table class='table table-light table-striped text-center m-4'>
+      <caption>アップデート履歴</caption>
+      <thead>
+        <tr class=''>
+          <th class="w-50">内容</th>
+          <th class="w-50">アップデート日</th>
+        </tr>
+      </thead>
+      <tbody>
         {% for update in update_list %}
-          {% if update.updated_or_not == True %}
-          <li class='text-left'>{{update.title}}(→{{update.updated_at}}に追加済)</li>
+          <tr>
+            <th>{{update.title}}</th>
+            {% if update.updated_or_not == True %}
+              <td>{{update.updated_at}}</td>
+            {% else %}
+              <td>今後実装予定</td>
+          </tr>
           {% endif %}
         {% endfor %}
-      </ul>
-    </div>
-    <h3 class='my-5'>今後実装予定の機能</h3>
-    <div class='container mx-auto pt-3 pb-1 my-5 col-xl-5 col-md-8 col-lg-6 col-sm-12 bg-white'>
-      <ul>
-        {% for update in update_list %}
-          {% if update.updated_or_not == False %}
-          <li class='text-left'>{{update.title}}</li>
-          {% endif %}
-        {% endfor %}
-      </ul>
-    </div>
-    <h3>他にも欲しい機能がありましたら<br>開発者までお気軽にご要望ください</h3>
+      </tbody>
+  　</table>
+    <h4 class='my-5'>他にも欲しい機能がありましたら<br>開発者までお気軽にご要望ください</h4>
 
 {% endblock %}
