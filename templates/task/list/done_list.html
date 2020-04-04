@@ -86,14 +86,14 @@
 
 {% block content4 %}
 <!-- md -->
-    <table class='table table-striped table-bordered d-none d-md-block text-center'>
+    <table class='table table-sm table-striped table-bordered d-none d-sm-block text-center'>
       <thead>
         <tr class='table-primary'>
               <th scope='col'></th>
               <th class="w-50" scope='col'>タスク名</th>
-              <th scope='col'>重要</th>
-              <th scope='col'>緊急</th>
-              <th scope='col'>完了</th>
+              <th scope='col'>要</th>
+              <th scope='col'>急</th>
+              <th class="w-25" scope='col'>完了</th>
               <th class="w-25" scope='col'>メニュー</th>
         </tr>
       </thead>
@@ -120,14 +120,14 @@
             {% endfor %}
       </tbody>
     </table>
-<!-- xs -->
-    <table class='table table-sm table-bordered table-striped table-responsive d-block d-md-none text-center'>
+<!-- xs/sm -->
+    <table class='table table-sm table-bordered table-striped table-responsive d-block d-sm-none text-center'>
         <thead>
             <tr class='table-primary'>
               <th scope='col'></th>
-              <th class='' scope='col'>タスク名</th>
-              <th scope='col'>完了</th>
-              <th class="w-25" scope='col'>menu</th>
+              <th class='w-50' scope='col'>タスク名</th>
+              <th class="w-25" scope='col'>完了</th>
+              <th class="w-25" scope='col'></th>
             </tr>
         </thead>
           <tbody>
