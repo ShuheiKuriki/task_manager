@@ -93,39 +93,42 @@ def send(request, when):
 
     line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
     users = LinePush.objects.all()
-    logger.error(len(users))
+    print(len(users))
     if len(users) == 0:
         return HttpResponse("送信する相手がいません")
     else:
         for push in users:
-            logger.error(when)
-            today = Taskinfo(
-                    name = "今日",
-                    tasks = Task.objects.all().filter(user=push.user, done_or_not=False, when__lte=datetime.date.today()).order_by('order')
-            )
-            tom = Taskinfo(
-                    name = "明日",
-                    tasks = Task.objects.all().filter(user=push.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order')
-            )
-            context = {
-                'today': today,
-                'tom': tom,
-            }
-            logger.error(context)
+            print(when)
+            tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
+            todays = tasks.filter(when__lte=datetime.date.today())
+            num = len(todays)
+            names = ['~12時','12~15時','15~18時','18~21時','21時~']
+            h = datetime.datetime.now().hour
+            p = max(h//3-3,0)
+            today_info = []
+            for i,name in enumerate(names):
+                if i<p:
+                    continue
+                elif i==p:
+                    info = Taskinfo(name=name, tasks=todays.filter(period__lte=i).order_by('order'))
+                else:
+                    info = Taskinfo(name=name, tasks=todays.filter(period=i).order_by('order'))
+                if info.num>0:
+                    today_info.append(info)
+            context = {'today': today_info, 'num':num}
+            print(context)
             if when == 'report':
                 text = "notify/message/notify_report.txt"
+                tom = Taskinfo(name = "明日", tasks = tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order'))
+                context["tom"]=tom
                 dones = Task.objects.all().filter(user=push.user, done_or_not=True).order_by('-done_date')
-                done_today = Taskinfo(
-                        tasks = dones.filter(done_date=datetime.date.today())
-                )
-                done_week = Taskinfo(
-                        tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7))
-                )
+                done_today = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()))
+                done_week = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7)))
                 context["done_today"]=done_today
                 context["done_week"]=done_week
             else:
                 text = "notify/message/notify_message.txt"
             message = render_to_string(text, context, request)
-            logger.error("message ready")
+            print("message ready")
             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
         return HttpResponse("送信しました")

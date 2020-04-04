@@ -1,6 +1,10 @@
-今日のタスクはあと{{ today.num }}個あります
+今日のタスクはあと{{ num }}個あります
 
-{% for task in today.tasks %}・{{ task.name }}
+{% for period in today %}
+  ◆ {{period.name}} ◆
+
+  {% for task in period.tasks %}・{{ task.name }}
+  {% endfor %}
 {% endfor %}
 
 必要に応じてタスクを変更しましょう
