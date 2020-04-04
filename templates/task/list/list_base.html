@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
 {% block message %}{% endblock %}
-<a class='btn btn-warning d-block d-md-none my-4' href="{% url 'task:create' %}">タスク追加</a>
+<a class='btn btn-warning d-block d-md-none my-4' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
 {% endblock %}
 {% block content2 %}
     {% for info in infos %}
