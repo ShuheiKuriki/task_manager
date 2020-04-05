@@ -36,7 +36,7 @@ def callback(request):
     try:
         CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
     except:
-        CHANNEL_SECRET = getattr(settings, "CHANNEL_SECRET", None)
+        CHANNEL_SECRET = getattr(settings.dev, "CHANNEL_SECRET", None)
 
     logger.error("OK")
     # logger.error(CHANNEL_SECRET)
@@ -90,7 +90,6 @@ def send(request, when):
         CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
     except:
         CHANNEL_ACCESS_TOKEN = getattr(settings, "CHANNEL_ACCESS_TOKEN", None)
-
     line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
     users = LinePush.objects.all()
     print(len(users))
@@ -99,7 +98,7 @@ def send(request, when):
     else:
         for push in users:
             print(when)
-            tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
+            tasks = Task.objects.all().filter(user=push.user, done_or_not=False)
             todays = tasks.filter(when__lte=datetime.date.today())
             num = len(todays)
             names = ['~12時','12~15時','15~18時','18~21時','21時~']
