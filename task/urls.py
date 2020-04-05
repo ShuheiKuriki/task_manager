@@ -14,7 +14,7 @@ path('<int:pk>/done_list', views.done_list, name='done_list'),
 # 未完了タスク関連の操作
 path('create', views.create, name='create'),
 path('<int:pk>/update', views.TaskUpdateView.as_view(), name='update'),
-path('<int:pk>/delete', views.TaskDeleteView.as_view(), name='delete'),
+path('<int:pk>/delete', views.delete, name='delete'),
 path('<int:pk>/later', views.later, name='later'),
 path('<int:pk>/period_before', views.period_before, name='period_before'),
 path('<int:pk>/period_after', views.period_after, name='period_after'),
