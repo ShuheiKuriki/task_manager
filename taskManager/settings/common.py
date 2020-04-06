@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'notify.apps.NotifyConfig',
     'task.apps.TaskConfig',
+    'book.apps.BookConfig',
 ]
 
 MIDDLEWARE = [
@@ -135,7 +136,7 @@ AUTHENTICATION_BACKENDS = (
 
 #認証⽅式を 「メールアドレスとパスワード」 に変更
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_USERNAME_REQUIRED = True 
+ACCOUNT_USERNAME_REQUIRED = True
 
 # EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
 #

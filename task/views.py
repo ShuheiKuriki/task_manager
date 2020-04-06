@@ -3,10 +3,10 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.http import is_safe_url
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
 from .forms import TaskCreateForm, TaskUpdateForm, DoneEditForm
@@ -191,7 +191,9 @@ def period_after(request, pk):
 
 @csrf_exempt
 def sort(request):
+    print(request.POST.getlist('task[]'))
     for order, id in enumerate(request.POST.getlist('task[]')):
+        print(order,id)
         task = Task.objects.get(id=id)
         task.order = order
         task.save()

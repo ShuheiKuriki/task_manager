@@ -24,6 +24,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('notify/', include('notify.urls')),
     path('task/', include('task.urls')),
+    path('book/', include('book.urls')),
     # path('auth/', include('allauth.urls')),     # 追加
 
     # 全ユーザー共通のページを表示

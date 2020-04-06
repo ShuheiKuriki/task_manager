@@ -14,5 +14,8 @@
     <li class="sidebar-nav-item">
       <a class="js-scroll-trigger" href="{% url 'task:done_list' user.pk %}">レポート</a>
     </li>
+    <li class="sidebar-nav-item">
+      <a class="js-scroll-trigger" href="{% url 'notify:line' %}">LINE通知</a>
+    </li>
     {% endif %}
 {% endblock %}

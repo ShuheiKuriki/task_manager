@@ -21,7 +21,7 @@
               <th class="w-25">メニュー</th>
             </tr>
           </thead>
-          <tbody {% if info.name != '明日以降' %}class='sortable{{ forloop.counter }}'{% endif %}>
+          <tbody {% if info.name != '明日以降' %}id='sortable{{ forloop.counter }}'{% endif %}>
             {% for task in info.tasks %}
               <tr id="task_{{ task.id }}">
                 <th class='{% if task.expired %}text-danger{% endif %}' name="num_data" scope='row'>
@@ -61,7 +61,7 @@
               <th class="w-25">メニュー</th>
             </tr>
           </thead>
-          <tbody {% if info.name != '明日以降' %}class='sortable{{ forloop.counter|add:"5" }}'{% endif %}>
+          <tbody {% if info.name != '明日以降' %}id='sortable{{ forloop.counter|add:"5" }}'{% endif %}>
             {% for task in info.tasks %}
               <tr id="task_{{ task.id }}">
                 <th class='{% if task.expired %}text-danger{% endif %}' name="num_data2" scope='row'>
@@ -99,7 +99,7 @@
               <th class="w-25" scope='col'>メニュー</th>
             </tr>
           </thead>
-          <tbody {% if info.name != '明日以降' %}class='sortable{{ forloop.counter|add:"10" }}'{% endif %}>
+          <tbody {% if info.name != '明日以降' %}id='sortable{{ forloop.counter|add:"10" }}'{% endif %}>
             {% for task in info.tasks %}
               <tr id="task_{{ task.id }}">
                 <th class='{% if task.expired %}text-danger{% endif %}' name="num_data3" scope='row'>
