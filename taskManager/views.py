@@ -9,7 +9,10 @@ from datetime import date
 class Taskinfo:
     def __init__(self, tasks, name="", day=''):
         self.name = name
-        self.tasks = tasks[:5]
+        if name == "明日以降":
+            self.tasks = tasks
+        else:
+            self.tasks = tasks[:5]
         self.num = len(tasks)
 
 class IndexView(TemplateView):
