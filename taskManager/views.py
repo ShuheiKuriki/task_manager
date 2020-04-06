@@ -41,7 +41,7 @@ def top(request,pk):
         book.expired = True if book.deadline<date.today() else False
         book.save()
     book_infos = []
-    genres = ["小説","アカデミック","ビジネス","自己啓発"]
+    genres = ["小説","アカデミック","テクノロジー","ビジネス","自己啓発"]
     for genre in genres:
         book_info = Bookinfo(name=genre, books=books.filter(genre=genre).order_by('order'))
         book_infos.append(book_info)
