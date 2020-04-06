@@ -3,13 +3,10 @@
 {% block li %}
     {% if user.is_authenticated %}
     <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'task:list' user.pk %}">タスク一覧</a>
+      <a class="js-scroll-trigger" href="{% url 'top' user.pk %}">トップページ</a>
     </li>
     <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'task:today' user.pk %}">今日のタスク</a>
-    </li>
-    <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'task:tomorrow' user.pk %}">明日のタスク</a>
+      <a class="js-scroll-trigger" href="{% url 'task:today' user.pk %}">今日と明日</a>
     </li>
     <li class="sidebar-nav-item">
       <a class="js-scroll-trigger" href="{% url 'task:done_list' user.pk %}">レポート</a>

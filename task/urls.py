@@ -6,9 +6,7 @@ app_name = 'task'
 urlpatterns = [
 path('redirect', views.redirect_to_origin, name='redirect'),
 #リスト
-path('<int:pk>', views.index, name='list'),
 path('<int:pk>/today', views.today, name='today'),
-path('<int:pk>/tomorrow', views.tomorrow, name='tomorrow'),
 path('<int:pk>/done_list', views.done_list, name='done_list'),
 
 # 未完了タスク関連の操作

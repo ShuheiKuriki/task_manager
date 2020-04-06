@@ -5,7 +5,7 @@
 {% block li %}
     {% if user.is_authenticated %}
     <li class="sidebar-nav-item">
-      <a class="js-scroll-trigger" href="{% url 'task:list' user.pk %}">タスク管理を始める</a>
+      <a class="js-scroll-trigger" href="{% url 'top' user.pk %}">タスク管理を始める</a>
     </li>
     {%else%}
     <li class="sidebar-nav-item">

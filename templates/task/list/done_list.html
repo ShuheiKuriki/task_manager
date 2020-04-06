@@ -1,41 +1,144 @@
 {% extends "base/user_base.html" %}
 {% block title %}レポート{% endblock %}
 {% block active_done %}active{% endblock %}
-{% block content %}
-  <h1 class='d-none d-md-block'>今日完了したタスク : {{ today }}個　お疲れ様でした！</h1>
+
+{% block content-md-left %}
+  <h2>今日完了したタスク : {{ today }}個</h2>
+  <canvas id="LineChart1" style="height:40vh; width:80vw"></canvas>
 {% endblock %}
-{% block content-xs %}
-  <h4 class='d-block d-md-none'>今日完了したタスク : {{ today }}個<br>お疲れ様でした！</h4>
-{% endblock %}
-{% block content2 %}
-  <!-- <table class='table border col-12'>
+
+{% block content2-md-left %}
+  <h2>今週完了したタスク : {{ week.num }}個</h2>
+  <h2 class='text-info'>レベル : {{ week.level }}</h2>
+  <table class='table table-sm table-striped table-bordered text-center'>
     <thead>
-      <tr>
-        <th scope='col'>今週のレポート</th>
-        {% for info in infos %}
-          <th scope='col'>{{ info.name }}</th>
-        {% endfor %}
+      <tr class='table-primary'>
+            <th scope='col'></th>
+            <th class="w-50" scope='col'>タスク名</th>
+            <th scope='col'>要</th>
+            <th scope='col'>急</th>
+            <th class="w-25" scope='col'>完了</th>
+            <th class="w-25" scope='col'></th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope='col'>タスク完了数</th>
-        {% for info in infos %}
-          <th scope='col'><span class='text-danger'>{{info.num}}</span></th>
-        {% endfor %}
-      </tr>
+          {% for done in week.tasks %}
+            <tr>
+              <th scope='row'>{{ forloop.counter }}</th>
+              <td>{{ done.name }}</td>
+              <td>{% if done.important == True %}○{% else %}×{% endif %}</td>
+              <td>{% if done.urgent == True %}○{% else %}×{% endif %}</td>
+              <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
+              <td>
+                <div class="dropdown">
+                  <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a class='btn btn-primary btn-block' href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
+                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
+                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
+                    <li><a class='btn btn-primary btn-block' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
     </tbody>
-  </table> -->
-  <!-- <div class="chart-container" style="position: relative; height:40vh; width:80vw"> -->
-  <canvas id="LineChart" style="height:40vh; width:80vw"></canvas>
-  <!-- </div> -->
-  <script type="text/javascript">
+  </table>
+{% endblock %}
 
-  /* idが"radar-chart"の要素を取得 */
-  var ctx = document.getElementById("LineChart");
-  // chart.canvas.height = 100;
+{% block content-sm %}
+  <h2>今日完了したタスク : {{ today }}個</h2>
+  <canvas id="LineChart2" style="height:40vh; width:80vw"></canvas>
+{% endblock %}
 
-  var LineChart = new Chart(ctx, {
+{% block content2-sm %}
+  <h2>今週完了したタスク : {{ week.num }}個</h2>
+  <h2 class='text-info'>レベル : {{ week.level }}</h2>
+  <table class='table table-sm table-striped table-bordered text-center'>
+    <thead>
+      <tr class='table-primary'>
+          <th scope='col'></th>
+          <th class="w-50" scope='col'>タスク名</th>
+          <th scope='col'>要</th>
+          <th scope='col'>急</th>
+          <th class="w-25" scope='col'>完了</th>
+          <th class="w-25" scope='col'></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for done in week.tasks %}
+          <tr>
+            <th scope='row'>{{ forloop.counter }}</th>
+            <td>{{ done.name }}</td>
+            <td>{% if done.important == True %}○{% else %}×{% endif %}</td>
+            <td>{% if done.urgent == True %}○{% else %}×{% endif %}</td>
+            <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
+            <td>
+              <div class="dropdown">
+                <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a class='btn btn-primary btn-block' href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
+                  <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
+                  <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
+                  <li><a class='btn btn-primary btn-block' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block content-xs %}
+  <h4>今日完了したタスク : {{ today }}個</h4>
+  <canvas id="LineChart3" style="height:40vh; width:80vw"></canvas>
+{% endblock %}
+
+{% block content2-xs %}
+  <h4>今週完了したタスク : {{ week.num }}個</h4>
+  <h4 class='text-info'>レベル : {{ week.level }}</h4>
+  <table class='table table-sm table-striped table-bordered text-center'>
+    <thead>
+      <tr class='table-primary'>
+            <th scope='col'></th>
+            <th class="w-50" scope='col'>タスク名</th>
+            <th scope='col'>要</th>
+            <th scope='col'>急</th>
+            <th class="w-25" scope='col'>完了</th>
+            <th class="w-25" scope='col'></th>
+      </tr>
+    </thead>
+    <tbody>
+          {% for done in week.tasks %}
+            <tr>
+              <th scope='row'>{{ forloop.counter }}</th>
+              <td>{{ done.name }}</td>
+              <td>{% if done.important == True %}○{% else %}×{% endif %}</td>
+              <td>{% if done.urgent == True %}○{% else %}×{% endif %}</td>
+              <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
+              <td>
+                <div class="dropdown">
+                  <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a class='btn btn-primary btn-block' href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
+                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
+                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
+                    <li><a class='btn btn-primary btn-block' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+<script type="text/javascript">
+  var ctx1 = document.getElementById("LineChart1");
+  var ctx2 = document.getElementById("LineChart2");
+  var ctx3 = document.getElementById("LineChart3");
+  var LineChart1 = new Chart(ctx1, {
       type: 'line',
       data: {
         labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
@@ -49,106 +152,104 @@
       },
       options: {
         title: {
-        display: true,
-        text: '今週のタスク完了状況',
-        elements: {
+          display: true,
+          text: '今週のタスク完了状況',
+          elements: {
             line: {
                 tension: 0, // ベジェ曲線を無効にする
             }
+          },
+          responsive: true,
+          maintainAspectRatio: false
         },
-        responsive: true,
-        maintainAspectRatio: false
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            // suggestedMax: 100,
-            suggestedMin: 0,
-            stepSize: 1,
-            // callback: function(value, index, values){
-            //   return  value +  '個'
-            // }
-          }
-        }]
-      },
+        scales: {
+          yAxes: [{
+            ticks: {
+              // suggestedMax: 100,
+              suggestedMin: 0,
+              stepSize: 1,
+              // callback: function(value, index, values){
+              //   return  value +  '個'
+              // }
+            }
+          }]
+        },
       }
   });
-  </script>
-{% endblock %}
-
-{% block content3 %}
-  <h1 class='d-none d-md-block'>今週完了したタスク : {{ week.num }}個　<span class='text-info'>レベル : {{ week.level }}</span></h1>
-{% endblock %}
-
-{% block content3-xs %}
-  <h4 class='d-block d-md-none'>今週完了したタスク : {{ week.num }}個　<span class='text-info'>レベル : {{ week.level }}</span></h4>
-{% endblock %}
-
-{% block content4 %}
-<!-- md -->
-    <table class='table table-sm table-striped table-bordered d-none d-sm-block text-center'>
-      <thead>
-        <tr class='table-primary'>
-              <th scope='col'></th>
-              <th class="w-50" scope='col'>タスク名</th>
-              <th scope='col'>要</th>
-              <th scope='col'>急</th>
-              <th class="w-25" scope='col'>完了</th>
-              <th class="w-25" scope='col'>メニュー</th>
-        </tr>
-      </thead>
-      <tbody>
-            {% for done in week.tasks %}
-              <tr>
-                <th scope='row'>{{ forloop.counter }}</th>
-                <td>{{ done.name }}</td>
-                <td>{% if done.important == True %}○　　{% else %}×　　{% endif %}</td>
-                <td>{% if done.urgent == True %}○　　{% else %}×　　{% endif %}</td>
-                <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
-                <td>
-                  <div class="dropdown">
-                    <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a class='btn btn-primary btn-block' href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
-                      <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
-                      <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
-                      <li><a class='btn btn-primary btn-block' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-            {% endfor %}
-      </tbody>
-    </table>
-<!-- xs/sm -->
-    <table class='table table-sm table-bordered table-striped table-responsive d-block d-sm-none text-center'>
-        <thead>
-            <tr class='table-primary'>
-              <th scope='col'></th>
-              <th class='w-50' scope='col'>タスク名</th>
-              <th class="w-25" scope='col'>完了</th>
-              <th class="w-25" scope='col'></th>
-            </tr>
-        </thead>
-          <tbody>
-            {% for done in week.tasks %}
-              <tr>
-                <th scope='row'>{{ forloop.counter }}</th>
-                <td>{{ done.name }}</td>
-                <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
-                <td>
-                  <div class="dropdown">
-                    <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a class='btn btn-primary btn-block' href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
-                      <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
-                      <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
-                      <li><a class='btn btn-primary btn-block' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-    </table>
-{% endblock %}
+  var LineChart2 = new Chart(ctx2, {
+      type: 'line',
+      data: {
+        labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
+        datasets: [{
+          label: 'タスク完了数',
+          data: {{data}},
+          borderColor: "rgba(255,0,0,1)",
+          backgroundColor: "rgba(0,0,0,0)",
+          lineTension: 0
+        }],
+      },
+      options: {
+        title: {
+          display: true,
+          text: '今週のタスク完了状況',
+          elements: {
+            line: {
+                tension: 0, // ベジェ曲線を無効にする
+            }
+          },
+          responsive: true,
+          maintainAspectRatio: false
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              // suggestedMax: 100,
+              suggestedMin: 0,
+              stepSize: 1,
+              // callback: function(value, index, values){
+              //   return  value +  '個'
+              // }
+            }
+          }]
+        },
+      }
+  });
+  var LineChart3 = new Chart(ctx3, {
+      type: 'line',
+      data: {
+        labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
+        datasets: [{
+          label: 'タスク完了数',
+          data: {{data}},
+          borderColor: "rgba(255,0,0,1)",
+          backgroundColor: "rgba(0,0,0,0)",
+          lineTension: 0
+        }],
+      },
+      options: {
+        title: {
+          display: true,
+          text: '今週のタスク完了状況',
+          elements: {
+            line: {
+                tension: 0, // ベジェ曲線を無効にする
+            }
+          },
+          responsive: true,
+          maintainAspectRatio: false
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              // suggestedMax: 100,
+              suggestedMin: 0,
+              stepSize: 1,
+              // callback: function(value, index, values){
+              //   return  value +  '個'
+              // }
+            }
+          }]
+        },
+      }
+  });
+</script>

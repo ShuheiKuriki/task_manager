@@ -3,11 +3,11 @@ from django.utils.timezone import now
 from django.contrib.auth.models import User
 
 class Book(models.Model):
-    genre_lis = ["小説","アカデミック","ビジネス","自己啓発"]
+    genre_lis = ["小説","アカデミック","テクノロジー","ビジネス","自己啓発"]
     genres=[(i,i) for i in genre_lis]
 
-    title = models.CharField('タイトル', max_length=128, blank=True)
-    genre = models.CharField('ジャンル', choices=genres, max_length=32, blank=True, null=True)
+    title = models.CharField('タイトル', max_length=128)
+    genre = models.CharField('ジャンル', choices=genres, default ='小説',max_length=32)
     deadline = models.DateField('期限', default=now, blank=True, null=True)
     expired = models.BooleanField('期限切れ', default=False)
 

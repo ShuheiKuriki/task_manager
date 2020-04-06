@@ -1,7 +1,0 @@
-{% extends "task/list/list_base.html" %}
-{% block title %}一覧ページ{% endblock %}
-{% block message-md %}<h1 class='d-none d-md-block'>{{user.username}}さん 今日も頑張りましょう！</h1>{% endblock %}
-{% block message %}<h4 class='d-block d-md-none'>{{user.username}}さん<br>今日も頑張りましょう！</h4>{% endblock %}
-{% block excute %}{{ task.when.month }}/{{ task.when.day }}{% endblock %}
-{% block excute-sm %}{{ task.when.month }}/{{ task.when.day }}{% endblock %}
-{% block excute-xs %}{{ task.when.month }}/{{ task.when.day }}{% endblock %}

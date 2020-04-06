@@ -4,7 +4,6 @@ from . import views
 app_name = 'book'
 
 urlpatterns = [
-path('<int:pk>/list', views.list, name='list'),
 path('sort', views.sort, name='sort'),
 path('create', views.BookCreateView.as_view(), name='create'),
 path('<int:pk>/update', views.BookUpdateView.as_view(), name='update'),

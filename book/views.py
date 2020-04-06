@@ -21,20 +21,6 @@ class Bookinfo:
         self.books = books
         self.num = len(books)
 
-def list(request,pk):
-    if request.user.pk != pk:
-        return redirect('account_login')
-    books = Book.objects.all().filter(user=request.user, done_or_not = False)
-    for book in books:
-        book.expired = True if book.deadline<date.today() else False
-        book.save()
-    infos = []
-    genres = ["小説","アカデミック","ビジネス","自己啓発"]
-    for genre in genres:
-        info = Bookinfo(name=genre, books=books.filter(genre=genre).order_by('order'))
-        infos.append(info)
-    return render(request, 'book/book_list.html', {'infos':infos})
-
 @method_decorator(login_required, name='dispatch')
 class BookCreateView(CreateView):
     form_class = BookForm
@@ -45,7 +31,7 @@ class BookCreateView(CreateView):
         return super(BookCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('book:list', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('top', kwargs={'pk': self.request.user.id})
 
 @method_decorator(login_required, name='dispatch')
 class BookUpdateView(UpdateView):
@@ -59,13 +45,13 @@ class BookUpdateView(UpdateView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy('book:list', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('top', kwargs={'pk': self.request.user.id})
 
 @require_POST
 def delete(request,pk):
     book = get_object_or_404(Book, pk=pk)
     book.delete()
-    return redirect('book:list',pk=request.user.id)
+    return redirect('top',pk=request.user.id)
 
 @csrf_exempt
 def sort(request):
@@ -81,11 +67,11 @@ def read(request, pk):
     book.done_or_not = True
     book.done_date = date.today()
     book.save()
-    return redirect('book:list', pk=request.user.id)
+    return redirect('top', pk=request.user.id)
 
 @login_required
 def later(request, pk):
     book = Book.objects.get(id=pk)
     book.deadline += datetime.timedelta(days=1)
     book.save()
-    return redirect('book:list', pk=request.user.id)
+    return redirect('top', pk=request.user.id)

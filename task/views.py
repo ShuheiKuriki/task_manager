@@ -32,67 +32,42 @@ class Taskinfo:
         else:
             self.level = n-1
 
-def index(request,pk):
-    if request.user.pk != pk:
-        return redirect('account_login')
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
-    past_tasks = tasks.filter(when__lt=datetime.date.today())
-    for past_task in past_tasks:
-        past_task.when = datetime.date.today()
-        past_task.save()
-    for task in tasks:
-        task.expired = True if task.deadline<datetime.date.today() else False
-        task.save()
-    today = Taskinfo(name="今日", day=0,
-        tasks=tasks.filter(when=datetime.date.today()).order_by('order'))
-    tom = Taskinfo(name="明日", day=1,
-        tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order'))
-    other = Taskinfo(name="明日以降",
-        tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when'))
-    infos = [today, tom, other]
-    return render(request, 'task/list/all_list.html', {'infos':infos})
-
 def today(request,pk):
     if request.user.pk != pk:
         return redirect('account_login')
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when__lte=datetime.date.today())
-    for task in tasks:
-        task.when = datetime.date.today()
+    tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
+    todays = tasks.filter(when__lte=datetime.date.today())
+    for task in todays:
+        task.when = date.today()
         task.save()
-    for task in tasks:
+    for task in todays:
         task.expired = True if task.deadline<datetime.date.today() else False
         task.save()
-    num = len(tasks)
+    today_num = len(todays)
     names = ['~12時','12~15時','15~18時','18~21時','21時~']
     h = datetime.datetime.now().hour
     p = max(h//3-3,0)
-    infos = []
+    today_infos = []
     for i,name in enumerate(names):
         if i<p:
             continue
         elif i==p:
-            info = Taskinfo(name=name, tasks=tasks.filter(period__lte=i).order_by('order'))
+            info = Taskinfo(name=name, tasks=todays.filter(period__lte=i).order_by('order'))
         else:
-            info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
+            info = Taskinfo(name=name, tasks=todays.filter(period=i).order_by('order'))
         if info.num>0:
-            infos.append(info)
-    return render(request, 'task/list/today.html', {'infos':infos, 'num':num})
-
-def tomorrow(request,pk):
-    if request.user.pk != pk:
-        return redirect('account_login')
-    tasks = Task.objects.all().filter(user=request.user, done_or_not=False, when=datetime.date.today()+datetime.timedelta(days=1))
-    for task in tasks:
+            today_infos.append(info)
+    toms = tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1))
+    for task in toms:
         task.expired = True if task.deadline<datetime.date.today() else False
         task.save()
-    num = len(tasks)
-    names = ['~12時','12~15時','15~18時','18~21時','21時~']
-    infos = []
+    tom_num = len(toms)
+    tom_infos = []
     for i,name in enumerate(names):
-        info = Taskinfo(name=name, tasks=tasks.filter(period=i).order_by('order'))
+        info = Taskinfo(name=name, tasks=toms.filter(period=i).order_by('order'))
         if info.num>0:
-            infos.append(info)
-    return render(request, 'task/list/tomorrow.html', {'infos':infos, 'num':num})
+            tom_infos.append(info)
+    return render(request, 'task/list/today.html', {'today_infos':today_infos, 'today_num':today_num, 'tom_infos':tom_infos, 'tom_num':tom_num})
 
 def done_list(request,pk):
     if request.user.pk != pk:
@@ -236,7 +211,7 @@ def recover(request, pk):
     task = Task.objects.get(id=pk)
     task.done_or_not = False
     task.save()
-    return redirect('task:list', pk=request.user.id)
+    return redirect('top', pk=request.user.id)
 
 def redirect_to_origin(request):
     redirect_to = request.GET.get('next')

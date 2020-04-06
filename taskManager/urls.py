@@ -30,6 +30,7 @@ urlpatterns = [
     # 全ユーザー共通のページを表示
     path('', views.IndexView.as_view(), name='index'),
     path('sample', views.IndexSampleView.as_view(),name='sample'),
+    path('<int:pk>/top', views.top ,name='top'),
 ]
 
 #if settings.DEBUG:    # この if 文 (5STEP) を追加します。

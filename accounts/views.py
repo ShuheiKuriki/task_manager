@@ -2,4 +2,4 @@
 from django.shortcuts import redirect
 
 def profile(request):
-    return redirect('task:list', pk=request.user.id)
+    return redirect('top', pk=request.user.id)
