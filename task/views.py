@@ -79,7 +79,7 @@ def done_list(request,pk):
     for i in range(7):
         info = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i)))
         data.append(info.num)
-    return render(request, 'task/list/done_list.html', {'week':week, 'today':data[0], 'data':data})
+    return render(request, 'task/done_list.html', {'week':week, 'today':data[0], 'data':data})
 
 #未完了タスク関連
 def create(request):
