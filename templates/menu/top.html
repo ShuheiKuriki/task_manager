@@ -3,10 +3,10 @@
 {% block content-md-left %}
     <h1>タスク<a class='btn btn-success float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h1>
     {% for info in task_infos %}
-        <table class='table table-sm table-striped d-none d-md-block text-center'>
+        <table class='table table-sm table-striped text-center'>
           <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
           <thead>
-            <tr class='table-info'>
+            <tr class='table-primary'>
               <th class=""></th>
               <th class="w-75">タスク名</th>
               <th class="">要</th>
@@ -87,7 +87,8 @@
     {% endfor %}
 {% endblock %}
 {% block content-sm %}
-    <h3>タスク<a class='btn btn-success float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h3>
+    <h3>タスク<a class='btn btn-warning ml-4 float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
+      <a class='btn btn-success float-right' href="{% url 'task:today' user.pk %}?next={{ request.get_full_path }}">今日と明日の詳細</a></h3>
     {% for info in task_infos %}
         <table class='table table-sm table-striped text-center'>
           <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
@@ -173,8 +174,9 @@
     {% endfor %}
 {% endblock %}
 {% block content-xs %}
-      <h3>タスク<a class='btn btn-success float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h3>
-      {% for info in task_infos %}
+    <h3>タスク<a class='btn btn-warning ml-4 float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
+      <a class='btn btn-success float-right' href="{% url 'task:today' user.pk %}?next={{ request.get_full_path }}">今日と明日の詳細</a></h3>
+    {% for info in task_infos %}
         <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped text-center'>
           <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
           <thead class='table-primary'>

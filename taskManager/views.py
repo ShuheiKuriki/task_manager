@@ -33,9 +33,9 @@ def top(request,pk):
         task.expired = True if task.deadline<datetime.date.today() else False
         task.save()
     today = Taskinfo(name="今日", day=0,
-        tasks=tasks.filter(when=datetime.date.today()).order_by('order'))
+        tasks=tasks.filter(when=datetime.date.today()).order_by('deadline'))
     tom = Taskinfo(name="明日", day=1,
-        tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('order'))
+        tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('deadline'))
     other = Taskinfo(name="明日以降",
         tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when'))
     task_infos = [today, tom, other]
