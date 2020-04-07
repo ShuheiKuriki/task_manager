@@ -9,7 +9,7 @@ class DateInput(forms.DateInput):
 class BookForm(ModelForm):
     class Meta:
         model = Book
-        fields = ['title','genre','deadline']
+        fields = ['title','genre','author','deadline']
         forms.CheckboxInput(attrs={'class': 'check'})
         widgets = {
             'deadline': DateInput(),
