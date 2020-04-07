@@ -189,8 +189,8 @@
     {% endfor %}
 {% endblock %}
 {% block content-xs %}
-    <h4>{% if today_num == 0 %}今日のタスクは完了です！{% else %}今日のタスク : {{today_num}}個{% endif %}
-      <a class='btn btn-warning float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h4>
+    <h5>{% if today_num == 0 %}今日のタスクは完了です！{% else %}今日のタスク : {{today_num}}個{% endif %}
+      <a class='btn btn-sm btn-warning float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h5>
 
     {% for info in today_infos %}
         <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped text-center'>
@@ -233,8 +233,8 @@
 {% endblock %}
 
 {% block content2-xs %}
-    <h4>{% if tom_num == 0 %}明日は自由です！{% else %}明日のタスク : {{tom_num}}個{% endif %}
-    <a class='btn btn-warning float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h4>
+    <h5>{% if tom_num == 0 %}明日は自由です！{% else %}明日のタスク : {{tom_num}}個{% endif %}
+    <a class='btn btn-sm btn-warning float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h5>
 
     {% for info in tom_infos %}
       <table class='table table-sm table-striped text-center'>
