@@ -8,6 +8,7 @@ class Book(models.Model):
 
     title = models.CharField('タイトル', max_length=128)
     genre = models.CharField('ジャンル', choices=genres, default ='小説',max_length=32)
+    author = models.CharField('著者', max_length=32, blank=True, null=True)
     deadline = models.DateField('期限', default=now, blank=True, null=True)
     expired = models.BooleanField('期限切れ', default=False)
 

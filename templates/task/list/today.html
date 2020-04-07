@@ -13,11 +13,11 @@
         <thead>
           <tr class='table-info'>
             <th class=""></th>
-            <th class="w-50">タスク名</th>
+            <th class="w-75">タスク名</th>
             <th class="">要</th>
             <th class="">急</th>
             <th class="w-25">期限</th>
-            <th class="w-25">メニュー</th>
+            <th class=""></th>
           </tr>
         </thead>
         <tbody id='sortable{{ forloop.counter }}'>
@@ -61,11 +61,11 @@
       <thead>
         <tr class='table-danger'>
           <th class=""></th>
-          <th class="w-50">タスク名</th>
+          <th class="w-75">タスク名</th>
           <th class="">要</th>
           <th class="">急</th>
           <th class="w-25">期限</th>
-          <th class="w-25">メニュー</th>
+          <th class=""></th>
         </tr>
       </thead>
       <tbody id='sortable{{ forloop.counter|add:"30" }}'>
@@ -106,11 +106,11 @@
     <thead>
       <tr class='table-primary'>
         <th class=""></th>
-        <th class="w-50">タスク名</th>
+        <th class="w-75">タスク名</th>
         <th class="">要</th>
         <th class="">急</th>
         <th class="w-25">期限</th>
-        <th class="w-25">メニュー</th>
+        <th class=""></th>
       </tr>
     </thead>
     <tbody id='sortable{{ forloop.counter|add:"5" }}'>
@@ -152,11 +152,11 @@
         <thead>
           <tr class='table-danger'>
             <th class=""></th>
-            <th class="w-50">タスク名</th>
+            <th class="w-75">タスク名</th>
             <th class="">要</th>
             <th class="">急</th>
             <th class="w-25">期限</th>
-            <th class="w-25">メニュー</th>
+            <th class=""></th>
           </tr>
         </thead>
         <tbody id='sortable{{ forloop.counter|add:"35" }}'>
@@ -198,7 +198,7 @@
           <thead class='table-primary'>
             <tr class=''>
               <th scope='col'></th>
-              <th class="w-50">タスク名</th>
+              <th class="w-75">タスク名</th>
               <th class="w-25" scope='col'>期限</th>
               <th class="w-25" scope='col'>メニュー</th>
             </tr>
@@ -242,20 +242,16 @@
         <thead>
           <tr class='table-danger'>
             <th class=""></th>
-            <th class="w-50">タスク名</th>
-            <th class="">要</th>
-            <th class="">急</th>
+            <th class="w-75">タスク名</th>
             <th class="w-25">期限</th>
-            <th class="w-25">メニュー</th>
+            <th class=""></th>
           </tr>
         </thead>
-        <tbody id='sortable{{ forloop.counter|add:"35" }}'>
+        <tbody id='sortable{{ forloop.counter|add:"40" }}'>
           {% for task in info.tasks %}
             <tr id="task_{{ task.id }}">
-              <th class='{% if task.expired %}text-danger{% endif %}' name="num_data8" scope='row'>{{ forloop.counter }}</th>
+              <th class='{% if task.expired %}text-danger{% endif %}' name="num_data9" scope='row'>{{ forloop.counter }}</th>
               <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-              <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
-              <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
               <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
               <td><div class="dropdown">
                      <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
