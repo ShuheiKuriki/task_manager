@@ -96,6 +96,46 @@
       </tbody>
     </table>
   {% endfor %}
+    <h2 class='mt-5 mb-3'>明日以降のタスク : {{other.num}}個</h2>
+    <table class='table table-sm table-striped text-center'>
+      <thead>
+        <tr class='table-danger'>
+          <th class=""></th>
+          <th class="w-75">タスク名</th>
+          <th class="">要</th>
+          <th class="">急</th>
+          <th class="w-25">期限</th>
+          <th class=""></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in other.tasks %}
+          <tr>
+            <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>
+              {% if other.name != '明日以降' %}{{ forloop.counter }}{% else %}{{ task.when.month }}/{{ task.when.day }}{% endif %}</th>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
+            <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
+            <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+            <td><div class="dropdown">
+                   <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                   <ul class="dropdown-menu" role="menu">
+                     <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
+                     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
+                     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
+                     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
+                     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                     <li>
+                       <form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
+                         <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+                       </form>
+                     </li>
+                   </ul>
+            </div></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 {% endblock %}
 {% block content-sm %}
   <h4>{% if today_num == 0 %}今日のタスクは完了です！{% else %}今日のタスク : {{today_num}}個{% endif %}
@@ -188,6 +228,48 @@
       </table>
     {% endfor %}
 {% endblock %}
+{% block content3-sm %}
+<h4 class='my-4'>明日以降のタスク : {{other.num}}個<a class='btn btn-warning float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h4>
+<table class='table table-sm table-striped text-center'>
+  <thead>
+    <tr class='table-success'>
+      <th class=""></th>
+      <th class="w-75">タスク名</th>
+      <th class="">要</th>
+      <th class="">急</th>
+      <th class="w-25">期限</th>
+      <th class=""></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for task in other.tasks %}
+      <tr>
+        <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>
+          {% if other.name != '明日以降' %}{{ forloop.counter }}{% else %}{{ task.when.month }}/{{ task.when.day }}{% endif %}</th>
+        <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
+        <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
+        <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
+        <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+        <td><div class="dropdown">
+               <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+               <ul class="dropdown-menu" role="menu">
+                 <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
+                 <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
+                 <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
+                 <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
+                 <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                 <li>
+                   <form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
+                     <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+                   </form>
+                 </li>
+               </ul>
+        </div></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
 {% block content-xs %}
     <h5>{% if today_num == 0 %}今日のタスクは完了です！{% else %}今日のタスク : {{today_num}}個{% endif %}
       <a class='btn btn-sm btn-warning float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h5>
@@ -273,4 +355,46 @@
         </tbody>
       </table>
     {% endfor %}
+{% endblock %}
+{% block content3-xs %}
+<h5 class='my-4'>明日以降のタスク : {{other.num}}個<a class='btn btn-sm btn-warning float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h5>
+<table class='table table-sm table-striped text-center'>
+  <thead>
+    <tr class='table-success'>
+      <th class=""></th>
+      <th class="w-75">タスク名</th>
+      <th class="">要</th>
+      <th class="">急</th>
+      <th class="w-25">期限</th>
+      <th class=""></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for task in other.tasks %}
+      <tr>
+        <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>
+          {% if other.name != '明日以降' %}{{ forloop.counter }}{% else %}{{ task.when.month }}/{{ task.when.day }}{% endif %}</th>
+        <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
+        <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
+        <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
+        <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+        <td><div class="dropdown">
+               <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+               <ul class="dropdown-menu" role="menu">
+                 <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
+                 <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
+                 <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
+                 <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
+                 <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                 <li>
+                   <form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
+                     <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+                   </form>
+                 </li>
+               </ul>
+        </div></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}

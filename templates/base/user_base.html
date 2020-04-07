@@ -30,7 +30,7 @@
             </ul>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item {% block active_today %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'task:today' user.pk %}">今日と明日</a>
+                    <a class="nav-link" href="{% url 'task:list' user.pk %}">タスク</a>
                 </li>
                 <li class="nav-item {% block active_done %}{% endblock %}">
                     <a class="nav-link" href="{% url 'task:done_list' user.pk %}">レポート</a>
@@ -99,6 +99,18 @@
     <div class="container d-block d-sm-none">
       <div class="my-5">
         {% block content2-xs %}
+        {% endblock %}
+      </div>
+    </div>
+    <div class="container d-none d-sm-block d-md-none">
+      <div class="my-4">
+        {% block content3-sm %}
+        {% endblock %}
+      </div>
+    </div>
+    <div class="container d-block d-sm-none">
+      <div class="my-5">
+        {% block content3-xs %}
         {% endblock %}
       </div>
     </div>

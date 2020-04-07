@@ -32,7 +32,7 @@ class Taskinfo:
         else:
             self.level = n-1
 
-def today(request,pk):
+def list(request,pk):
     if request.user.pk != pk:
         return redirect('account_login')
     tasks = Task.objects.all().filter(user=request.user, done_or_not=False)
@@ -67,7 +67,8 @@ def today(request,pk):
         info = Taskinfo(name=name, tasks=toms.filter(period=i).order_by('order'))
         if info.num>0:
             tom_infos.append(info)
-    return render(request, 'task/list/today.html', {'today_infos':today_infos, 'today_num':today_num, 'tom_infos':tom_infos, 'tom_num':tom_num})
+    other = Taskinfo(name="明日以降",tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when'))
+    return render(request, 'task/list.html', {'today_infos':today_infos, 'today_num':today_num, 'tom_infos':tom_infos, 'tom_num':tom_num, 'other':other})
 
 def done_list(request,pk):
     if request.user.pk != pk:
