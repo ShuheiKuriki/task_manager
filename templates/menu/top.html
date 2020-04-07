@@ -174,8 +174,8 @@
     {% endfor %}
 {% endblock %}
 {% block content-xs %}
-    <h3>タスク<a class='btn btn-warning ml-4 float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
-      <a class='btn btn-success float-right' href="{% url 'task:today' user.pk %}?next={{ request.get_full_path }}">今日と明日の詳細</a></h3>
+    <h4>タスク<a class='btn btn-warning ml-2 float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
+      <a class='btn btn-success float-right' href="{% url 'task:today' user.pk %}?next={{ request.get_full_path }}">今日と明日の詳細</a></h4>
     {% for info in task_infos %}
         <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped text-center'>
           <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
