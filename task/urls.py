@@ -23,5 +23,6 @@ path('<int:pk>/done', views.done, name='done'),
 path('<int:pk>/done_before', views.done_before, name='done_before'),
 path('<int:pk>/done_after', views.done_after, name='done_after'),
 path('<int:pk>/done_update', views.DoneUpdateView.as_view(), name='done_update'),
+path('done_create', views.DoneCreateView.as_view(), name='done_create'),
 path('<int:pk>/recover', views.recover, name='recover'),
 ]

@@ -3,13 +3,15 @@
 {% block active_done %}active{% endblock %}
 
 {% block content-md-left %}
-  <h2>今日完了したタスク : {{ today }}個</h2>
+  <h3>今日の完了タスク : {{ today }}個</h3>
+  <a class='btn btn-success btn-sm mr-2 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
+  <a class='btn btn-warning btn-sm float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
   <canvas id="LineChart1" style="height:40vh; width:80vw"></canvas>
 {% endblock %}
 
 {% block content2-md-left %}
-  <h2>今週完了したタスク : {{ week.num }}個</h2>
-  <h2 class='text-info'>レベル : {{ week.level }}</h2>
+  <h3>今週の完了タスク : {{ week.num }}個</h3>
+  <h3 class='text-info'>レベル : {{ week.level }}</h3>
   <table class='table table-sm table-striped table-bordered text-center'>
     <thead>
       <tr class='table-primary'>
@@ -47,12 +49,14 @@
 {% endblock %}
 
 {% block content-sm %}
-  <h2>今日完了したタスク : {{ today }}個</h2>
+  <h2>今日の完了タスク : {{ today }}個</h2>
+  <a class='btn btn-success btn-sm mr-2 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
+  <a class='btn btn-warning btn-sm float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
   <canvas id="LineChart2" style="height:40vh; width:80vw"></canvas>
 {% endblock %}
 
 {% block content2-sm %}
-  <h2>今週完了したタスク : {{ week.num }}個</h2>
+  <h2>今週の完了タスク : {{ week.num }}個</h2>
   <h2 class='text-info'>レベル : {{ week.level }}</h2>
   <table class='table table-sm table-striped table-bordered text-center'>
     <thead>
@@ -92,6 +96,8 @@
 
 {% block content-xs %}
   <h4>今日完了したタスク : {{ today }}個</h4>
+  <a class='btn btn-success btn-sm mr-2 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
+  <a class='btn btn-warning btn-sm float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
   <canvas id="LineChart3" style="height:40vh; width:80vw"></canvas>
 {% endblock %}
 

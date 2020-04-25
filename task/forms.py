@@ -36,7 +36,7 @@ class TaskUpdateForm(ModelForm):
             'when': DateInput(),
             }
 
-class DoneEditForm(ModelForm):
+class DoneForm(ModelForm):
     class Meta:
         model = Task
         fields = ['name','done_date']

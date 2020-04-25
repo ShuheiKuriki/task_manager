@@ -1,7 +1,8 @@
 {% extends "base/user_base.html" %}
 {% block title %}トップページ{% endblock %}
 {% block content-md-left %}
-    <h1>タスク<a class='btn btn-success float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h1>
+    <h1>タスク<a class='btn btn-warning ml-2 mt-2 btn-sm float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
+      <a class='btn btn-success btn-sm mt-2 float-right' href="{% url 'task:list' user.pk %}?next={{ request.get_full_path }}">タスク詳細</a></h1>
     {% for info in task_infos %}
         <table class='table table-sm table-striped text-center'>
           <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>

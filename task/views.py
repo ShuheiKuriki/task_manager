@@ -9,7 +9,7 @@ from django.utils.http import is_safe_url
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.conf import settings
 
-from .forms import TaskCreateForm, TaskUpdateForm, DoneEditForm
+from .forms import TaskCreateForm, TaskUpdateForm, DoneForm
 from taskManager.models import Task
 
 import datetime
@@ -187,8 +187,22 @@ def done(request, pk):
 @method_decorator(login_required, name='dispatch')
 class DoneUpdateView(UpdateView):
     model = Task
-    form_class = DoneEditForm
+    form_class = DoneForm
     template_name = 'task/done_update.html'
+
+    def get_success_url(self):
+        return reverse_lazy('task:done_list', kwargs={'pk': self.request.user.id})
+
+@method_decorator(login_required, name='dispatch')
+class DoneCreateView(CreateView):
+    model = Task
+    form_class = DoneForm
+    template_name = 'task/done_create.html'
+
+    def form_valid(self, form):
+        form.instance.user_id = self.request.user.id
+        form.instance.done_or_not = True
+        return super(DoneCreateView, self).form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('task:done_list', kwargs={'pk': self.request.user.id})
