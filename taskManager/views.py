@@ -7,9 +7,9 @@ import datetime
 from datetime import date
 
 class Taskinfo:
-    def __init__(self, tasks, name="", day=''):
+    def __init__(self, tasks, name=""):
         self.name = name
-        self.tasks = tasks[:3]
+        self.tasks = tasks
         self.num = len(tasks)
 
 class IndexView(TemplateView):
@@ -29,13 +29,10 @@ def top(request,pk):
     for task in tasks:
         task.expired = True if task.deadline<datetime.date.today() else False
         task.save()
-    today = Taskinfo(name="今日", day=0,
-        tasks=tasks.filter(when=datetime.date.today()).order_by('deadline'))
-    tom = Taskinfo(name="明日", day=1,
-        tasks=tasks.filter(when=datetime.date.today()+datetime.timedelta(days=1)).order_by('deadline'))
-    other = Taskinfo(name="明日以降",
-        tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when'))
-    task_infos = [today, tom, other]
+    names = ['~12時','12~15時','15~18時','18~21時','21時~']
+    h = datetime.datetime.now().hour
+    p = max(h//3-3,0)
+    todo = Taskinfo(name=names[p], tasks=tasks.filter(when=datetime.date.today(),period__lte=p).order_by('order'))
     books = Book.objects.all().filter(user=request.user, done_or_not = False)
     for book in books:
         book.expired = True if book.deadline<date.today() else False
@@ -45,4 +42,4 @@ def top(request,pk):
     for genre in genres:
         book_info = Bookinfo(name=genre, books=books.filter(genre=genre).order_by('order'))
         book_infos.append(book_info)
-    return render(request, 'menu/top.html', {'task_infos':task_infos, 'book_infos':book_infos})
+    return render(request, 'menu/top.html', {'todo':todo, 'book_infos':book_infos})

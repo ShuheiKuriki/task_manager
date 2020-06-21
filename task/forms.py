@@ -11,7 +11,7 @@ class TaskCreateForm(ModelForm):
     # when = forms.DateField(input_formats = '%m/%d/%Y')
     rep_type = [('0', 'なし'),('1', '毎日'),('7', '毎週'),('14', '2週間ごと')]
     repeat =  forms.ChoiceField(label='繰り返し', choices=rep_type)
-    num =  forms.ChoiceField(label='繰り返し回数', choices=[(str(i),str(i)) for i in range(1,11)])
+    num =  forms.ChoiceField(label='繰り返し回数', choices=[(str(i),str(i)) for i in [1,2,3,4,5,7,10,14,21,30]])
     class Meta:
         model = Task
         fields = ['name','when','period','deadline','important','urgent']

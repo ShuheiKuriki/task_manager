@@ -85,8 +85,8 @@ def done_list(request,pk):
 def create(request):
     if request.method == 'GET':
         form = TaskCreateForm()
-        next = request.GET.get('next')
-        return render(request, 'task/task_create.html', {'form': form,'next': next})
+        nex = request.GET.get('next')
+        return render(request, 'task/task_create.html', {'form': form,'next': nex})
     if request.method == 'POST':
         form = TaskCreateForm(request.POST)
         repeat = int(request.POST.get('repeat'))
@@ -183,6 +183,19 @@ def done(request, pk):
     task.done_date = datetime.date.today()
     task.save()
     return redirect('task:done_list', pk=request.user.id)
+
+@method_decorator(login_required, name='dispatch')
+class DoneView(UpdateView):
+    model = Task
+    form_class = DoneForm
+    template_name = 'task/done_update.html'
+
+    def form_valid(self, form):
+        form.instance.done_or_not = True
+        return super(DoneView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('task:done_list', kwargs={'pk': self.request.user.id})
 
 @method_decorator(login_required, name='dispatch')
 class DoneUpdateView(UpdateView):

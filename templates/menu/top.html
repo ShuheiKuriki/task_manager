@@ -1,136 +1,130 @@
 {% extends "base/user_base.html" %}
 {% block title %}トップページ{% endblock %}
 {% block content-md-left %}
-    <h1>タスク<a class='btn btn-warning ml-2 mt-2 btn-sm float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
-      <a class='btn btn-success btn-sm mt-2 float-right' href="{% url 'task:list' user.pk %}?next={{ request.get_full_path }}">タスク詳細</a></h1>
-    {% for info in task_infos %}
-        <table class='table table-sm table-striped text-center'>
-          <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
-          <thead>
-            <tr class='table-primary'>
-              <th class=""></th>
-              <th class="w-75">タスク名</th>
-              <th class="">要</th>
-              <th class="">急</th>
-              <th class="w-25">期限</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for task in info.tasks %}
-              <tr>
-                <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>
-                  {% if info.name != '明日以降' %}{{ forloop.counter }}{% else %}{{ task.when.month }}/{{ task.when.day }}{% endif %}</th>
-                <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-                <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
-                <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
-                <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
-                <td><div class="dropdown">
-                       <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-                       <ul class="dropdown-menu" role="menu">
-                         <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
-                         {% block button %}{% endblock %}
-                         <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
-                         <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
-                         <li>
-                           <form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
-                             <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
-                           </form>
-                         </li>
-                       </ul>
-                </div></td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-    {% endfor %}
+    <h1>今日のタスク<a class='btn btn-warning ml-2 mt-2 btn-sm float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
+    <a class='btn btn-success btn-sm mt-2 float-right' href="{% url 'task:list' user.pk %}?next={{ request.get_full_path }}">タスク詳細</a></h1>
+    <table class='table table-sm table-striped text-center'>
+      <caption>{{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
+      <thead>
+        <tr class='table-primary'>
+          <th class=""></th>
+          <th class="w-75">タスク名</th>
+          <th class="">要</th>
+          <th class="">急</th>
+          <th class="w-25">期限</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in todo.tasks %}
+          <tr>
+            <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>{{ forloop.counter }}</th>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
+            <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
+            <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+            <td><div class="dropdown">
+                   <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                   <ul class="dropdown-menu" role="menu">
+                     <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
+                     {% block button %}{% endblock %}
+                     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
+                     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                     <li>
+                       <form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
+                         <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+                       </form>
+                     </li>
+                   </ul>
+            </div></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 {% endblock %}
 {% block content-md-right %}
     <h1>読む本<a class='btn btn-warning float-right' href="{% url 'book:create' %}">本追加</a></h1>
     {% for info in book_infos %}
       {% if info.num > 0 %}
-            <table class='table table-sm table-striped text-center'>
-              <caption>{{info.name}} : {{info.num}}冊</caption>
-              <thead>
-                <tr class='table-danger'>
-                  <th class=""></th>
-                  <th class="w-50">タイトル</th>
-                  <th class="w-25">著者</th>
-                  <th class="w-25">期限</th>
-                  <th class=""></th>
-                </tr>
-              </thead>
-              <tbody id='sortable{{ forloop.counter |add:"15" }}'>
-                {% for book in info.books %}
-                  <tr id="book_{{ book.id }}">
-                    <th class='{% if book.expired %}text-danger{% endif %}' name="num_data" scope='row'>{{ forloop.counter }}</th>
-                    <td class='{% if book.expired %}text-danger{% endif %}'>{{ book.title }}</td>
-                    <td class='{% if book.expired %}text-danger{% endif %}'>{% if book.author is not None %}{{ book.author}}{% endif %}</td>
-                    <td class='{% if book.expired %}text-danger{% endif %}'>{{ book.deadline.month }}/{{ book.deadline.day }}</td>
-                    <td><div class="dropdown">
-                      <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-                      <ul class="dropdown-menu" role="menu">
-                        <li><a class='btn btn-primary btn-block' href="{% url 'book:later' book.id %}">期限を翌日に</a></li>
-                        <li><a class='btn btn-primary btn-block my-1' href="{% url 'book:read' book.id %}" onclick=done_alert()>読了</a></li>
-                        <li><a class='btn btn-primary btn-block my-1' href="{% url 'book:update' book.id %}">編集</a></li>
-                        <li>
-                          <form method="post" action="{% url 'book:delete' book.id %}">{% csrf_token %}
-                            <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
-                          </form>
-                        </li>
-                      </ul>
-                    </div></td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-      {% endif %}
-    {% endfor %}
-{% endblock %}
-{% block content-sm %}
-    <h3>タスク<a class='btn btn-warning ml-4 float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
-      <a class='btn btn-success float-right' href="{% url 'task:list' user.pk %}?next={{ request.get_full_path }}">タスク詳細</a></h3>
-    {% for info in task_infos %}
         <table class='table table-sm table-striped text-center'>
-          <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
+          <caption>{{info.name}} : {{info.num}}冊</caption>
           <thead>
-            <tr class='table-primary'>
+            <tr class='table-danger'>
               <th class=""></th>
-              <th class="w-75">タスク名</th>
-              <th class="">要</th>
-              <th class="">急</th>
+              <th class="w-50">タイトル</th>
+              <th class="w-25">著者</th>
               <th class="w-25">期限</th>
               <th class=""></th>
             </tr>
           </thead>
-          <tbody>
-            {% for task in info.tasks %}
-              <tr>
-                <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>
-                  {% if info.name != '明日以降' %}{{ forloop.counter }}{% else %}{{ task.when.month }}/{{ task.when.day }}{% endif %}</th>
-                <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-                <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
-                <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
-                <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+          <tbody id='sortable{{ forloop.counter |add:"15" }}'>
+            {% for book in info.books %}
+              <tr id="book_{{ book.id }}">
+                <th class='{% if book.expired %}text-danger{% endif %}' name="num_data" scope='row'>{{ forloop.counter }}</th>
+                <td class='{% if book.expired %}text-danger{% endif %}'>{{ book.title }}</td>
+                <td class='{% if book.expired %}text-danger{% endif %}'>{% if book.author is not None %}{{ book.author}}{% endif %}</td>
+                <td class='{% if book.expired %}text-danger{% endif %}'>{{ book.deadline.month }}/{{ book.deadline.day }}</td>
                 <td><div class="dropdown">
-                       <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-                       <ul class="dropdown-menu" role="menu">
-                         <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
-                         {% block button-sm %}{% endblock %}
-                         <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
-                         <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
-                         <li>
-                           <form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
-                             <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
-                           </form>
-                         </li>
-                       </ul>
+                  <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a class='btn btn-primary btn-block' href="{% url 'book:later' book.id %}">期限を翌日に</a></li>
+                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'book:read' book.id %}" onclick=done_alert()>読了</a></li>
+                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'book:update' book.id %}">編集</a></li>
+                    <li>
+                      <form method="post" action="{% url 'book:delete' book.id %}">{% csrf_token %}
+                        <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+                      </form>
+                    </li>
+                  </ul>
                 </div></td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
-      {% endfor %}
+      {% endif %}
+    {% endfor %}
+{% endblock %}
+{% block content-sm %}
+    <h3>今日のタスク<a class='btn btn-warning ml-4 float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
+    <a class='btn btn-success float-right' href="{% url 'task:list' user.pk %}?next={{ request.get_full_path }}">タスク詳細</a></h3>
+    <table class='table table-sm table-striped text-center'>
+      <caption>{{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
+      <thead>
+        <tr class='table-primary'>
+          <th class=""></th>
+          <th class="w-75">タスク名</th>
+          <th class="">要</th>
+          <th class="">急</th>
+          <th class="w-25">期限</th>
+          <th class=""></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in todo.tasks %}
+          <tr>
+            <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>{{ forloop.counter }}</th>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
+            <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
+            <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+            <td><div class="dropdown">
+                   <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                   <ul class="dropdown-menu" role="menu">
+                     <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
+                     {% block button-sm %}{% endblock %}
+                     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
+                     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                     <li>
+                       <form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
+                         <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+                       </form>
+                     </li>
+                   </ul>
+            </div></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 {% endblock %}
 {% block content2-sm %}
     <h3>読む本<a class='btn btn-warning float-right' href="{% url 'book:create' %}">本追加</a></h3>
@@ -175,45 +169,42 @@
     {% endfor %}
 {% endblock %}
 {% block content-xs %}
-    <h5>タスク<a class='btn btn-sm btn-warning ml-2 float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
-      <a class='btn btn-success btn-sm float-right' href="{% url 'task:list' user.pk %}?next={{ request.get_full_path }}">タスク詳細</a></h5>
-    {% for info in task_infos %}
-        <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped text-center'>
-          <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
-          <thead class='table-primary'>
-            <tr class=''>
-              <th scope='col'></th>
-              <th class="w-75">タスク名</th>
-              <th class="w-25" scope='col'>期限</th>
-              <th class="" scope='col'></th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for task in info.tasks %}
-              <tr>
-                <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>
-                {% if info.name != '明日以降' %}{{ forloop.counter }}{% else %}{{ task.when.month }}/{{ task.when.day }}{% endif %}</th>
-                <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-                <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
-                <td><div class="dropdown">
-                       <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-                       <ul class="dropdown-menu" role="menu">
-                         <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
-                         {% block button-xs %}{% endblock %}
-                         <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
-                         <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
-                         <li>
-                           <form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
-                             <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
-                           </form>
-                         </li>
-                       </ul>
-                </div></td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      {% endfor %}
+    <h5>今日のタスク<a class='btn btn-sm btn-warning ml-2 float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
+    <a class='btn btn-success btn-sm float-right' href="{% url 'task:list' user.pk %}?next={{ request.get_full_path }}">タスク詳細</a></h5>
+    <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped text-center'>
+      <caption>{{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
+      <thead class='table-primary'>
+        <tr class=''>
+          <th scope='col'></th>
+          <th class="w-75">タスク名</th>
+          <th class="w-25" scope='col'>期限</th>
+          <th class="" scope='col'></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in todo.tasks %}
+          <tr>
+            <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>{{ forloop.counter }}</th>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+            <td><div class="dropdown">
+                   <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                   <ul class="dropdown-menu" role="menu">
+                     <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
+                     {% block button-xs %}{% endblock %}
+                     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
+                     <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                     <li>
+                       <form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
+                         <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+                       </form>
+                     </li>
+                   </ul>
+            </div></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 {% endblock %}
 {% block content2-xs %}
     <h3>読む本<a class='btn btn-warning float-right' href="{% url 'book:create' %}">本追加</a></h3>
