@@ -1,10 +1,10 @@
 {% extends "base/user_base.html" %}
 {% block title %}トップページ{% endblock %}
 {% block content-md-left %}
-    <h1>今日のタスク<a class='btn btn-warning ml-2 mt-2 btn-sm float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
+    <h1>タスク<a class='btn btn-warning ml-2 mt-2 btn-sm float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
     <a class='btn btn-success btn-sm mt-2 float-right' href="{% url 'task:list' user.pk %}?next={{ request.get_full_path }}">タスク詳細</a></h1>
     <table class='table table-sm table-striped text-center'>
-      <caption>{{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
+      <caption>今日 {{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
       <thead>
         <tr class='table-primary'>
           <th class=""></th>
@@ -85,10 +85,10 @@
     {% endfor %}
 {% endblock %}
 {% block content-sm %}
-    <h3>今日のタスク<a class='btn btn-warning ml-4 float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
+    <h3>タスク<a class='btn btn-warning ml-4 float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
     <a class='btn btn-success float-right' href="{% url 'task:list' user.pk %}?next={{ request.get_full_path }}">タスク詳細</a></h3>
     <table class='table table-sm table-striped text-center'>
-      <caption>{{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
+      <caption>今日 {{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
       <thead>
         <tr class='table-primary'>
           <th class=""></th>
@@ -169,10 +169,10 @@
     {% endfor %}
 {% endblock %}
 {% block content-xs %}
-    <h5>今日のタスク<a class='btn btn-sm btn-warning ml-2 float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
+    <h5>タスク<a class='btn btn-sm btn-warning ml-2 float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
     <a class='btn btn-success btn-sm float-right' href="{% url 'task:list' user.pk %}?next={{ request.get_full_path }}">タスク詳細</a></h5>
     <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped text-center'>
-      <caption>{{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
+      <caption>今日 {{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
       <thead class='table-primary'>
         <tr class=''>
           <th scope='col'></th>
