@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.http import is_safe_url
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.conf import settings
 
 from .forms import TaskCreateForm, TaskUpdateForm, DoneForm
@@ -176,26 +176,26 @@ def sort(request):
     return HttpResponse('')
 
 # 完了タスク関連の操作
+
 @login_required
 def done(request, pk):
     task = Task.objects.get(id=pk)
     task.done_or_not = True
     task.done_date = datetime.date.today()
     task.save()
-    return redirect('task:done_list', pk=request.user.id)
+    return redirect('task:done_update', pk=pk)
 
-@method_decorator(login_required, name='dispatch')
-class DoneView(UpdateView):
-    model = Task
-    form_class = DoneForm
-    template_name = 'task/done_update.html'
+# @method_decorator(login_required, name='dispatch')
+# class DoneView(UpdateView):
+#     model = Task
+#     form_class = DoneForm
+#     template_name = 'task/done_update.html'
 
-    def form_valid(self, form):
-        form.instance.done_or_not = True
-        return super(DoneView, self).form_valid(form)
+#     def form_valid(self, form):
+#         return super(DoneView, self).form_valid(form)
 
-    def get_success_url(self):
-        return reverse_lazy('task:done_list', kwargs={'pk': self.request.user.id})
+#     def get_success_url(self):
+#         return reverse_lazy('task:done_list', kwargs={'pk': self.request.user.id})
 
 @method_decorator(login_required, name='dispatch')
 class DoneUpdateView(UpdateView):
