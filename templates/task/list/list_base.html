@@ -35,7 +35,7 @@
                        <ul class="dropdown-menu" role="menu">
                          <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
                          {% block button %}{% endblock %}
-                         <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
+                         <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}?next={{ request.get_full_path }}" onclick=done_alert()>完了</a></li>
                          <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
                          <li>
                            <form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
