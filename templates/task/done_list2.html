@@ -1,0 +1,51 @@
+{% extends "base/user_base.html" %}
+{% block title %}レポート{% endblock %}
+{% block active_done %}active{% endblock %}
+
+{% block content-md-left %}
+  <h3>今日の完了タスク : {{ today }}個</h3>
+  <a class='btn btn-success btn-sm mr-2 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
+  <a class='btn btn-warning btn-sm float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
+  <canvas id="LineChart" height='300' width='600'></canvas>
+  <script type="text/javascript">
+    var ctx = document.getElementById("LineChart");
+    var LineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
+        datasets: [{
+          label: 'タスク完了数',
+          data: {{data}},
+          borderColor: "rgba(255,0,0,1)",
+          backgroundColor: "rgba(0,0,0,0)",
+          lineTension: 0
+        }],
+      },
+      options: {
+        title: {
+          display: true,
+          text: '今週のタスク完了状況',
+          elements: {
+            line: {
+                tension: 0, // ベジェ曲線を無効にする
+            }
+          },
+          responsive: true,
+          maintainAspectRatio: false
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              // suggestedMax: 100,
+              suggestedMin: 0,
+              stepSize: 1,
+              // callback: function(value, index, values){
+              //   return  value +  '個'
+              // }
+            }
+          }]
+        },
+      }
+    });
+  </script>
+{% endblock %}

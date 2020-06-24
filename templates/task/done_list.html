@@ -4,12 +4,53 @@
 
 {% block content-md-left %}
   <h3>今日の完了タスク : {{ today }}個</h3>
-  <a class='btn btn-success btn-sm mr-2 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
-  <a class='btn btn-warning btn-sm float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
-  <canvas id="LineChart1" style="height:40vh; width:80vw"></canvas>
+  <a class='btn btn-success btn-sm mr-2 mb-3 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
+  <a class='btn btn-warning btn-sm mb-3 float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
+  <canvas id="LineChart" style="height:3vh; width:2vw"></canvas>
+  <script type="text/javascript">
+    var ctx = document.getElementById("LineChart");
+    var LineChart1 = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
+          datasets: [{
+            label: 'タスク完了数',
+            data: {{data}},
+            borderColor: "rgba(255,0,0,1)",
+            backgroundColor: "rgba(0,0,0,0)",
+            lineTension: 0
+          }],
+        },
+        options: {
+          title: {
+            display: true,
+            text: '今週のタスク完了状況',
+            elements: {
+              line: {
+                  tension: 0, // ベジェ曲線を無効にする
+              }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                // suggestedMax: 100,
+                suggestedMin: 0,
+                stepSize: 1,
+                // callback: function(value, index, values){
+                //   return  value +  '個'
+                // }
+              }
+            }]
+          },
+        }
+    });
+  </script>
 {% endblock %}
 
-{% block content2-md-left %}
+{% block content-md-right %}
   <h3>今週の完了タスク : {{ week.num }}個</h3>
   <h3 class='text-info'>レベル : {{ week.level }}</h3>
   <table class='table table-sm table-striped table-bordered text-center'>
@@ -49,15 +90,56 @@
 {% endblock %}
 
 {% block content-sm %}
-  <h2>今日の完了タスク : {{ today }}個</h2>
+  <h3>今日の完了タスク : {{ today }}個</h3>
   <a class='btn btn-success btn-sm mr-2 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
   <a class='btn btn-warning btn-sm float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
-  <canvas id="LineChart2" style="height:40vh; width:80vw"></canvas>
+  <canvas id="LineChart1" style="height:2vh; width:3vw"></canvas>
+  <script type="text/javascript">
+    var ctx = document.getElementById("LineChart1");
+    var LineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
+          datasets: [{
+            label: 'タスク完了数',
+            data: {{data}},
+            borderColor: "rgba(255,0,0,1)",
+            backgroundColor: "rgba(0,0,0,0)",
+            lineTension: 0
+          }],
+        },
+        options: {
+          title: {
+            display: true,
+            text: '今週のタスク完了状況',
+            elements: {
+              line: {
+                  tension: 0, // ベジェ曲線を無効にする
+              }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                // suggestedMax: 100,
+                suggestedMin: 0,
+                stepSize: 1,
+                // callback: function(value, index, values){
+                //   return  value +  '個'
+                // }
+              }
+            }]
+          },
+        }
+    });
+  </script>
 {% endblock %}
 
 {% block content2-sm %}
-  <h2>今週の完了タスク : {{ week.num }}個</h2>
-  <h2 class='text-info'>レベル : {{ week.level }}</h2>
+  <h3>今週の完了タスク : {{ week.num }}個</h3>
+  <h3 class='text-info'>レベル : {{ week.level }}</h3>
   <table class='table table-sm table-striped table-bordered text-center'>
     <thead>
       <tr class='table-primary'>
@@ -95,14 +177,55 @@
 {% endblock %}
 
 {% block content-xs %}
-  <h4>今日完了したタスク : {{ today }}個</h4>
+  <h4>今日の完了タスク : {{ today }}個</h4>
   <a class='btn btn-success btn-sm mr-2 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
   <a class='btn btn-warning btn-sm float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
-  <canvas id="LineChart3" style="height:40vh; width:80vw"></canvas>
+  <canvas id="LineChart2" style="height:1vh; width:2vw"></canvas>
+  <script type="text/javascript">
+    var ctx = document.getElementById("LineChart2");
+    var LineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
+          datasets: [{
+            label: 'タスク完了数',
+            data: {{data}},
+            borderColor: "rgba(255,0,0,1)",
+            backgroundColor: "rgba(0,0,0,0)",
+            lineTension: 0
+          }],
+        },
+        options: {
+          title: {
+            display: true,
+            text: '今週のタスク完了状況',
+            elements: {
+              line: {
+                  tension: 0, // ベジェ曲線を無効にする
+              }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                // suggestedMax: 100,
+                suggestedMin: 0,
+                stepSize: 1,
+                // callback: function(value, index, values){
+                //   return  value +  '個'
+                // }
+              }
+            }]
+          },
+        }
+    });
+  </script>
 {% endblock %}
 
 {% block content2-xs %}
-  <h4>今週完了したタスク : {{ week.num }}個</h4>
+  <h4>今週の完了タスク : {{ week.num }}個</h4>
   <h4 class='text-info'>レベル : {{ week.level }}</h4>
   <table class='table table-sm table-striped table-bordered text-center'>
     <thead>
@@ -139,123 +262,3 @@
     </tbody>
   </table>
 {% endblock %}
-
-<script type="text/javascript">
-  var ctx1 = document.getElementById("LineChart1");
-  var ctx2 = document.getElementById("LineChart2");
-  var ctx3 = document.getElementById("LineChart3");
-  var LineChart1 = new Chart(ctx1, {
-      type: 'line',
-      data: {
-        labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
-        datasets: [{
-          label: 'タスク完了数',
-          data: {{data}},
-          borderColor: "rgba(255,0,0,1)",
-          backgroundColor: "rgba(0,0,0,0)",
-          lineTension: 0
-        }],
-      },
-      options: {
-        title: {
-          display: true,
-          text: '今週のタスク完了状況',
-          elements: {
-            line: {
-                tension: 0, // ベジェ曲線を無効にする
-            }
-          },
-          responsive: true,
-          maintainAspectRatio: false
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              // suggestedMax: 100,
-              suggestedMin: 0,
-              stepSize: 1,
-              // callback: function(value, index, values){
-              //   return  value +  '個'
-              // }
-            }
-          }]
-        },
-      }
-  });
-  var LineChart2 = new Chart(ctx2, {
-      type: 'line',
-      data: {
-        labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
-        datasets: [{
-          label: 'タスク完了数',
-          data: {{data}},
-          borderColor: "rgba(255,0,0,1)",
-          backgroundColor: "rgba(0,0,0,0)",
-          lineTension: 0
-        }],
-      },
-      options: {
-        title: {
-          display: true,
-          text: '今週のタスク完了状況',
-          elements: {
-            line: {
-                tension: 0, // ベジェ曲線を無効にする
-            }
-          },
-          responsive: true,
-          maintainAspectRatio: false
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              // suggestedMax: 100,
-              suggestedMin: 0,
-              stepSize: 1,
-              // callback: function(value, index, values){
-              //   return  value +  '個'
-              // }
-            }
-          }]
-        },
-      }
-  });
-  var LineChart3 = new Chart(ctx3, {
-      type: 'line',
-      data: {
-        labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
-        datasets: [{
-          label: 'タスク完了数',
-          data: {{data}},
-          borderColor: "rgba(255,0,0,1)",
-          backgroundColor: "rgba(0,0,0,0)",
-          lineTension: 0
-        }],
-      },
-      options: {
-        title: {
-          display: true,
-          text: '今週のタスク完了状況',
-          elements: {
-            line: {
-                tension: 0, // ベジェ曲線を無効にする
-            }
-          },
-          responsive: true,
-          maintainAspectRatio: false
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              // suggestedMax: 100,
-              suggestedMin: 0,
-              stepSize: 1,
-              // callback: function(value, index, values){
-              //   return  value +  '個'
-              // }
-            }
-          }]
-        },
-      }
-  });
-</script>

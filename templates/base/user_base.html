@@ -9,11 +9,11 @@
           href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"/>
     <link rel="stylesheet"
           href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <!-- <link rel="stylesheet" href={% static 'css/fluidity.min.css' %}"> -->
   </head>
   <body>
+  {% comment %} nav {% endcomment %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="{% url 'top' user.pk %}">Task Scheduler</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -54,30 +54,35 @@
             {%endif%}
         </div>
     </nav>
+  {% comment %} content-md {% endcomment %}
     <div class="container d-none d-md-block">
       <div class='row'>
-        <div class="my-4 col-md-6">
+        <div class="col-md-6 my-4">
           {% block content-md-left %}
           {% endblock %}
         </div>
-        <div class="my-4 col-md-6">
+        <div class="col-md-6 my-4">
           {% block content-md-right %}
           {% endblock %}
         </div>
       </div>
     </div>
+  
+  {% comment %} conent-sm {% endcomment %}
     <div class="container d-none d-sm-block d-md-none">
         <div class="my-4">
           {% block content-sm %}
           {% endblock %}
         </div>
     </div>
+  {% comment %} conent-xs {% endcomment %}
     <div class="container d-block d-sm-none">
         <div class="my-4">
           {% block content-xs %}
           {% endblock %}
         </div>
     </div>
+  {% comment %} conent2-md {% endcomment %}
     <div class="container d-none d-md-block">
       <div class='row'>
         <div class="my-4 col-md-6">
@@ -90,36 +95,42 @@
         </div>
       </div>
     </div>
+  {% comment %} conent2-sm {% endcomment %}
     <div class="container d-none d-sm-block d-md-none">
       <div class="my-4">
         {% block content2-sm %}
         {% endblock %}
       </div>
     </div>
+  {% comment %} conent2-xs {% endcomment %}
     <div class="container d-block d-sm-none">
       <div class="my-5">
         {% block content2-xs %}
         {% endblock %}
       </div>
     </div>
+  {% comment %} conent3-sm {% endcomment %}
     <div class="container d-none d-sm-block d-md-none">
       <div class="my-4">
         {% block content3-sm %}
         {% endblock %}
       </div>
     </div>
+  {% comment %} conent3-xs {% endcomment %}
     <div class="container d-block d-sm-none">
       <div class="my-5">
         {% block content3-xs %}
         {% endblock %}
       </div>
     </div>
+  {% comment %} conent4 {% endcomment %}
     <div class="container">
       <div class="my-4">
         {% block content4 %}
         {% endblock %}
       </div>
     </div>
+  {% comment %} script {% endcomment %}
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
             integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"

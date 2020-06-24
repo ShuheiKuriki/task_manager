@@ -1,20 +1,21 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy,reverse
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-from django.utils.http import is_safe_url
-from django.views.generic import CreateView, UpdateView, DeleteView
-from django.conf import settings
+if 'import':
+    from django.shortcuts import render, redirect, get_object_or_404
+    from django.http import HttpResponse
+    from django.contrib.auth.decorators import login_required
+    from django.urls import reverse_lazy,reverse
+    from django.utils.decorators import method_decorator
+    from django.views.decorators.csrf import csrf_exempt
+    from django.views.decorators.http import require_POST
+    from django.utils.http import is_safe_url
+    from django.views.generic import CreateView, UpdateView, DeleteView
+    from django.conf import settings
 
-from urllib.parse import urlencode
-from .forms import TaskCreateForm, TaskUpdateForm, DoneForm
-from taskManager.models import Task
+    from urllib.parse import urlencode
+    from .forms import TaskCreateForm, TaskUpdateForm, DoneForm
+    from taskManager.models import Task
 
-import datetime
-from datetime import date
+    import datetime
+    from datetime import date
 # Create your views here.
 class Taskinfo:
     def __init__(self, tasks, name="", day=''):
@@ -190,15 +191,15 @@ def done(request, pk):
 
 # @method_decorator(login_required, name='dispatch')
 # class DoneView(UpdateView):
-#     model = Task
-#     form_class = DoneForm
-#     template_name = 'task/done_update.html'
+    #     model = Task
+    #     form_class = DoneForm
+    #     template_name = 'task/done_update.html'
 
-#     def form_valid(self, form):
-#         return super(DoneView, self).form_valid(form)
+    #     def form_valid(self, form):
+    #         return super(DoneView, self).form_valid(form)
 
-#     def get_success_url(self):
-#         return reverse_lazy('task:done_list', kwargs={'pk': self.request.user.id})
+    #     def get_success_url(self):
+    #         return reverse_lazy('task:done_list', kwargs={'pk': self.request.user.id})
 
 @method_decorator(login_required, name='dispatch')
 class DoneUpdateView(UpdateView):
