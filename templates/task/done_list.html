@@ -3,7 +3,7 @@
 {% block active_done %}active{% endblock %}
 
 {% block content-md-left %}
-  <h3 class='d-none d-xl-block'>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></h3>
+  <h2 class='d-none d-xl-block'>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></h2>
   <h4 class='d-block d-xl-none'>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></h4>
   <canvas id="LineChart" style="height:3vh; width:2vw"></canvas>
   <script type="text/javascript">
