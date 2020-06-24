@@ -78,10 +78,11 @@ def done_list(request,pk):
     dones = Task.objects.all().filter(user=request.user, done_or_not=True).order_by('-done_date')
     week = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7)))
     data = []
-    for i in range(7):
-        info = Taskinfo(tasks = dones.filter(done_date=datetime.date.today()-datetime.timedelta(days=i)))
+    for i in range(6,-1,-1):
+        dat = date.today()-datetime.timedelta(days=i)
+        info = Taskinfo(tasks = dones.filter(done_date=dat))
         data.append(info.num)
-    return render(request, 'task/done_list.html', {'week':week, 'today':data[0], 'data':data})
+    return render(request, 'task/done_list.html', {'week':week, 'today':data[-1],'data':data})
 
 #未完了タスク関連
 def create(request):

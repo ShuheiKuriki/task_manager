@@ -43,7 +43,7 @@
     </table>
 {% endblock %}
 {% block content-md-right %}
-    <h1>読む本<a class='btn btn-warning float-right' href="{% url 'book:create' %}">本追加</a></h1>
+    <h1>本<a class='btn btn-warning float-right' href="{% url 'book:create' %}">本追加</a></h1>
     {% for info in book_infos %}
       {% if info.num > 0 %}
         <table class='table table-sm table-striped text-center'>

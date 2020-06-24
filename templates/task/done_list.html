@@ -3,16 +3,23 @@
 {% block active_done %}active{% endblock %}
 
 {% block content-md-left %}
-  <h3>今日の完了タスク : {{ today }}個</h3>
-  <a class='btn btn-success btn-sm mr-2 mb-3 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
-  <a class='btn btn-warning btn-sm mb-3 float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
+  <h3 class='d-none d-xl-block'>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></h3>
+  <h4 class='d-block d-xl-none'>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></h4>
   <canvas id="LineChart" style="height:3vh; width:2vw"></canvas>
   <script type="text/javascript">
     var ctx = document.getElementById("LineChart");
+    var weekdays = ['日','月','火','水','木','金','土'];
+    var label = [0,1,2,3,4,5,6]
+    var today = new Date();
+    for (let i = 0; i < 7; i++) {
+      var day = new Date();
+      day.setDate(today.getDate()-7+i);
+      label[i] = (day.getMonth()+1)+'/'+day.getDate()+'('+weekdays[day.getDay()]+')';
+    }
     var LineChart1 = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
+          labels: label,
           datasets: [{
             label: 'タスク完了数',
             data: {{data}},
@@ -51,8 +58,15 @@
 {% endblock %}
 
 {% block content-md-right %}
-  <h3>今週の完了タスク : {{ week.num }}個</h3>
-  <h3 class='text-info'>レベル : {{ week.level }}</h3>
+  <h3 class='d-none d-xl-block'>今週の完了タスク
+  <a class='btn btn-warning btn-sm mb-3 float-right' href="{% url 'task:list' user.pk %}">タスクページ</a>
+  <a class='btn btn-success btn-sm mr-2 mb-3 float-right' href="{% url 'task:done_create' %}">完了タスク追加</a>
+  </h3>
+  <div class='d-block d-xl-none'>
+    <h4>今週の完了タスク</h4>
+    <a class='btn btn-warning btn-sm mb-3 float-right' href="{% url 'task:list' user.pk %}">タスクページ</a>
+    <a class='btn btn-success btn-sm mr-2 mb-3 float-right' href="{% url 'task:done_create' %}">完了タスク追加</a>
+  </div>
   <table class='table table-sm table-striped table-bordered text-center'>
     <thead>
       <tr class='table-primary'>
@@ -90,16 +104,22 @@
 {% endblock %}
 
 {% block content-sm %}
-  <h3>今日の完了タスク : {{ today }}個</h3>
-  <a class='btn btn-success btn-sm mr-2 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
-  <a class='btn btn-warning btn-sm float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
+  <h3>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></h3>
   <canvas id="LineChart1" style="height:2vh; width:3vw"></canvas>
   <script type="text/javascript">
     var ctx = document.getElementById("LineChart1");
+    var weekdays = ['日','月','火','水','木','金','土'];
+    var label = [0,1,2,3,4,5,6]
+    var today = new Date();
+    for (let i = 0; i < 7; i++) {
+      var day = new Date();
+      day.setDate(today.getDate()-7+i);
+      label[i] = (day.getMonth()+1)+'/'+day.getDate()+'('+weekdays[day.getDay()]+')';
+    }
     var LineChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
+          labels: label,
           datasets: [{
             label: 'タスク完了数',
             data: {{data}},
@@ -138,8 +158,8 @@
 {% endblock %}
 
 {% block content2-sm %}
-  <h3>今週の完了タスク : {{ week.num }}個</h3>
-  <h3 class='text-info'>レベル : {{ week.level }}</h3>
+  <a class='btn btn-success btn-sm mr-2 mb-4 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
+  <a class='btn btn-warning btn-sm mb-4 float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
   <table class='table table-sm table-striped table-bordered text-center'>
     <thead>
       <tr class='table-primary'>
@@ -177,16 +197,22 @@
 {% endblock %}
 
 {% block content-xs %}
-  <h4>今日の完了タスク : {{ today }}個</h4>
-  <a class='btn btn-success btn-sm mr-2 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
-  <a class='btn btn-warning btn-sm float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
+  <h4>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></h4>
   <canvas id="LineChart2" style="height:1vh; width:2vw"></canvas>
   <script type="text/javascript">
     var ctx = document.getElementById("LineChart2");
+    var weekdays = ['日','月','火','水','木','金','土'];
+    var label = [0,1,2,3,4,5,6]
+    var today = new Date();
+    for (let i = 0; i < 7; i++) {
+      var day = new Date();
+      day.setDate(today.getDate()-7+i);
+      label[i] = (day.getMonth()+1)+'/'+day.getDate()+'('+weekdays[day.getDay()]+')';
+    }
     var LineChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['今日', '昨日', '一昨日', '3日前', '4日前', '5日前', '6日前'],
+          labels: label,
           datasets: [{
             label: 'タスク完了数',
             data: {{data}},
@@ -225,8 +251,8 @@
 {% endblock %}
 
 {% block content2-xs %}
-  <h4>今週の完了タスク : {{ week.num }}個</h4>
-  <h4 class='text-info'>レベル : {{ week.level }}</h4>
+  <a class='btn btn-success btn-sm mr-2 mb-4 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
+  <a class='btn btn-warning btn-sm mb-4 float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
   <table class='table table-sm table-striped table-bordered text-center'>
     <thead>
       <tr class='table-primary'>
