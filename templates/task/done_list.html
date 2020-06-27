@@ -13,7 +13,7 @@
     var today = new Date();
     for (let i = 0; i < 7; i++) {
       var day = new Date();
-      day.setDate(today.getDate()-7+i);
+      day.setDate(today.getDate()-6+i);
       label[i] = (day.getMonth()+1)+'/'+day.getDate()+'('+weekdays[day.getDay()]+')';
     }
     var LineChart1 = new Chart(ctx, {

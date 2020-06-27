@@ -28,7 +28,6 @@ class Task(models.Model):
         return {'タスク名':self.name, '実行予定日':self.when, '時間帯':self.periods[self.period],
                 '期限':self.deadline, '重要': important, '緊急':urgent}
 
-
 class LinePush(models.Model):
     line_id = models.CharField('ユーザーID', max_length=100, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
