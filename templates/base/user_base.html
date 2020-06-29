@@ -54,8 +54,21 @@
             {%endif%}
         </div>
     </nav>
+  {% comment %} content-xl {% endcomment %}
+    <div class="container d-none d-xl-block">
+      <div class='row'>
+        <div class="col-6 my-4">
+          {% block content-xl-left %}
+          {% endblock %}
+        </div>
+        <div class="col-6 my-4">
+          {% block content-xl-right %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
   {% comment %} content-md {% endcomment %}
-    <div class="container d-none d-md-block">
+    <div class="container d-none d-md-block d-xl-none">
       <div class='row'>
         <div class="col-6 my-4">
           {% block content-md-left %}
@@ -140,6 +153,39 @@
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script type="text/javascript" src="{% static 'jquery-ui-touch-punch/jquery.ui.touch-punch.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/sortable.js' %}"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var whens = ['today','tom'];
+        var sizes = ['xl','md','sm','xs'];
+        for ( var i = 0;  i < 2;  i++ ) {
+          for ( var j = 0;  j < 4;  j++ ) {
+            for ( var k = 1;  k < 6;  k++ ) {
+              $(`#sort_${whens[i]}_${sizes[j]}${k}`).sortable({
+                cursor: 'move',
+                opacity: 0.5,
+                update: function(event, ui) {
+                  var serial = $(this).sortable('serialize');
+                  $.ajax({
+                    url: "/task/sort",
+                    type: "post",
+                    data: serial
+                  });
+                }
+              });
+              $(`#sort_${whens[i]}_${sizes[j]}${k}`).bind('sortstop',function(){
+                // 番号を設定している要素に対しループ処理
+                $(this).find(`[name="num_data"]`).each(function(idx){
+                  // タグ内に通し番号を設定（idxは0始まりなので+1する）
+                  $(this).html(idx+1);
+                });
+              });
+            }
+          }
+        }
+      });
+      function done_alert() {
+        alert('タスクを完了しました。\nおめでとうございます！！');
+      };
+    </script>
   </body>
 </html>
