@@ -1,290 +1,47 @@
 {% extends "base/user_base.html" %}
+{% load macros %} {% loadmacros "task/macros.html" %}
 {% block title %}レポート{% endblock %}
 {% block active_done %}active{% endblock %}
 
-{% block content-md-left %}
-  <h2 class='d-none d-xl-block'>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></h2>
-  <h4 class='d-block d-xl-none'>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></h4>
-  <canvas id="LineChart" style="height:3vh; width:2vw"></canvas>
-  <script type="text/javascript">
-    var ctx = document.getElementById("LineChart");
-    var weekdays = ['日','月','火','水','木','金','土'];
-    var label = [0,1,2,3,4,5,6]
-    var today = new Date();
-    for (let i = 0; i < 7; i++) {
-      var day = new Date();
-      day.setDate(today.getDate()-6+i);
-      label[i] = (day.getMonth()+1)+'/'+day.getDate()+'('+weekdays[day.getDay()]+')';
-    }
-    var LineChart1 = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: label,
-          datasets: [{
-            label: 'タスク完了数',
-            data: {{data}},
-            borderColor: "rgba(255,0,0,1)",
-            backgroundColor: "rgba(0,0,0,0)",
-            lineTension: 0
-          }],
-        },
-        options: {
-          title: {
-            display: true,
-            text: '今週のタスク完了状況',
-            elements: {
-              line: {
-                  tension: 0, // ベジェ曲線を無効にする
-              }
-            },
-            responsive: true,
-            maintainAspectRatio: false
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                // suggestedMax: 100,
-                suggestedMin: 0,
-                stepSize: 1,
-                // callback: function(value, index, values){
-                //   return  value +  '個'
-                // }
-              }
-            }]
-          },
-        }
-    });
-  </script>
+{% block content-xl-left %}
+  {% usemacro report "h2" %}
+  {% usemacro graph "Linehart1" "3vh" "2vw" %}
+{% endblock %}
+{% block content-xl-right %}
+  <h2>今週の完了タスク<a class='btn btn-warning btn-sm mb-3 float-right' href="{% url 'task:list' user.pk %}">タスクページ</a>
+  <a class='btn btn-success btn-sm mr-2 mb-3 float-right' href="{% url 'task:done_create' %}">完了タスク追加</a></h2>
+  {% usemacro done_table "primary" %}
 {% endblock %}
 
+{% block content-md-left %}
+  {% usemacro report "h4" %}
+  {% usemacro graph "Linehart2" "3vh" "2vw" %}
+{% endblock %}
 {% block content-md-right %}
-  <h3 class='d-none d-xl-block'>今週の完了タスク
-  <a class='btn btn-warning btn-sm mb-3 float-right' href="{% url 'task:list' user.pk %}">タスクページ</a>
-  <a class='btn btn-success btn-sm mr-2 mb-3 float-right' href="{% url 'task:done_create' %}">完了タスク追加</a>
-  </h3>
-  <div class='d-block d-xl-none'>
+  <div>
     <h4>今週の完了タスク</h4>
     <a class='btn btn-warning btn-sm mb-3 float-right' href="{% url 'task:list' user.pk %}">タスクページ</a>
     <a class='btn btn-success btn-sm mr-2 mb-3 float-right' href="{% url 'task:done_create' %}">完了タスク追加</a>
   </div>
-  <table class='table table-sm table-striped table-bordered text-center'>
-    <thead>
-      <tr class='table-primary'>
-            <th scope='col'></th>
-            <th class="w-50" scope='col'>タスク名</th>
-            <th scope='col'>要</th>
-            <th scope='col'>急</th>
-            <th class="w-25" scope='col'>完了</th>
-            <th class="w-25" scope='col'></th>
-      </tr>
-    </thead>
-    <tbody>
-          {% for done in week.tasks %}
-            <tr>
-              <th scope='row'>{{ forloop.counter }}</th>
-              <td>{{ done.name }}</td>
-              <td>{% if done.important == True %}○{% else %}×{% endif %}</td>
-              <td>{% if done.urgent == True %}○{% else %}×{% endif %}</td>
-              <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
-              <td>
-                <div class="dropdown">
-                  <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a class='btn btn-primary btn-block' href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
-                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
-                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
-                    <li><a class='btn btn-primary btn-block' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-          {% endfor %}
-    </tbody>
-  </table>
+  {% usemacro done_table "primary" %}
 {% endblock %}
 
 {% block content-sm %}
-  <h3>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></h3>
-  <canvas id="LineChart1" style="height:2vh; width:3vw"></canvas>
-  <script type="text/javascript">
-    var ctx = document.getElementById("LineChart1");
-    var weekdays = ['日','月','火','水','木','金','土'];
-    var label = [0,1,2,3,4,5,6]
-    var today = new Date();
-    for (let i = 0; i < 7; i++) {
-      var day = new Date();
-      day.setDate(today.getDate()-7+i);
-      label[i] = (day.getMonth()+1)+'/'+day.getDate()+'('+weekdays[day.getDay()]+')';
-    }
-    var LineChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: label,
-          datasets: [{
-            label: 'タスク完了数',
-            data: {{data}},
-            borderColor: "rgba(255,0,0,1)",
-            backgroundColor: "rgba(0,0,0,0)",
-            lineTension: 0
-          }],
-        },
-        options: {
-          title: {
-            display: true,
-            text: '今週のタスク完了状況',
-            elements: {
-              line: {
-                  tension: 0, // ベジェ曲線を無効にする
-              }
-            },
-            responsive: true,
-            maintainAspectRatio: false
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                // suggestedMax: 100,
-                suggestedMin: 0,
-                stepSize: 1,
-                // callback: function(value, index, values){
-                //   return  value +  '個'
-                // }
-              }
-            }]
-          },
-        }
-    });
-  </script>
+  {% usemacro report "h3" %}
+  {% usemacro graph "Linehart3" "2vh" "3vw" %}
 {% endblock %}
-
 {% block content2-sm %}
   <a class='btn btn-success btn-sm mr-2 mb-4 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
   <a class='btn btn-warning btn-sm mb-4 float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
-  <table class='table table-sm table-striped table-bordered text-center'>
-    <thead>
-      <tr class='table-primary'>
-          <th scope='col'></th>
-          <th class="w-50" scope='col'>タスク名</th>
-          <th scope='col'>要</th>
-          <th scope='col'>急</th>
-          <th class="w-25" scope='col'>完了</th>
-          <th class="w-25" scope='col'></th>
-      </tr>
-    </thead>
-    <tbody>
-        {% for done in week.tasks %}
-          <tr>
-            <th scope='row'>{{ forloop.counter }}</th>
-            <td>{{ done.name }}</td>
-            <td>{% if done.important == True %}○{% else %}×{% endif %}</td>
-            <td>{% if done.urgent == True %}○{% else %}×{% endif %}</td>
-            <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
-            <td>
-              <div class="dropdown">
-                <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a class='btn btn-primary btn-block' href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
-                  <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
-                  <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
-                  <li><a class='btn btn-primary btn-block' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
-                </ul>
-              </div>
-            </td>
-          </tr>
-        {% endfor %}
-    </tbody>
-  </table>
+  {% usemacro done_table "primary" %}
 {% endblock %}
 
 {% block content-xs %}
-  <h4>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></h4>
-  <canvas id="LineChart2" style="height:1vh; width:2vw"></canvas>
-  <script type="text/javascript">
-    var ctx = document.getElementById("LineChart2");
-    var weekdays = ['日','月','火','水','木','金','土'];
-    var label = [0,1,2,3,4,5,6]
-    var today = new Date();
-    for (let i = 0; i < 7; i++) {
-      var day = new Date();
-      day.setDate(today.getDate()-7+i);
-      label[i] = (day.getMonth()+1)+'/'+day.getDate()+'('+weekdays[day.getDay()]+')';
-    }
-    var LineChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: label,
-          datasets: [{
-            label: 'タスク完了数',
-            data: {{data}},
-            borderColor: "rgba(255,0,0,1)",
-            backgroundColor: "rgba(0,0,0,0)",
-            lineTension: 0
-          }],
-        },
-        options: {
-          title: {
-            display: true,
-            text: '今週のタスク完了状況',
-            elements: {
-              line: {
-                  tension: 0, // ベジェ曲線を無効にする
-              }
-            },
-            responsive: true,
-            maintainAspectRatio: false
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                // suggestedMax: 100,
-                suggestedMin: 0,
-                stepSize: 1,
-                // callback: function(value, index, values){
-                //   return  value +  '個'
-                // }
-              }
-            }]
-          },
-        }
-    });
-  </script>
+  {% usemacro report "h4" %}
+  {% usemacro graph "Linehart4" "1vh" "2vw" %}
 {% endblock %}
-
 {% block content2-xs %}
   <a class='btn btn-success btn-sm mr-2 mb-4 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
   <a class='btn btn-warning btn-sm mb-4 float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
-  <table class='table table-sm table-striped table-bordered text-center'>
-    <thead>
-      <tr class='table-primary'>
-            <th scope='col'></th>
-            <th class="w-50" scope='col'>タスク名</th>
-            <th scope='col'>要</th>
-            <th scope='col'>急</th>
-            <th class="w-25" scope='col'>完了</th>
-            <th class="w-25" scope='col'></th>
-      </tr>
-    </thead>
-    <tbody>
-          {% for done in week.tasks %}
-            <tr>
-              <th scope='row'>{{ forloop.counter }}</th>
-              <td>{{ done.name }}</td>
-              <td>{% if done.important == True %}○{% else %}×{% endif %}</td>
-              <td>{% if done.urgent == True %}○{% else %}×{% endif %}</td>
-              <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
-              <td>
-                <div class="dropdown">
-                  <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a class='btn btn-primary btn-block' href="{% url 'task:done_before' done.id %}">完了日を前へ</a></li>
-                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
-                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
-                    <li><a class='btn btn-primary btn-block' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-          {% endfor %}
-    </tbody>
-  </table>
+  {% usemacro done_table "primary" %}
 {% endblock %}

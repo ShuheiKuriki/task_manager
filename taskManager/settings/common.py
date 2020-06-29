@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.line',
     'taskManager',
     'bootstrap4',
+    'macros',
     'accounts.apps.AccountsConfig',
     'notify.apps.NotifyConfig',
     'task.apps.TaskConfig',

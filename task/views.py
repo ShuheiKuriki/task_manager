@@ -71,7 +71,7 @@ def list(request,pk):
             tom_infos.append(info)
     other = Taskinfo(name="明日以降",tasks=tasks.filter(when__gt=datetime.date.today()+datetime.timedelta(days=1)).order_by('when'))
     return render(request, 'task/list.html', {'today_infos':today_infos, 'today_num':today_num, 'tom_infos':tom_infos, 'tom_num':tom_num, 'other':other})
-
+    
 def done_list(request,pk):
     if request.user.pk != pk:
         return redirect('account_login')
