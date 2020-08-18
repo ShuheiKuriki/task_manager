@@ -1,6 +1,7 @@
 {% load macros %}
 {% macro book_top size %}
-  <{{size}}>本<a class='btn btn-warning float-right' href="{% url 'book:create' %}">本追加</a></{{size}}>
+  <{{size}}>本<a class='btn btn-warning ml-2 btn-sm float-right' href="{% url 'book:create' %}">本追加</a>
+  <a class='btn btn-success btn-sm float-right' href="{% url 'book:index' user.pk %}?next={{ request.get_full_path }}">本詳細</a></{{size}}>
 {% endmacro %}
 
 {% macro book_table thead_color btn_color %}

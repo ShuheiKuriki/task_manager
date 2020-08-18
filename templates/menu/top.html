@@ -6,7 +6,8 @@
 {% block content-xl-left %}
   {% usemacro top_message "h1" %}
   {% usemacro top_table "primary" "secondary" %}
-  {% usemacro top_buy_table "primary" "secondary" %}
+  {% usemacro top_shopping_message "h1" "mt-1" %}
+  {% usemacro top_buy_table "success" "secondary" %}
 {% endblock %}
 {% block content-xl-right %}
   {% usemacro book_top "h1" %}
@@ -31,7 +32,8 @@
   {% usemacro book_table "danger" "secondary" %}
 {% endblock %}
 {% block content3-sm %}
-  {% usemacro top_buy_table "danger" "secondary" %}
+  {% usemacro top_shopping_message "h3" "mt-1" %}
+  {% usemacro top_buy_table "success" "secondary" %}
 {% endblock %}
 {% block content-xs %}
     {% usemacro top_message "h3" "mt-1" %}
@@ -40,4 +42,8 @@
 {% block content2-xs %}
   {% usemacro book_top "h3" %}
   {% usemacro book_table "danger" "secondary" %}
+{% endblock %}
+{% block content3-xs %}
+  {% usemacro top_shopping_message "h3" "mt-1" %}
+  {% usemacro top_buy_table "success" "secondary" %}
 {% endblock %}
