@@ -107,7 +107,7 @@
 {% endmacro %}
 {% macro other_table color %}
   <table class='table table-sm table-striped text-center'>
-    {% if info.num > 0 %}
+    {% if other.num > 0 %}
     <thead>
       <tr class='table-{{color}}'>
         <th class=""></th>
@@ -147,7 +147,7 @@
 {% endmacro %}
 {% macro other_table_xs color %}
   <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped text-center'>
-    {% if info.num > 0 %}
+    {% if other.num > 0 %}
       <thead>
         <tr class='table-{{ color }}'>
           <th scope='col'></th>
