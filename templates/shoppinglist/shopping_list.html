@@ -15,15 +15,15 @@
   {% usemacro bought_table "danger" %}
 {% endblock %}
 {% block content-sm %}
-  <a class='btn btn-warning' href="{% url 'shoppinglist:create' %}">商品追加</a>
+  {% usemacro shopping_title "h3" %}
   {% usemacro buy_table "primary" "secondary" %}
   {% usemacro bought_table "danger" "secondary" %}
 {% endblock %}
 {% block content-xs %}
-  <a class='btn btn-warning' href="{% url 'shoppinglist:create' %}">商品追加</a>
+  {% usemacro shopping_title "h3" %}
   {% usemacro buy_table "primary" "secondary" %}
   {% usemacro bought_table "danger" "secondary" %}
 {% endblock %}
 {% block content4 %}
-  <a class='btn btn-warning d-block d-md-none' href="{% url 'shoppinglist:create' %}">商品追加</a>
+  <a class='btn btn-success d-block d-md-none' href="{% url 'shoppinglist:create' %}">商品追加</a>
 {% endblock %}

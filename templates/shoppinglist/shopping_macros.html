@@ -3,6 +3,9 @@
   <{{size}}>買い物<a class='btn btn-warning ml-2 {{margin}} btn-sm float-right' href="{% url 'shoppinglist:create' %}?next={{ request.get_full_path }}">商品追加</a>
   <a class='btn btn-success btn-sm {{margin}} float-right' href="{% url 'shoppinglist:index' user.pk %}?next={{ request.get_full_path }}">買い物詳細</a></{{size}}>
 {% endmacro %}
+{% macro shopping_title size %}
+  <{{size}}>買い物<a class='btn btn-warning btn-sm float-right' href="{% url 'shoppinglist:create' %}?next={{ request.get_full_path }}">商品追加</a></{{size}}>
+{% endmacro %}
 {% macro buy_table thead_color btn_color %}
   {% for info in infos %}
     {% if info.num > 0 %}

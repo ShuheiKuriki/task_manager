@@ -10,7 +10,7 @@
 {% block content-xl-right %}
   <h2>今週の完了タスク<a class='btn btn-warning btn-sm mb-3 float-right' href="{% url 'task:list' user.pk %}">タスクページ</a>
   <a class='btn btn-success btn-sm mr-2 mb-3 float-right' href="{% url 'task:done_create' %}">完了タスク追加</a></h2>
-  {% usemacro done_table "primary" %}
+  {% usemacro done_table "primary" "secondary" %}
 {% endblock %}
 
 {% block content-md-left %}
@@ -23,7 +23,7 @@
     <a class='btn btn-warning btn-sm mb-3 float-right' href="{% url 'task:list' user.pk %}">タスクページ</a>
     <a class='btn btn-success btn-sm mr-2 mb-3 float-right' href="{% url 'task:done_create' %}">完了タスク追加</a>
   </div>
-  {% usemacro done_table "primary" %}
+  {% usemacro done_table "primary" "secondary" %}
 {% endblock %}
 
 {% block content-sm %}
@@ -33,7 +33,7 @@
 {% block content2-sm %}
   <a class='btn btn-success btn-sm mr-2 mb-4 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
   <a class='btn btn-warning btn-sm mb-4 float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
-  {% usemacro done_table "primary" %}
+  {% usemacro done_table "primary" "secondary" %}
 {% endblock %}
 
 {% block content-xs %}
@@ -43,5 +43,5 @@
 {% block content2-xs %}
   <a class='btn btn-success btn-sm mr-2 mb-4 float-left' href="{% url 'task:done_create' %}">完了タスク追加</a>
   <a class='btn btn-warning btn-sm mb-4 float-left' href="{% url 'task:list' user.pk %}">タスクページ</a>
-  {% usemacro done_table "primary" %}
+  {% usemacro done_table "primary" "secondary" %}
 {% endblock %}
