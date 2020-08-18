@@ -1,0 +1,8 @@
+{% extends "base/form_base.html" %}
+{% block title3 %}編集フォーム{% endblock %}
+{% block h2 %}編集フォーム{% endblock %}
+{% block form %}
+  {{ form.as_p }}
+  <button class="btn btn-info btn-block mt-5 mb-4" type="submit">更新</button>
+  <a class="btn btn-success btn-block text-light" href="{% url 'shoppinglist:index' %}">編集をやめて戻る</a>
+{% endblock%}

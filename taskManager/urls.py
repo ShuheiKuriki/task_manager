@@ -25,11 +25,13 @@ urlpatterns = [
     path('notify/', include('notify.urls')),
     path('task/', include('task.urls')),
     path('book/', include('book.urls')),
+    path('shoppinglist/', include('shoppinglist.urls')),
     # path('auth/', include('allauth.urls')),     # 追加
 
-    # 全ユーザー共通のページを表示
+    #全ユーザー共通のページを表示
     path('', views.IndexView.as_view(), name='index'),
     path('sample', views.IndexSampleView.as_view(),name='sample'),
+    #トップページ
     path('<int:pk>/top', views.top ,name='top'),
 ]
 

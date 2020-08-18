@@ -1,9 +1,12 @@
 {% extends "base/user_base.html" %}
-{% load macros %} {% loadmacros "task/macros.html" %}
+{% load macros %} {% loadmacros "task/task_macros.html" %}
+{% load macros %} {% loadmacros "shoppinglist/shopping_macros.html" %}
+{% load macros %} {% loadmacros "book/book_macros.html" %}
 {% block title %}トップページ{% endblock %}
 {% block content-xl-left %}
   {% usemacro top_message "h1" %}
   {% usemacro top_table "primary" %}
+  {% usemacro top_buy_table "primary" %}
 {% endblock %}
 {% block content-xl-right %}
   {% usemacro book_top "h1" %}
@@ -12,6 +15,8 @@
 {% block content-md-left %}
   {% usemacro top_message "h2" "mt-1" %}
   {% usemacro top_table "primary" %}
+  {% usemacro top_shopping_message "h2" "mt-1" %}
+  {% usemacro top_buy_table "success" %}
 {% endblock %}
 {% block content-md-right %}
   {% usemacro book_top "h2" %}
@@ -24,6 +29,9 @@
 {% block content2-sm %}
   {% usemacro book_top "h3" %}
   {% usemacro book_table "danger" %}
+{% endblock %}
+{% block content3-sm %}
+  {% usemacro top_buy_table "danger" %}
 {% endblock %}
 {% block content-xs %}
     {% usemacro top_message "h3" "mt-1" %}

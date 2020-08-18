@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'notify.apps.NotifyConfig',
     'task.apps.TaskConfig',
     'book.apps.BookConfig',
+    'shoppinglist.apps.ShoppinglistConfig',
 ]
 
 MIDDLEWARE = [

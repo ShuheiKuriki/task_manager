@@ -3,6 +3,8 @@ from django.views.generic import TemplateView
 from book.views import Bookinfo
 from book.models import Book
 from taskManager.models import Task
+from shoppinglist.models import Shopping
+from shoppinglist.views import Shoppinginfo
 import datetime
 from datetime import date
 
@@ -42,4 +44,11 @@ def top(request,pk):
     for genre in genres:
         book_info = Bookinfo(name=genre, books=books.filter(genre=genre).order_by('order'))
         book_infos.append(book_info)
-    return render(request, 'menu/top.html', {'todo':todo, 'book_infos':book_infos})
+    shoppings = Shopping.objects.filter(user=request.user)
+    past_shoppings = shoppings.filter(buy_date__lt=date.today())
+    for past_shopping in past_shoppings:
+        past_shopping.buy_date = date.today()
+        past_shopping.save()
+    not_buy = shoppings.filter(buy_or_not=False)
+    shopping = Shoppinginfo(name="今日", day=0,shoppings=not_buy.filter(buy_date=date.today()).order_by('shop'))
+    return render(request, 'menu/top.html', {'todo':todo, 'infos':book_infos,'shopping':shopping})

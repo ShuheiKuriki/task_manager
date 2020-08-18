@@ -30,6 +30,7 @@
 {% macro table color ids %}
   <table class='table table-sm table-striped text-center'>
     <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
+    {% if info.num > 0 %}
     <thead>
       <tr class='table-{{color}}'>
         <th class=""></th>
@@ -64,45 +65,49 @@
         </tr>
       {% endfor %}
     </tbody>
+    {% endif %}
   </table>
 {% endmacro %}
 {% macro table_xs color ids %}
   <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped text-center'>
     <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
-    <thead>
-      <tr class='table-{{ color }}'>
-        <th scope='col'></th>
-        <th class="w-75">タスク名</th>
-        <th class="w-25" scope='col'>期限</th>
-        <th class="w-25" scope='col'>メニュー</th>
-      </tr>
-    </thead>
-    <tbody id="sort_{{ ids }}{{ forloop.counter }}">
-      {% for task in info.tasks %}
-        <tr id="task_{{ task.id }}">
-          <th class='{% if task.expired %}text-danger{% endif %}' name='num_data' scope='row'>{{ forloop.counter }}</th>
-          <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-          <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
-          <td><div class="dropdown">
-            <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-            <ul class="dropdown-menu" role="menu">
-              <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
-              <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
-              <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
-              <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}?next={{ request.get_full_path }}" onclick=done_alert()>完了</a></li>
-              <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
-              <li><form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
-                <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
-              </form></li>
-            </ul>
-          </div></td>
+    {% if info.num > 0 %}
+      <thead>
+        <tr class='table-{{ color }}'>
+          <th scope='col'></th>
+          <th class="w-75">タスク名</th>
+          <th class="w-25" scope='col'>期限</th>
+          <th class="w-25" scope='col'>メニュー</th>
         </tr>
-      {% endfor %}
-    </tbody>
+      </thead>
+      <tbody id="sort_{{ ids }}{{ forloop.counter }}">
+        {% for task in info.tasks %}
+          <tr id="task_{{ task.id }}">
+            <th class='{% if task.expired %}text-danger{% endif %}' name='num_data' scope='row'>{{ forloop.counter }}</th>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+            <td><div class="dropdown">
+              <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+              <ul class="dropdown-menu" role="menu">
+                <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
+                <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
+                <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
+                <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}?next={{ request.get_full_path }}" onclick=done_alert()>完了</a></li>
+                <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                <li><form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
+                  <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+                </form></li>
+              </ul>
+            </div></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    {% endif %}
   </table>
 {% endmacro %}
 {% macro other_table color %}
   <table class='table table-sm table-striped text-center'>
+    {% if info.num > 0 %}
     <thead>
       <tr class='table-{{color}}'>
         <th class=""></th>
@@ -137,40 +142,43 @@
         </tr>
       {% endfor %}
     </tbody>
+    {% endif %}
   </table>
 {% endmacro %}
 {% macro other_table_xs color %}
   <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped text-center'>
-    <thead>
-      <tr class='table-{{ color }}'>
-        <th scope='col'></th>
-        <th class="w-75">タスク名</th>
-        <th class="w-25" scope='col'>期限</th>
-        <th class="w-25" scope='col'>メニュー</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for task in other.tasks %}
-        <tr>
-          <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>{{ task.when.month }}/{{ task.when.day }}</th>
-          <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-          <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
-          <td><div class="dropdown">
-            <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-            <ul class="dropdown-menu" role="menu">
-              <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
-              <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
-              <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
-              <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
-              <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
-              <li><form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
-                <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
-              </form></li>
-            </ul>
-          </div></td>
+    {% if info.num > 0 %}
+      <thead>
+        <tr class='table-{{ color }}'>
+          <th scope='col'></th>
+          <th class="w-75">タスク名</th>
+          <th class="w-25" scope='col'>期限</th>
+          <th class="w-25" scope='col'></th>
         </tr>
-      {% endfor %}
-    </tbody>
+      </thead>
+      <tbody>
+        {% for task in other.tasks %}
+          <tr>
+            <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>{{ task.when.month }}/{{ task.when.day }}</th>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+            <td><div class="dropdown">
+              <button type="button" class="btn-xs btn-secondary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+              <ul class="dropdown-menu" role="menu">
+                <li><a class='btn btn-primary btn-block' href="{% url 'task:later' task.id %}?next={{ request.get_full_path }}">実行日を翌日に</a></li>
+                <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_before' task.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
+                <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:period_after' task.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
+                <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done' task.id %}" onclick=done_alert()>完了</a></li>
+                <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:update' task.id %}?next={{ request.get_full_path }}">編集</a></li>
+                <li><form method="post" action="{% url 'task:delete' task.id %}?next={{ request.get_full_path }}">{% csrf_token %}
+                  <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+                </form></li>
+              </ul>
+            </div></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    {% endif %}
   </table>
 {% endmacro %}
 {% macro done_table color %}
@@ -210,6 +218,7 @@
 {% macro top_table color %}
   <table class='table table-sm table-striped text-center'>
     <caption>今日 {{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
+    {% if todo.num > 0 %}
     <thead>
       <tr class='table-{{color}}'>
         <th class=""></th>
@@ -242,11 +251,13 @@
         </tr>
       {% endfor %}
     </tbody>
+    {% endif %}
   </table>
 {% endmacro %}
 {% macro top_table_xs color %}
   <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped text-center'>
     <caption>今日 {{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
+    {% if todo.num > 0 %}
     <thead>
       <tr class='table-{{color}}'>
         <th scope='col'></th>
@@ -275,6 +286,7 @@
         </tr>
       {% endfor %}
     </tbody>
+    {% endif %}
   </table>
 {% endmacro %}
 {% macro book_table color %}

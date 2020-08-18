@@ -27,10 +27,22 @@
                 <li class="nav-item">
                     <a href="{% url 'task:create' %}?next={{ request.get_full_path }}" class="nav-link">タスク追加</a>
                 </li>
+                <li class="nav-item">
+                    <a href="{% url 'shoppinglist:create' %}?next={{ request.get_full_path }}" class="nav-link">商品追加</a>
+                </li>
             </ul>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item {% block active_today %}{% endblock %}">
                     <a class="nav-link" href="{% url 'task:list' user.pk %}">タスク</a>
+                </li>
+                <li class="nav-item {% block active_routine %}{% endblock %}">
+                    <a class="nav-link" href="{% url 'task:list' user.pk %}">ルーチン</a>
+                </li>
+                <li class="nav-item {% block active_shopping %}{% endblock %}">
+                    <a class="nav-link" href="{% url 'shoppinglist:index' user.pk %}">買い物</a>
+                </li>
+                <li class="nav-item {% block active_book %}{% endblock %}">
+                    <a class="nav-link" href="{% url 'book:index' user.pk %}">本</a>
                 </li>
                 <li class="nav-item {% block active_done %}{% endblock %}">
                     <a class="nav-link" href="{% url 'task:done_list' user.pk %}">レポート</a>

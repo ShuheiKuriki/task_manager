@@ -1,129 +1,26 @@
 {% extends "base/user_base.html" %}
+{% load macros %} {% loadmacros "book/book_macros.html" %}
 {% block active_book %}active{% endblock %}
-{% block content %}
-<a class='btn btn-warning d-block d-md-none my-4' href="{% url 'book:create' %}">本追加</a>
+{% block content-xl-left %}
+  <a class='btn btn-warning' href="{% url 'book:create' %}">本追加</a>
+  {% usemacro book_table "primary" %}
 {% endblock %}
-{% block content2 %}
-  <!-- md -->
-  <div class='container d-none d-md-block'>
-    <div class='row'>
-      <div class='col-md-6'>
-        {% for info in infos %}
-        {% if info.num > 0 %}
-          <table class='table table-sm table-striped text-center'>
-            <caption>{{info.name}} : {{info.num}}冊</caption>
-            <thead>
-              <tr class='table-primary'>
-                <th class=""></th>
-                <th class="w-50">タイトル</th>
-                <th class="w-25">期限</th>
-                <th class="w-25">メニュー</th>
-              </tr>
-            </thead>
-            <tbody id='sortable{{ forloop.counter |add:"15" }}'>
-              {% for book in info.books %}
-                <tr id="book_{{ book.id }}">
-                  <th class='{% if book.expired %}text-danger{% endif %}' name="num_data" scope='row'>{{ forloop.counter }}</th>
-                  <td class='{% if book.expired %}text-danger{% endif %}'>{{ book.title }}</td>
-                  <td class='{% if book.expired %}text-danger{% endif %}'>{{ book.deadline.month }}/{{ book.deadline.day }}</td>
-                  <td><div class="dropdown">
-                    <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a class='btn btn-primary btn-block' href="{% url 'book:later' book.id %}">期限を翌日に</a></li>
-                      <li><a class='btn btn-primary btn-block my-1' href="{% url 'book:read' book.id %}" onclick=done_alert()>読了</a></li>
-                      <li><a class='btn btn-primary btn-block my-1' href="{% url 'book:update' book.id %}">編集</a></li>
-                      <li>
-                        <form method="post" action="{% url 'book:delete' book.id %}">{% csrf_token %}
-                          <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
-                        </form>
-                      </li>
-                    </ul>
-                  </div></td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        {% endif %}
-      {% endfor %}
-        </div>
-        <div class='col-md-1'>
-        </div>
-        <div class='col-md-5'>
-          <a class='btn btn-warning btn-block my-4' href="{% url 'book:create' %}">本追加</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- sm -->
-    {% for info in infos %}
-      {% if info.num > 0 %}
-        <table class='table table-sm table-striped d-none d-sm-block d-md-none text-center'>
-          <caption>{{info.name}} : {{info.num}}個</caption>
-          <thead>
-            <tr class='table-primary'>
-              <th class=""></th>
-              <th class="w-50">タイトル</th>
-              <th class="w-25">期限</th>
-              <th class="w-25">メニュー</th>
-            </tr>
-          </thead>
-          <tbody id='sortable{{ forloop.counter|add:"20" }}'>
-            {% for book in info.books %}
-              <tr id="book_{{ book.id }}">
-                <th class='{% if book.expired %}text-danger{% endif %}' name="num_data2" scope='row'>{{ forloop.counter }}</th>
-                <td class='{% if book.expired %}text-danger{% endif %}'>{{ book.title }}</td>
-                <td class='{% if book.expired %}text-danger{% endif %}'>{{ book.deadline.month }}/{{ book.deadline.day }}</td>
-                <td><div class="dropdown">
-                  <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a class='btn btn-primary btn-block' href="{% url 'book:later' book.id %}">期限を翌日に</a></li>
-                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'book:read' book.id %}" onclick=done_alert()>読了</a></li>
-                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'book:update' book.id %}">編集</a></li>
-                    <li>
-                      <form method="post" action="{% url 'book:delete' book.id %}">{% csrf_token %}
-                        <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
-                      </form>
-                    </li>
-                  </ul>
-                </div></td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-    <!-- xs -->
-        <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped d-block d-sm-none text-center'>
-          <caption>{{info.name}} : {{info.num}}個</caption>
-          <thead>
-            <tr class='table-primary'>
-              <th class=""></th>
-              <th class="w-50">タイトル</th>
-              <th class="w-25">期限</th>
-              <th class="w-25">メニュー</th>
-            </tr>
-          </thead>
-          <tbody id='sortable{{ forloop.counter |add:"25" }}'>
-            {% for book in info.books %}
-              <tr id="book_{{ book.id }}">
-                <th class='{% if book.expired %}text-danger{% endif %}' name="num_data3" scope='row'>{{ forloop.counter }}</th>
-                <td class='{% if book.expired %}text-danger{% endif %}'>{{ book.title }}</td>
-                <td class='{% if book.expired %}text-danger{% endif %}'>{{ book.deadline.month }}/{{ book.deadline.day }}</td>
-                <td><div class="dropdown">
-                  <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a class='btn btn-primary btn-block' href="{% url 'book:later' book.id %}">期限を翌日に</a></li>
-                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'book:read' book.id %}" onclick=done_alert()>読了</a></li>
-                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'book:update' book.id %}">編集</a></li>
-                    <li>
-                      <form method="post" action="{% url 'book:delete' book.id %}">{% csrf_token %}
-                        <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
-                      </form>
-                    </li>
-                  </ul>
-                </div></td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      {% endif %}
-    {% endfor %}
+{% block content-xl-right %}
+{% endblock %}
+{% block content-md-left %}
+  <a class='btn btn-warning' href="{% url 'book:create' %}">本追加</a>
+  {% usemacro book_table "primary" %}
+{% endblock %}
+{% block content-md-right %}
+{% endblock %}
+{% block content-sm %}
+  <a class='btn btn-warning' href="{% url 'book:create' %}">本追加</a>
+  {% usemacro book_table "primary" %}
+{% endblock %}
+{% block content-xs %}
+  <a class='btn btn-warning' href="{% url 'book:create' %}">本追加</a>
+  {% usemacro book_table "primary" %}
+{% endblock %}
+{% block content4 %}
+  <a class='btn btn-warning d-block d-md-none' href="{% url 'book:create' %}">本追加</a>
 {% endblock %}

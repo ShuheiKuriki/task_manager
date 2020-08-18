@@ -21,6 +21,20 @@ class Bookinfo:
         self.books = books
         self.num = len(books)
 
+def index(request,pk):
+    if request.user.pk != pk:
+        return redirect('account_login')
+    books = Book.objects.filter(user=request.user, done_or_not = False)
+    for book in books:
+        book.expired = True if book.deadline<date.today() else False
+        book.save()
+    book_infos = []
+    genres = ["アカデミック","テクノロジー","ビジネス","自己啓発","小説"]
+    for genre in genres:
+        book_info = Bookinfo(name=genre, books=books.filter(genre=genre).order_by('order'))
+        book_infos.append(book_info)
+    return render(request, 'book/book_list.html', {'infos':book_infos})
+
 @method_decorator(login_required, name='dispatch')
 class BookCreateView(CreateView):
     form_class = BookForm
