@@ -3,26 +3,26 @@
 {% block title %}買い物リスト{% endblock %}
 {% block active_shopping %}active{% endblock %}
 {% block content-xl-left %}
-  {% usemacro buy_table "primary" %}
+  {% usemacro buy_table "primary" "secondary" %}
 {% endblock %}
 {% block content-xl-right %}
-  {% usemacro bought_table "danger" %}
+  {% usemacro bought_table "danger" "secondary" %}
 {% endblock %}
 {% block content-md-left %}
-  {% usemacro buy_table "primary" %}
+  {% usemacro buy_table "primary" "secondary" %}
 {% endblock %}
 {% block content-md-right %}
   {% usemacro bought_table "danger" %}
 {% endblock %}
 {% block content-sm %}
   <a class='btn btn-warning' href="{% url 'shoppinglist:create' %}">商品追加</a>
-  {% usemacro buy_table "primary" %}
-  {% usemacro bought_table "danger" %}
+  {% usemacro buy_table "primary" "secondary" %}
+  {% usemacro bought_table "danger" "secondary" %}
 {% endblock %}
 {% block content-xs %}
   <a class='btn btn-warning' href="{% url 'shoppinglist:create' %}">商品追加</a>
-  {% usemacro buy_table "primary" %}
-  {% usemacro bought_table "danger" %}
+  {% usemacro buy_table "primary" "secondary" %}
+  {% usemacro bought_table "danger" "secondary" %}
 {% endblock %}
 {% block content4 %}
   <a class='btn btn-warning d-block d-md-none' href="{% url 'shoppinglist:create' %}">商品追加</a>

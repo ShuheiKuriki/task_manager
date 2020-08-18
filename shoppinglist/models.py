@@ -9,7 +9,7 @@ class Shopping(models.Model):
     price = models.IntegerField('価格', default=0, blank=True, null=True)
     count = models.IntegerField('個数', default=1)
     date = models.DateField('最後に買った日', default=now)
-    buy_date = models.DateField('買う日', default=now, null=True)
+    buy_date = models.DateField('買う日', default=now)
     past = models.IntegerField('経過日数', blank=True, null=True)
     buy_or_not = models.BooleanField('購入済', default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

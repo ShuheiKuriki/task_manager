@@ -6,69 +6,69 @@
 {% block content-xl-left %}
   {% usemacro today_message "h2" %}
   {% for info in today_infos %}
-    {% usemacro table "primary" "today_xl" %}
+    {% usemacro table "primary" "secondary" "today_xl" %}
   {% endfor %}
 {% endblock %}
 {% block content-xl-right %}
   {% usemacro tom_message "h2" %}
   {% for info in tom_infos %}
-    {% usemacro table "danger" "tom_xl" %}
+    {% usemacro table "danger" "secondary" "tom_xl" %}
   {% endfor %}
   {% usemacro other_message "h2" %}
-  {% usemacro other_table "danger" %}
+  {% usemacro other_table "danger" "secondary" %}
 {% endblock %}
 
 {% block content-md-left %}
   {% usemacro today_message "h3" %}
   {% for info in today_infos %}
-    {% usemacro table_xs "primary" "today_md" %}
+    {% usemacro table_xs "primary" "secondary" "today_md" %}
   {% endfor %}
 {% endblock %}
 {% block content-md-right %}
   {% usemacro tom_message "h3" %}
   {% for info in tom_infos %}
-    {% usemacro table_xs "danger" "tom_md" %}
+    {% usemacro table_xs "danger" "secondary" "tom_md" %}
   {% endfor %}
   {% usemacro other_message "h3" %}
-  {% usemacro other_table_xs "danger" %}
+  {% usemacro other_table_xs "danger" "secondary" %}
 {% endblock %}
 
 {% block content-sm %}
   <a class='btn btn-warning float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h4>
   {% usemacro today_message "h4" %}
   {% for info in today_infos %}
-    {% usemacro table "primary" "today_sm" %}
+    {% usemacro table "primary" "secondary" "today_sm" %}
   {% endfor %}
 {% endblock %}
 {% block content2-sm %}
   <a class='btn btn-warning float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
   {% usemacro tom_message "h4" %}
   {% for info in tom_infos %}
-    {% usemacro table "danger" "tom_sm" %}
+    {% usemacro table "danger" "secondary" "tom_sm" %}
   {% endfor %}
 {% endblock %}
 {% block content3-sm %}
   <a class='btn btn-warning float-right mb-3' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
   {% usemacro other_message "h4" %}
-  {% usemacro other_table "success" %}
+  {% usemacro other_table "success" "secondary" %}
 {% endblock %}
 
 {% block content-xs %}
   <a class='btn btn-sm btn-warning float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a></h4>
   {% usemacro today_message "h5" %}
   {% for info in today_infos %}
-    {% usemacro table_xs "primary" "today_xs" %}
+    {% usemacro table_xs "primary" "secondary" "today_xs" %}
   {% endfor %}
 {% endblock %}
 {% block content2-xs %}
   <a class='btn btn-sm btn-warning float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
   {% usemacro tom_message "h5" %}
   {% for info in tom_infos %}
-    {% usemacro table_xs "danger" "tom_xs" %}
+    {% usemacro table_xs "danger" "secondary" "tom_xs" %}
   {% endfor %}
 {% endblock %}
 {% block content3-xs %}
   <a class='btn btn-sm btn-warning float-right mb-3' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
   {% usemacro other_message "h5" %}
-  {% usemacro other_table_xs "success" %}
+  {% usemacro other_table_xs "success" "secondary" %}
 {% endblock %}

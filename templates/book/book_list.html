@@ -3,23 +3,23 @@
 {% block active_book %}active{% endblock %}
 {% block content-xl-left %}
   <a class='btn btn-warning' href="{% url 'book:create' %}">本追加</a>
-  {% usemacro book_table "primary" %}
+  {% usemacro book_table "primary" "secondary" %}
 {% endblock %}
 {% block content-xl-right %}
 {% endblock %}
 {% block content-md-left %}
   <a class='btn btn-warning' href="{% url 'book:create' %}">本追加</a>
-  {% usemacro book_table "primary" %}
+  {% usemacro book_table "primary" "secondary" %}
 {% endblock %}
 {% block content-md-right %}
 {% endblock %}
 {% block content-sm %}
   <a class='btn btn-warning' href="{% url 'book:create' %}">本追加</a>
-  {% usemacro book_table "primary" %}
+  {% usemacro book_table "primary" "secondary" %}
 {% endblock %}
 {% block content-xs %}
   <a class='btn btn-warning' href="{% url 'book:create' %}">本追加</a>
-  {% usemacro book_table "primary" %}
+  {% usemacro book_table "primary" "secondary" %}
 {% endblock %}
 {% block content4 %}
   <a class='btn btn-warning d-block d-md-none' href="{% url 'book:create' %}">本追加</a>

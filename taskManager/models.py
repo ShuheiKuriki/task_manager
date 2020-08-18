@@ -7,15 +7,15 @@ class Task(models.Model):
     choices=[(i,period) for i,period in enumerate(periods)]
 
     name = models.CharField('タスク名', max_length=256, blank=True)
-    deadline = models.DateField('期限', default=now, blank=True, null=True)
+    deadline = models.DateField('期限', default=now)
     important = models.BooleanField('重要', default=False)
     expired = models.BooleanField('期限切れ', default=False)
     urgent = models.BooleanField('緊急', default=False)
-    when = models.DateField('実行予定日', default=now, blank=True)
+    when = models.DateField('実行予定日', default=now)
     period = models.IntegerField('時間帯', choices=choices, default=0)
 
     done_or_not = models.BooleanField(default=False)
-    done_date = models.DateField('完了した日', default=now, blank=True, null=True)
+    done_date = models.DateField('完了した日', default=now)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order = models.IntegerField('順番', default=0)
 
