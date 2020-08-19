@@ -3,12 +3,14 @@
 {% block title %}買い物リスト{% endblock %}
 {% block active_shopping %}active{% endblock %}
 {% block content-xl-left %}
+  {% usemacro shopping_title "h1" %}
   {% usemacro buy_table "primary" "secondary" %}
 {% endblock %}
 {% block content-xl-right %}
   {% usemacro bought_table "danger" "secondary" %}
 {% endblock %}
 {% block content-md-left %}
+  {% usemacro shopping_title "h2" %}
   {% usemacro buy_table "primary" "secondary" %}
 {% endblock %}
 {% block content-md-right %}

@@ -69,86 +69,96 @@
   {% comment %} content-xl {% endcomment %}
     <div class="container d-none d-xl-block">
       <div class='row'>
-        <div class="col-6 my-4">
-          {% block content-xl-left %}
-          {% endblock %}
+        <div class="col-6">
+          <div class="my-4">
+            {% block content-xl-left %}
+            {% endblock %}
+          </div>
+          <div class="my-4">
+            {% block content2-xl-left %}
+            {% endblock %}
+          </div>
         </div>
-        <div class="col-6 my-4">
-          {% block content-xl-right %}
-          {% endblock %}
+        <div class="col-6">
+          <div class="my-4">
+            {% block content-xl-right %}
+            {% endblock %}
+          </div>
+          <div class="my-4">
+            {% block content2-xl-right %}
+            {% endblock %}
+          </div>
         </div>
       </div>
     </div>
   {% comment %} content-md {% endcomment %}
     <div class="container d-none d-md-block d-xl-none">
       <div class='row'>
-        <div class="col-6 my-4">
-          {% block content-md-left %}
-          {% endblock %}
+        <div class="col-6">
+          <div class="my-4">
+            {% block content-md-left %}
+            {% endblock %}
+          </div>
+          <div class="my-4">
+            {% block content2-md-left %}
+            {% endblock %}
+          </div>
         </div>
-        <div class="col-6 my-4">
-          {% block content-md-right %}
-          {% endblock %}
+        <div class="col-6">
+          <div class="my-4">
+            {% block content-md-right %}
+            {% endblock %}
+          </div>
+          <div class="my-4">
+            {% block content2-md-right %}
+            {% endblock %}
+          </div>
         </div>
       </div>
     </div>
-
-  {% comment %} conent-sm {% endcomment %}
+  {% comment %} content-sm {% endcomment %}
     <div class="container d-none d-sm-block d-md-none">
         <div class="my-4">
           {% block content-sm %}
           {% endblock %}
         </div>
     </div>
-  {% comment %} conent-xs {% endcomment %}
+  {% comment %} content-xs {% endcomment %}
     <div class="container d-block d-sm-none">
         <div class="my-4">
           {% block content-xs %}
           {% endblock %}
         </div>
     </div>
-  {% comment %} conent2-md {% endcomment %}
-    <div class="container d-none d-md-block">
-      <div class='row'>
-        <div class="my-4 col-md-6">
-          {% block content2-md-left %}
-          {% endblock %}
-        </div>
-        <div class="my-4 col-md-6">
-          {% block content2-md-right %}
-          {% endblock %}
-        </div>
-      </div>
-    </div>
-  {% comment %} conent2-sm {% endcomment %}
+  {% comment %} content2-sm {% endcomment %}
     <div class="container d-none d-sm-block d-md-none">
       <div class="my-4">
         {% block content2-sm %}
         {% endblock %}
       </div>
     </div>
-  {% comment %} conent2-xs {% endcomment %}
+  {% comment %} content2-xs {% endcomment %}
     <div class="container d-block d-sm-none">
       <div class="my-4">
         {% block content2-xs %}
         {% endblock %}
       </div>
     </div>
-  {% comment %} conent3-sm {% endcomment %}
+  {% comment %} content3-sm {% endcomment %}
     <div class="container d-none d-sm-block d-md-none">
       <div class="my-4">
         {% block content3-sm %}
         {% endblock %}
       </div>
     </div>
-  {% comment %} conent3-xs {% endcomment %}
+  {% comment %} content3-xs {% endcomment %}
     <div class="container d-block d-sm-none">
       <div class="my-4">
         {% block content3-xs %}
         {% endblock %}
       </div>
     </div>
-  {% comment %} conent4 {% endcomment %}
+  {% comment %} content4 {% endcomment %}
     <div class="container">
       <div class="my-4">
         {% block content4 %}
