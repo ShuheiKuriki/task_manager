@@ -7,3 +7,4 @@ bin
 .envrc
 .ipynb
 pyvenv.cfg
+.vscode/

@@ -1,0 +1,64 @@
+{% extends "base/user_base.html" %}
+{% load macros %} {% loadmacros "task/task_macros.html" %}
+{% block title %}ルーティンページ{% endblock %}
+{% block active_routine %}active{% endblock %}
+
+{% block content-xl-left %}
+  {% usemacro daily_routine "h2" "mt-1" %}
+  {% for info in daily_infos %}
+    {% usemacro routine_table "primary" "secondary" %}
+  {% endfor %}
+{% endblock %}
+{% block content-xl-right %}
+  {% usemacro weekly_routine "h2" "mt-1" %}
+  {% for day_infos in weekly_infos %}
+    {% for info in day_infos %}
+      {% usemacro routine_table "danger" "secondary" %}
+    {% endfor %}
+  {% endfor %}
+{% endblock %}
+
+{% block content-md-left %}
+  {% usemacro daily_routine "h3" "mt-1" %}
+  {% for info in daily_infos %}
+    {% usemacro routine_table "primary" "secondary" %}
+  {% endfor %}
+{% endblock %}
+{% block content-md-right %}
+  {% usemacro weekly_routine "h3" "mt-1" %}
+  {% for day_infos in weekly_infos %}
+    {% for info in day_infos %}
+      {% usemacro routine_table "danger" "secondary" %}
+    {% endfor %}
+  {% endfor %}
+{% endblock %}
+
+{% block content-sm %}
+  {% usemacro daily_routine "h4" %}
+  {% for info in daily_infos %}
+    {% usemacro routine_table "primary" "secondary" %}
+  {% endfor %}
+{% endblock %}
+{% block content2-sm %}
+  {% usemacro weekly_routine "h4" "mt-1" %}
+  {% for day_infos in weekly_infos %}
+    {% for info in day_infos %}
+      {% usemacro routine_table "danger" "secondary" %}
+    {% endfor %}
+  {% endfor %}
+{% endblock %}
+
+{% block content-xs %}
+  {% usemacro daily_routine "h5" %}
+  {% for info in daily_infos %}
+    {% usemacro routine_table "primary" "secondary" %}
+  {% endfor %}
+{% endblock %}
+{% block content2-xs %}
+  {% usemacro weekly_routine "h5" "mt-1" %}
+  {% for day_infos in weekly_infos %}
+    {% for info in day_infos %}
+      {% usemacro routine_table "danger" "secondary" %}
+    {% endfor %}
+  {% endfor %}
+{% endblock %}

@@ -36,7 +36,7 @@
                     <a class="nav-link" href="{% url 'task:list' user.pk %}">タスク</a>
                 </li>
                 <li class="nav-item {% block active_routine %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'task:list' user.pk %}">ルーチン</a>
+                    <a class="nav-link" href="{% url 'task:routine_list' user.pk %}">ルーティン</a>
                 </li>
                 <li class="nav-item {% block active_shopping %}{% endblock %}">
                     <a class="nav-link" href="{% url 'shoppinglist:index' user.pk %}">買い物</a>

@@ -20,6 +20,12 @@
   <{{size}}>タスク<a class='btn btn-warning ml-2 {{margin}} btn-sm float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
   <a class='btn btn-success btn-sm {{margin}} float-right' href="{% url 'task:list' user.pk %}?next={{ request.get_full_path }}">タスク詳細</a></{{size}}>
 {% endmacro %}
+{% macro daily_routine size margin %}
+  <{{size}}>1日のルーティン<a class='btn btn-warning ml-2 {{margin}} btn-sm float-right' href="{% url 'task:routine_create' %}?next={{ request.get_full_path }}">ルーティン追加</a>
+{% endmacro %}
+{% macro weekly_routine size margin %}
+  <{{size}}>1週間のルーティン<a class='btn btn-warning ml-2 {{margin}} btn-sm float-right' href="{% url 'task:routine_create' %}?next={{ request.get_full_path }}">ルーティン追加</a>
+{% endmacro %}
 {% macro report size %}
   <{{size}}>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></{{size}}>
 {% endmacro %}
@@ -205,6 +211,41 @@
               <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_after' done.id %}">完了日を後へ</a></li>
               <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:done_update' done.id %}">編集</a></li>
               <li><a class='btn btn-primary btn-block' href="{% url 'task:recover' done.id %}">未完了にする</a></li>
+            </ul>
+          </div></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endmacro %}
+{% macro routine_table thead_color btn_color ids %}
+  <table class='table table-sm table-striped text-center'>
+    <caption>{{info.name}} : {{info.num}}個</caption>
+    <thead>
+      <tr class='table-{{thead_color}}'>
+        <th class=""></th>
+        <th class="">ルーティン名</th>
+        <th class="">要</th>
+        <th class="">急</th>
+        <th class="">メニュー</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for routine in info.routines %}
+        <tr>
+          <th scope='row'>{{ forloop.counter }}</th>
+          <td>{{ routine.name }}</td>
+          <td>{% if routine.important == True %}○{% else %}×{% endif %}</td>
+          <td>{% if routine.urgent == True %}○{% else %}×{% endif %}</td>
+          <td><div class="dropdown">
+            <button type="button" class="btn-xs btn-{{btn_color}} dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:routine_before' routine.id %}?next={{ request.get_full_path }}">時間帯を前へ</a></li>
+              <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:routine_after' routine.id %}?next={{ request.get_full_path }}">時間帯を後ろへ</a></li>
+              <li><a class='btn btn-primary btn-block my-1' href="{% url 'task:routine_update' routine.id %}?next={{ request.get_full_path }}">編集</a></li>
+              <li><form method="post" action="{% url 'task:routine_delete' routine.id %}?next={{ request.get_full_path }}">{% csrf_token %}
+                <button class="btn btn-primary btn-block" type="submit" onclick='return confirm("本当に削除しますか？");'>削除</button>
+              </form></li>
             </ul>
           </div></td>
         </tr>
