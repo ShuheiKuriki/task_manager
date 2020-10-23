@@ -115,12 +115,9 @@ def routine_list(request,pk):
       daily_infos.append(info)
   weekly_infos = []
   for d, day in enumerate(days):
-    day_infos = []
-    for i, name in enumerate(names):
-      info = Routineinfo(name=day+"曜 "+name, routines=routines.filter(days=1+d, period=i))
-      if info.num>0:
-        day_infos.append(info)
-    weekly_infos.append(day_infos)
+    info = Routineinfo(name=day+"曜", routines=routines.filter(days=1+d).order_by('period'))
+    if info.num>0:
+      weekly_infos.append(info)
   if len(AddRoutine.objects.filter(user=request.user)):
     add_or_not = AddRoutine.objects.get(user=request.user).add_or_not
   else:

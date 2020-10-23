@@ -4,9 +4,9 @@
 {% block active_routine %}active{% endblock %}
 
 {% block content-xl %}
-  {% usemacro routine_setting "h2" "mt-3" %}
 {% endblock %}
 {% block content-xl-left %}
+  {% usemacro routine_setting "h2" "mb-4" %}
   {% usemacro daily_routine "h2" "my-1" %}
   {% for info in daily_infos %}
     {% usemacro routine_table "primary" "secondary" %}
@@ -14,17 +14,15 @@
 {% endblock %}
 {% block content-xl-right %}
   {% usemacro weekly_routine "h2" "my-1" %}
-  {% for day_infos in weekly_infos %}
-    {% for info in day_infos %}
-      {% usemacro routine_table "danger" "secondary" %}
-    {% endfor %}
+  {% for info in weekly_infos %}
+    {% usemacro routine_table "danger" "secondary" %}
   {% endfor %}
 {% endblock %}
 
 {% block content-md %}
-  {% usemacro routine_setting "h3" "mt-3" %}
 {% endblock %}
 {% block content-md-left %}
+  {% usemacro routine_setting "h3" "mb-4" %}
   {% usemacro daily_routine "h3" "mt-1" %}
   {% for info in daily_infos %}
     {% usemacro routine_table "primary" "secondary" %}
@@ -32,15 +30,13 @@
 {% endblock %}
 {% block content-md-right %}
   {% usemacro weekly_routine "h3" "mt-1" %}
-  {% for day_infos in weekly_infos %}
-    {% for info in day_infos %}
-      {% usemacro routine_table "danger" "secondary" %}
-    {% endfor %}
+  {% for info in weekly_infos %}
+    {% usemacro routine_table "danger" "secondary" %}
   {% endfor %}
 {% endblock %}
 
 {% block content-sm %}
-  {% usemacro routine_setting "h4" "mt-3" %}
+  {% usemacro routine_setting "h4" %}
 {% endblock %}
 {% block content2-sm %}
   {% usemacro daily_routine "h4" %}
@@ -50,15 +46,13 @@
 {% endblock %}
 {% block content3-sm %}
   {% usemacro weekly_routine "h4" "mt-1" %}
-  {% for day_infos in weekly_infos %}
-    {% for info in day_infos %}
-      {% usemacro routine_table "danger" "secondary" %}
-    {% endfor %}
+  {% for info in weekly_infos %}
+    {% usemacro routine_table "danger" "secondary" %}
   {% endfor %}
 {% endblock %}
 
 {% block content-xs %}
-  {% usemacro routine_setting "h5" "mt-3" %}
+  {% usemacro routine_setting "h5" %}
 {% endblock %}
 {% block content2-xs %}
   {% usemacro daily_routine "h5" %}
@@ -68,9 +62,7 @@
 {% endblock %}
 {% block content3-xs %}
   {% usemacro weekly_routine "h5" "mt-1" %}
-  {% for day_infos in weekly_infos %}
-    {% for info in day_infos %}
-      {% usemacro routine_table "danger" "secondary" %}
-    {% endfor %}
+  {% for info in weekly_infos %}
+    {% usemacro routine_table "danger" "secondary" %}
   {% endfor %}
 {% endblock %}
