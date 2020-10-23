@@ -46,26 +46,27 @@ def list(request, pk):
     return redirect('account_login')
   d = datetime.date.today()
   day = datetime.datetime.now().weekday()
-  addroutine = AddRoutine.objects.get(user=request.user)
-  if addroutine.last_visited != d and addroutine.add_or_not:
-    routines = Routine.objects.filter(user=request.user)
-    routine_tasks = []
-    for routine in routines:
-      if routine.days > 0 and routine.days-1 != day:
-        continue
-      task = Task(
-        name = routine.name,
-        deadline = d,
-        period = routine.period,
-        when = d,
-        important = routine.important,
-        urgent = routine.urgent,
-        user = request.user
-      )
-      routine_tasks.append(task)
-    Task.objects.bulk_create(routine_tasks)
-    addroutine.last_visited = d
-    addroutine.save()
+  if len(AddRoutine.objects.filter(user=request.user)):
+    addroutine = AddRoutine.objects.get(user=request.user)
+    if addroutine.last_visited != d and addroutine.add_or_not:
+      routines = Routine.objects.filter(user=request.user)
+      routine_tasks = []
+      for routine in routines:
+        if routine.days > 0 and routine.days-1 != day:
+          continue
+        task = Task(
+          name = routine.name,
+          deadline = d,
+          period = routine.period,
+          when = d,
+          important = routine.important,
+          urgent = routine.urgent,
+          user = request.user
+        )
+        routine_tasks.append(task)
+      Task.objects.bulk_create(routine_tasks)
+      addroutine.last_visited = d
+      addroutine.save()
   tasks = Task.objects.filter(user=request.user, done_or_not=False)
   todays = tasks.filter(when__lte=datetime.date.today())
   for task in todays:
@@ -104,7 +105,7 @@ def list(request, pk):
 def routine_list(request,pk):
   if request.user.pk != pk:
     return redirect('account_login')
-  routines = Routine.objects.all().filter(user=request.user)
+  routines = Routine.objects.filter(user=request.user)
   names = ['~12時','12~15時','15~18時','18~21時','21時~']
   days = ['月', '火', '水', '木', '金', '土', '日']
   daily_infos = []
@@ -120,7 +121,10 @@ def routine_list(request,pk):
       if info.num>0:
         day_infos.append(info)
     weekly_infos.append(day_infos)
-  add_or_not = AddRoutine.objects.get(user=request.user).add_or_not
+  if len(AddRoutine.objects.filter(user=request.user)):
+    add_or_not = AddRoutine.objects.get(user=request.user).add_or_not
+  else:
+    add_or_not = False
   return render(request, 'task/routine_list.html', {'daily_infos':daily_infos, 'weekly_infos':weekly_infos, 'add_or_not':add_or_not})
   
 def done_list(request,pk):
