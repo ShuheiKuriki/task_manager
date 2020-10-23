@@ -293,7 +293,7 @@ def change_routine_setting(request, pk):
   if request.user.pk != pk:
     return redirect('account_login')
   if not len(AddRoutine.objects.filter(user=request.user)):
-    addroutine = AddRoutine(user=request.user, last_visited = datetime.date.today()-1)
+    addroutine = AddRoutine(user=request.user, last_visited=datetime.date.today()-datetime.timedelta(days=1))
     addroutine.save()
   addroutine = AddRoutine.objects.get(user=request.user)
   addroutine.add_or_not ^= 1
