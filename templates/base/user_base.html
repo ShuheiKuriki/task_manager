@@ -68,6 +68,8 @@
     </nav>
   {% comment %} content-xl {% endcomment %}
     <div class="container d-none d-xl-block">
+      {% block content-xl %}
+      {% endblock %}
       <div class='row'>
         <div class="col-6">
           <div class="my-4">
@@ -93,6 +95,8 @@
     </div>
   {% comment %} content-md {% endcomment %}
     <div class="container d-none d-md-block d-xl-none">
+      {% block content-md %}
+      {% endblock %}
       <div class='row'>
         <div class="col-6">
           <div class="my-4">

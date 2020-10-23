@@ -20,8 +20,15 @@
   <{{size}}>タスク<a class='btn btn-warning ml-2 {{margin}} btn-sm float-right' href="{% url 'task:create' %}?next={{ request.get_full_path }}">タスク追加</a>
   <a class='btn btn-success btn-sm {{margin}} float-right' href="{% url 'task:list' user.pk %}?next={{ request.get_full_path }}">タスク詳細</a></{{size}}>
 {% endmacro %}
+{% macro routine_setting size margin %}
+  {% if add_or_not == True %}
+    <a class='btn btn-success {{margin}} float_right' href="{% url 'task:change_setting' user.id %}">ルーティン自動追加をオフにする</a>
+  {% else %}
+    <a class='btn btn-success {{margin}} float_right' href="{% url 'task:change_setting' user.id %}">ルーティン自動追加をオンにする</a>
+  {% endif %}
+{% endmacro %}
 {% macro daily_routine size margin %}
-  <{{size}}>1日のルーティン<a class='btn btn-warning ml-2 {{margin}} btn-sm float-right' href="{% url 'task:routine_create' %}?next={{ request.get_full_path }}">ルーティン追加</a>
+  <{{size}}>1日のルーティン<a class='btn btn-warning ml-2 {{margin}} btn-sm float-right' href="{% url 'task:routine_create' %}?next={{ request.get_full_path }}">ルーティン追加</a></{{size}}>
 {% endmacro %}
 {% macro weekly_routine size margin %}
   <{{size}}>1週間のルーティン<a class='btn btn-warning ml-2 {{margin}} btn-sm float-right' href="{% url 'task:routine_create' %}?next={{ request.get_full_path }}">ルーティン追加</a>

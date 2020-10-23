@@ -27,6 +27,7 @@ path('<int:pk>/routine_update', views.RoutineUpdateView.as_view(), name='routine
 path('<int:pk>/routine_delete', views.routine_delete, name='routine_delete'),
 path('<int:pk>/routine_before', views.routine_before, name='routine_before'),
 path('<int:pk>/routine_after', views.routine_after, name='routine_after'),
+path('<int:pk>/change_routine_setting', views.change_routine_setting, name='change_setting'),
 
 # 完了タスク関連の操作
 path('<int:pk>/done', views.done, name='done'),

@@ -29,3 +29,4 @@ class Routine(models.Model):
 class AddRoutine(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
   last_visited = models.DateField(default=now)
+  add_or_not = models.BooleanField(default=False)

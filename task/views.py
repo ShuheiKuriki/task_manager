@@ -41,20 +41,13 @@ class Routineinfo:
     self.routines = routines
     self.num = len(routines)
 
-def list(request,pk):
+def list(request, pk):
   if request.user.pk != pk:
     return redirect('account_login')
   d = datetime.date.today()
   day = datetime.datetime.now().weekday()
-  addroutines = AddRoutine.objects.filter(user=request.user)
-  if len(addroutines)==0:
-    addroutine = AddRoutine(user=request.user, last_visited=d)
-    addroutine.save()
-    addroutines = AddRoutine.objects.filter(user=request.user)
-  assert(len(addroutines) == 1)
-  for addroutine in addroutines:
-    if addroutine.last_visited == d:
-      break
+  addroutine = AddRoutine.objects.get(user=request.user)
+  if addroutine.last_visited != d and addroutine.add_or_not:
     routines = Routine.objects.filter(user=request.user)
     routine_tasks = []
     for routine in routines:
@@ -127,7 +120,8 @@ def routine_list(request,pk):
       if info.num>0:
         day_infos.append(info)
     weekly_infos.append(day_infos)
-  return render(request, 'task/routine_list.html', {'daily_infos':daily_infos, 'weekly_infos':weekly_infos})
+  add_or_not = AddRoutine.objects.get(user=request.user).add_or_not
+  return render(request, 'task/routine_list.html', {'daily_infos':daily_infos, 'weekly_infos':weekly_infos, 'add_or_not':add_or_not})
   
 def done_list(request,pk):
   if request.user.pk != pk:
@@ -277,7 +271,7 @@ def routine_before(request, pk):
   try:
     return redirect_to_origin(request)
   except:
-    return redirect('routine:today', pk=request.user.id)
+    return redirect('task:routine_list', pk=request.user.id)
 
 @login_required
 def routine_after(request, pk):
@@ -288,7 +282,20 @@ def routine_after(request, pk):
   try:
     return redirect_to_origin(request)
   except:
-    return redirect('routine:today', pk=request.user.id)
+    return redirect('task:routine_list', pk=request.user.id)
+
+@login_required
+def change_routine_setting(request, pk):
+  if request.user.pk != pk:
+    return redirect('account_login')
+  if not len(AddRoutine.objects.filter(user=request.user)):
+    addroutine = AddRoutine(user=request.user, last_visited = d-1)
+    addroutine.save()
+  addroutine = AddRoutine.objects.get(user=request.user)
+  addroutine.add_or_not ^= 1
+  addroutine.save()
+  return redirect('task:routine_list', pk=request.user.id)
+
 
 # 完了タスク関連の操作
 @login_required
