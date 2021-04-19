@@ -81,7 +81,7 @@ def index(request,pk):
         infos.append(Shoppinginfo(day=i,
             shoppings=not_buy.filter(buy_date=date.today()+datetime.timedelta(days=i)).order_by('shop')))
     bought = Shoppinginfo(name="過去に購入した商品",
-            shoppings=shoppings.filter(buy_or_not=True).order_by('date'))
+            shoppings=shoppings.filter(buy_or_not=True).order_by('-date'))
     return render(request, 'shoppinglist/shopping_list.html', {'infos':infos,'bought':bought})
 
 @method_decorator(login_required, name='dispatch')
