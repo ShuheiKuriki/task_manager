@@ -19,12 +19,12 @@ if 'import':
   from datetime import date
 # Create your views here.
 class Taskinfo:
-  def __init__(self, tasks, name="", day=''):
+  def __init__(self, tasks, name="", day='', days=1):
     self.name = name
     self.tasks = tasks
     self.num = len(tasks)
     self.total_h = sum(task.time for task in tasks)
-    self.mean_h = int(self.total_h / 7 * 10) / 10
+    self.mean_h = int(self.total_h / days * 10) / 10
     if day=='':
       self.date=''
     else:
@@ -131,8 +131,8 @@ def done_list(request,pk):
   if request.user.pk != pk:
     return redirect('account_login')
   dones = Task.objects.all().filter(user=request.user, done_or_not=True).order_by('-done_date')
-  week = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7)))
-  month = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=30)))
+  week = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7)), days=7)
+  month = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=30)), days=30)
   nums = []
   hours = []
   for i in range(29,-1,-1):
