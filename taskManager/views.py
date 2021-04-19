@@ -13,6 +13,7 @@ class Taskinfo:
         self.name = name
         self.tasks = tasks
         self.num = len(tasks)
+        self.total_h = sum(task.time for task in tasks)
 
 class IndexView(TemplateView):
     template_name = 'menu/index.html'
@@ -50,5 +51,5 @@ def top(request,pk):
         past_shopping.buy_date = date.today()
         past_shopping.save()
     not_buy = shoppings.filter(buy_or_not=False)
-    shopping = Shoppinginfo(name="今日", day=0,shoppings=not_buy.filter(buy_date=date.today()).order_by('shop'))
+    shopping = Shoppinginfo(name="今日", day=0, shoppings=not_buy.filter(buy_date=date.today()).order_by('shop'))
     return render(request, 'menu/top.html', {'todo':todo, 'infos':book_infos,'shopping':shopping})

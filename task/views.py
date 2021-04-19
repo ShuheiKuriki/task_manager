@@ -23,6 +23,8 @@ class Taskinfo:
     self.name = name
     self.tasks = tasks
     self.num = len(tasks)
+    self.total_h = sum(task.time for task in tasks)
+    self.mean_h = int(self.total_h / 7 * 10) / 10
     if day=='':
       self.date=''
     else:
@@ -40,6 +42,7 @@ class Routineinfo:
     self.name = name
     self.routines = routines
     self.num = len(routines)
+    self.total_h = sum(routine.time for routine in routines)
 
 def list(request, pk):
   if request.user.pk != pk:
@@ -59,8 +62,8 @@ def list(request, pk):
           deadline = d,
           period = routine.period,
           when = d,
-          important = routine.important,
-          urgent = routine.urgent,
+          time = routine.time,
+          fixed = routine.fixed,
           user = request.user
         )
         routine_tasks.append(task)
@@ -129,12 +132,15 @@ def done_list(request,pk):
     return redirect('account_login')
   dones = Task.objects.all().filter(user=request.user, done_or_not=True).order_by('-done_date')
   week = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=7)))
-  data = []
-  for i in range(6,-1,-1):
+  month = Taskinfo(tasks = dones.filter(done_date__gt=datetime.date.today()-datetime.timedelta(days=30)))
+  nums = []
+  hours = []
+  for i in range(29,-1,-1):
     dat = date.today()-datetime.timedelta(days=i)
     info = Taskinfo(tasks = dones.filter(done_date=dat))
-    data.append(info.num)
-  return render(request, 'task/done_list.html', {'week':week, 'today':data[-1],'data':data})
+    nums.append(info.num)
+    hours.append(int(info.total_h*10)*0.1)
+  return render(request, 'task/done_list.html', {'week':week, 'month': month, 'today':nums[-1], 'nums':nums, 'hours':hours})
 
 #未完了タスク関連
 def create(request):
@@ -156,8 +162,8 @@ def create(request):
           deadline=deadline.strftime('%Y-%m-%d'),
           period=request.POST.get('period'),
           when=when.strftime('%Y-%m-%d'),
-          important=form.cleaned_data['important'],
-          urgent=form.cleaned_data['urgent'],
+          time=form.cleaned_data['time'],
+          fixed=form.cleaned_data['fixed'],
           user=request.user
         )
         tasks.append(task)

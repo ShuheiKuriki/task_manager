@@ -34,19 +34,19 @@
   <{{size}}>1週間のルーティン<a class='btn btn-warning ml-2 {{margin}} btn-sm float-right' href="{% url 'task:routine_create' %}?next={{ request.get_full_path }}">ルーティン追加</a>
 {% endmacro %}
 {% macro report size %}
-  <{{size}}>今日 : {{ today }}個　今週 : {{ week.num }}個 <span class='text-info'>Level{{ week.level }}</span></{{size}}>
+  <{{size}}> 週avg : {{ week.mean_h }}h　月avg : {{ month.mean_h }}h</{{size}}>
 {% endmacro %}
 
 {% macro table thead_color btn_color ids %}
   <table class='table table-sm table-striped text-center'>
-    <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
+    <caption>{{info.name}} {{info.date}} : {{info.total_h}}h</caption>
     {% if info.num > 0 %}
     <thead>
       <tr class='table-{{thead_color}}'>
         <th class=""></th>
         <th class="w-75">タスク名</th>
-        <th class="">要</th>
-        <th class="">急</th>
+        <th class="">h</th>
+        <th class="">予</th>
         <th class="w-25">期限</th>
         <th class="">メニュー</th>
       </tr>
@@ -56,8 +56,8 @@
         <tr id="task_{{ task.id }}">
           <th class='{% if task.expired %}text-danger{% endif %}' name='num_data' scope='row'>{{ forloop.counter }}</th>
           <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-          <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
-          <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
+          <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.time }}</td>
+          <td>{% if task.fixed %}○{% else %}×{% endif %}</td>
           <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
           <td><div class="dropdown">
             <button type="button" class="btn-xs btn-{{btn_color}} dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
@@ -80,13 +80,13 @@
 {% endmacro %}
 {% macro table_xs thead_color btn_color ids %}
   <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped text-center'>
-    <caption>{{info.name}} {{info.date}} : {{info.num}}個</caption>
+    <caption>{{info.name}} {{info.date}} : {{info.total_h}}h</caption>
     {% if info.num > 0 %}
       <thead>
         <tr class='table-{{ thead_color }}'>
           <th scope='col'></th>
           <th class="w-75">タスク名</th>
-          <th class="w-25" scope='col'>期限</th>
+          <th class="w-25" scope='col'>h</th>
           <th class="w-25" scope='col'>メニュー</th>
         </tr>
       </thead>
@@ -95,7 +95,7 @@
           <tr id="task_{{ task.id }}">
             <th class='{% if task.expired %}text-danger{% endif %}' name='num_data' scope='row'>{{ forloop.counter }}</th>
             <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.time }}</td>
             <td><div class="dropdown">
               <button type="button" class="btn-xs btn-{{ btn_color }} dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
               <ul class="dropdown-menu" role="menu">
@@ -122,8 +122,8 @@
       <tr class='table-{{thead_color}}'>
         <th class=""></th>
         <th class="w-75">タスク名</th>
-        <th class="">要</th>
-        <th class="">急</th>
+        <th class="">h</th>
+        <th class="">予</th>
         <th class="w-25">期限</th>
         <th class="">メニュー</th>
       </tr>
@@ -133,8 +133,8 @@
         <tr>
           <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>{{ task.when.month }}/{{ task.when.day }}</th>
           <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-          <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
-          <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
+          <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.time }}</td>
+          <td>{% if task.fixed %}○{% else %}×{% endif %}</td>
           <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
           <td><div class="dropdown">
             <button type="button" class="btn-xs btn-{{btn_color}} dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
@@ -162,7 +162,7 @@
         <tr class='table-{{thead_color}}'>
           <th scope='col'></th>
           <th class="w-75">タスク名</th>
-          <th class="w-25" scope='col'>期限</th>
+          <th class="w-25" scope='col'>h</th>
           <th class="w-25" scope='col'></th>
         </tr>
       </thead>
@@ -171,7 +171,7 @@
           <tr>
             <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>{{ task.when.month }}/{{ task.when.day }}</th>
             <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+            <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.time }}</td>
             <td><div class="dropdown">
               <button type="button" class="btn-xs btn-{{btn_color}} dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
               <ul class="dropdown-menu" role="menu">
@@ -197,8 +197,7 @@
       <tr class='table-{{thead_color}}'>
         <th scope='col'></th>
         <th class="w-50" scope='col'>タスク名</th>
-        <th scope='col'>要</th>
-        <th scope='col'>急</th>
+        <th scope='col'>h</th>
         <th class="w-25" scope='col'>完了</th>
         <th class="w-25" scope='col'></th>
       </tr>
@@ -208,8 +207,7 @@
         <tr>
           <th scope='row'>{{ forloop.counter }}</th>
           <td>{{ done.name }}</td>
-          <td>{% if done.important == True %}○{% else %}×{% endif %}</td>
-          <td>{% if done.urgent == True %}○{% else %}×{% endif %}</td>
+          <td>{{ done.time }}</td>
           <td>{{ done.done_date.month }}/{{ done.done_date.day }}</td>
           <td><div class="dropdown">
             <button type="button" class="btn-xs btn-{{btn_color}} dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
@@ -227,13 +225,13 @@
 {% endmacro %}
 {% macro routine_table thead_color btn_color ids %}
   <table class='table table-sm table-striped text-center'>
-    <caption>{{info.name}} : {{info.num}}個</caption>
+    <caption>{{info.name}} : {{info.total_h}}h</caption>
     <thead>
       <tr class='table-{{thead_color}}'>
         <th class=""></th>
         <th class="">ルーティン名</th>
-        <th class="">要</th>
-        <th class="">急</th>
+        <th class="">h</th>
+        <th class="">予</th>
         <th class="">メニュー</th>
       </tr>
     </thead>
@@ -242,8 +240,8 @@
         <tr>
           <th scope='row'>{{ forloop.counter }}</th>
           <td>{{ routine.name }}</td>
-          <td>{% if routine.important == True %}○{% else %}×{% endif %}</td>
-          <td>{% if routine.urgent == True %}○{% else %}×{% endif %}</td>
+          <td class='{% if task.expired %}text-danger{% endif %}'>{{ routine.time }}</td>
+          <td>{% if routine.fixed %}○{% else %}×{% endif %}</td>
           <td><div class="dropdown">
             <button type="button" class="btn-xs btn-{{btn_color}} dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
             <ul class="dropdown-menu" role="menu">
@@ -262,14 +260,14 @@
 {% endmacro %}
 {% macro top_table thead_color btn_color %}
   <table class='table table-sm table-striped text-center'>
-    <caption>今日 {{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
+    <caption>今日 {{todo.name}} {{todo.date}} : {{todo.total_h}}h</caption>
     {% if todo.num > 0 %}
     <thead>
       <tr class='table-{{thead_color}}'>
         <th class=""></th>
         <th class="w-75">タスク名</th>
-        <th class="">要</th>
-        <th class="">急</th>
+        <th class="">h</th>
+        <th class="">予</th>
         <th class="w-25">期限</th>
         <th class=""></th>
       </tr>
@@ -279,8 +277,8 @@
         <tr>
           <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>{{ forloop.counter }}</th>
           <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-          <td>{% if task.important == True %}○{% else %}×{% endif %}</td>
-          <td>{% if task.urgent == True %}○{% else %}×{% endif %}</td>
+          <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.time }}</td>
+          <td>{% if task.fixed %}○{% else %}×{% endif %}</td>
           <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
           <td><div class="dropdown">
             <button type="button" class="btn-xs btn-{{btn_color}} dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
@@ -301,13 +299,13 @@
 {% endmacro %}
 {% macro top_table_xs thead_color btn_color %}
   <table class='table table-sm {% if info.num > 5 %}table-responsive{% endif %} table-striped text-center'>
-    <caption>今日 {{todo.name}} {{todo.date}} : {{todo.num}}個</caption>
+    <caption>今日 {{todo.name}} {{todo.date}} : {{todo.total_h}}h</caption>
     {% if todo.num > 0 %}
     <thead>
       <tr class='table-{{thead_color}}'>
         <th scope='col'></th>
         <th class="w-75">タスク名</th>
-        <th class="w-25" scope='col'>期限</th>
+        <th class="w-25" scope='col'>h</th>
         <th class="" scope='col'></th>
       </tr>
     </thead>
@@ -316,7 +314,7 @@
         <tr>
           <th class='{% if task.expired %}text-danger{% endif %}' scope='row'>{{ forloop.counter }}</th>
           <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.name }}</td>
-          <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.deadline.month }}/{{ task.deadline.day }}</td>
+          <td class='{% if task.expired %}text-danger{% endif %}'>{{ task.time }}</td>
           <td><div class="dropdown">
             <button type="button" class="btn-xs btn-{{btn_color}} dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
             <ul class="dropdown-menu" role="menu">
@@ -340,49 +338,66 @@
   <script type="text/javascript">
     var ctx = document.getElementById("{{ id }}");
     var weekdays = ['日','月','火','水','木','金','土'];
-    var label = [0,1,2,3,4,5,6]
+    var labels = new Array(30);
     var today = new Date();
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 30; i++) {
       var day = new Date();
-      day.setDate(today.getDate()-6+i);
-      label[i] = (day.getMonth()+1)+'/'+day.getDate()+'('+weekdays[day.getDay()]+')';
+      day.setDate(today.getDate()-29+i);
+      labels[i] = (day.getMonth()+1)+'/'+day.getDate()+'('+weekdays[day.getDay()]+')';
     }
     var LineChart = new Chart(ctx, {
-        type: 'line',
+        type: "bar",
         data: {
-          labels: label,
-          datasets: [{
-            label: 'タスク完了数',
-            data: {{data}},
-            borderColor: "rgba(255,0,0,1)",
-            backgroundColor: "rgba(0,0,0,0)",
-            lineTension: 0
-          }],
+          labels: labels,
+          datasets: [
+            {
+              type: 'line',
+              label: '作業時間',
+              data: {{hours}},
+              borderColor: "rgba(254,97,132,1)",
+              //backgroundColor: "rgba(254,97,132,0.7)",
+              fill: false,
+              yAxisID: "y-axis-1"
+            },
+            {
+              type: 'bar',
+              label: '完了タスク数',
+              data: {{nums}},
+              borderColor: "rgba(54,164,235,0.8)",
+              backgroundColor: "rgba(54,164,235,0.7)",
+              yAxisID: "y-axis-2",
+              //lineTension: 0
+            }
+          ]
         },
         options: {
           title: {
             display: true,
             text: '今週のタスク完了状況',
-            elements: {
-              line: {
-                  tension: 0, // ベジェ曲線を無効にする
-              }
-            },
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: true
           },
           scales: {
             yAxes: [{
+              id: "y-axis-1",   // Y軸のID
+              type: "linear",   // linear固定 
+              position: "left", // どちら側に表示される軸か？
               ticks: {
                 // suggestedMax: 100,
-                suggestedMin: 0,
-                stepSize: 1,
-                // callback: function(value, index, values){
-                //   return  value +  '個'
-                // }
+                // suggestedMin: 0,
+                // stepSize: 1,
+              },
+            }, {
+              id: "y-axis-2",
+              type: "linear", 
+              position: "right",
+              ticks: {
+                //max: 1.5,
+                //min: 0,
+                stepSize: 1
               }
             }]
-          },
+          }
         }
     });
   </script>

@@ -15,13 +15,11 @@ class TaskCreateForm(ModelForm):
   num = forms.ChoiceField(label='繰り返し回数', choices=[(str(i), str(i)) for i in [1, 2, 3, 4, 5, 7, 10, 14, 21, 30]])
   class Meta:
     model = Task
-    fields = ['name', 'when', 'period', 'deadline', 'important', 'urgent']
+    fields = ['name', 'when', 'period', 'deadline', 'time', 'fixed']
     forms.CheckboxInput(attrs={'class': 'check'})
     widgets = {
       'deadline': DateInput(),
       'when': DateInput(),
-      # 'important': forms.CheckboxInput(),
-      # 'urgent': forms.CheckboxInput()
     }
     input_formats = {
       'deadline': ['%d %B %Y'],
@@ -31,13 +29,13 @@ class TaskCreateForm(ModelForm):
 class RoutineForm(ModelForm):
   class Meta:
     model = Routine
-    fields = ['name', 'period', 'days', 'important', 'urgent']
+    fields = ['name', 'period', 'days', 'time', 'fixed']
     forms.CheckboxInput(attrs={'class': 'check'})
 
 class TaskUpdateForm(ModelForm):
   class Meta:
     model = Task
-    fields = ['name', 'when', 'period', 'deadline', 'important', 'urgent']
+    fields = ['name', 'when', 'period', 'deadline', 'time', 'fixed']
     forms.CheckboxInput(attrs={'class': 'check'})
     widgets = {
       'deadline': DateInput(),
@@ -47,13 +45,13 @@ class TaskUpdateForm(ModelForm):
 class RoutineUpdateForm(ModelForm):
   class Meta:
     model = Routine
-    fields = ['name', 'period', 'days', 'important', 'urgent']
+    fields = ['name', 'period', 'days', 'time', 'fixed']
     forms.CheckboxInput(attrs={'class': 'check'})
 
 class DoneForm(ModelForm):
   class Meta:
     model = Task
-    fields = ['name', 'done_date']
+    fields = ['name', 'done_date', 'time']
     widgets = {
       'done_date': DateInput()
     }

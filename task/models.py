@@ -10,8 +10,8 @@ class Routine(models.Model):
   day_choice=[(i,day_type) for i,day_type in enumerate(day_types)]
   
   name = models.CharField('ルーティン名', max_length=256, blank=True)
-  important = models.BooleanField('重要', default=False)
-  urgent = models.BooleanField('緊急', default=False)
+  time = models.DecimalField('所要時間(h)', max_digits=3, decimal_places=1, blank=True, null=True, default=1.0)
+  fixed = models.BooleanField('予定', default=False)
   period = models.IntegerField('時間帯', choices=period_choice, default=0)
   days = models.IntegerField('曜日タイプ', choices=day_choice, default=0)
 
@@ -21,10 +21,9 @@ class Routine(models.Model):
     return self.name
 
   def get_list(self):
-    important = '○' if self.important == True else '×'
-    urgent = '○' if self.urgent == True else '×'
+    fixed = '○' if self.fixed else '×'
     return {'ルーティン名':self.name, '時間帯':self.periods[self.period],
-        '期限':self.deadline, '重要': important, '緊急':urgent}
+        '期限':self.deadline, '所要時間(h)': self.time, '予定':fixed}
 
 class AddRoutine(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
