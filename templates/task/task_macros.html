@@ -376,12 +376,15 @@
             maintainAspectRatio: true
           },
           scales: {
-            type: "linear", 
-            ticks: {
-              max: 12,
-              min: 0,
-              stepSize: 1
-            }
+            yAxes: [
+              {
+                ticks: {
+                  max: 12,
+                  min: 0,
+                  stepSize: 1
+                }
+              }
+            ]
           }
         }
     });
