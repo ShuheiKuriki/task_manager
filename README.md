@@ -12,6 +12,12 @@
 ```
 postgres -D /usr/local/var/postgres
 ```
+- 前回データベースをちゃんと終了しなかった時の対処
+```
+rm /usr/local/var/postgres/postmaster.pid
+launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+```
 - ローカルサーバー起動
 ```
 python manage.py runserver

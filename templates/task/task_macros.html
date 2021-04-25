@@ -357,7 +357,6 @@
               borderColor: "rgba(254,97,132,1)",
               //backgroundColor: "rgba(254,97,132,0.7)",
               fill: false,
-              yAxisID: "y-axis-1"
             },
             {
               type: 'bar',
@@ -365,7 +364,6 @@
               data: {{nums}},
               borderColor: "rgba(54,164,235,0.8)",
               backgroundColor: "rgba(54,164,235,0.7)",
-              yAxisID: "y-axis-2",
               //lineTension: 0
             }
           ]
@@ -378,25 +376,15 @@
             maintainAspectRatio: true
           },
           scales: {
-            yAxes: [{
-              id: "y-axis-1",   // Y軸のID
-              type: "linear",   // linear固定 
-              position: "left", // どちら側に表示される軸か？
-              ticks: {
-                // suggestedMax: 100,
-                // suggestedMin: 0,
-                // stepSize: 1,
-              },
-            }, {
-              id: "y-axis-2",
-              type: "linear", 
-              position: "right",
-              ticks: {
-                //max: 1.5,
-                //min: 0,
-                stepSize: 1
+            yAxes: [
+              {
+                ticks: {
+                  max: 12,
+                  min: 0,
+                  stepSize: 1
+                }
               }
-            }]
+            ]
           }
         }
     });
