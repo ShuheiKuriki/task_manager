@@ -8,3 +8,4 @@ bin
 .ipynb
 pyvenv.cfg
 .vscode/
+venv/
