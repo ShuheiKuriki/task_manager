@@ -37,6 +37,6 @@ urlpatterns = [
 
 #if settings.DEBUG:    # この if 文 (5STEP) を追加します。
 import debug_toolbar
-urlpatterns = [
+urlpatterns += [
   path('__debug__/', include(debug_toolbar.urls))
-  ] + urlpatterns
+  ]

@@ -26,8 +26,10 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'taskManager.settings.prod')
 
 application = get_wsgi_application()
 
+
 def notify(when):
     requests.get("https://tasks-day-scheduler.herokuapp.com/notify/send/"+when)
+
 
 def daily():
     schedule.every().day.at("08:00").do(notify, "morning")
@@ -44,8 +46,10 @@ def daily():
                 requests.get("https://tasks-day-scheduler.herokuapp.com/")
             print("sleep_done")
 
+
 def test():
     print("test")
+
 
 t = threading.Thread(target=daily)
 t.start()
