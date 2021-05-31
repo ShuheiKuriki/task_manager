@@ -12,6 +12,7 @@
 - Webフレームワーク : Django
 - JSライブラリ : Jquery, Chart.js
 - データベース : PostgreSQL
+- デザイン : Bootstrap(デザインテンプレート使用)
 - デプロイ先 : heroku
 - その他 : LINE API
 
