@@ -10,7 +10,7 @@
 ## 使用技術
 - 主要言語 : Python, javascript
 - Webフレームワーク : Django
-- JSライブラリ : Jquery, Chart.js
+- JSライブラリ : jQuery, Chart.js
 - データベース : PostgreSQL
 - デザイン : Bootstrap(デザインテンプレート使用)
 - デプロイ先 : heroku
