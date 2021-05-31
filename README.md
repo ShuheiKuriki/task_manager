@@ -1,6 +1,6 @@
 # task_manager
-タスク管理アプリ「Task Manager」として開発を始めたアプリ。
-最終的にタスク・ルーティン・買い物・本など生活を総合的に管理するアプリ「Life Planner」になった。
+タスク管理アプリ「Today's Task Schduler」として開発を始めたアプリ。
+最終的にタスク・ルーティン・買い物・本など生活を総合的に管理するアプリ「Smart Life Planner」になった。
 ログイン機能・LINE通知機能あり
 
 - 公開url : https://tasks-day-scheduler.herokuapp.com/
