@@ -82,8 +82,10 @@ def callback(request):
     return HttpResponse()
     # return render(request, 'notify_message.txt', {'request':request})
 
+
 def test(request):
     return HttpResponse(Task.objects.all().get(id=1).name)
+
 
 def send(request, when):
     try:

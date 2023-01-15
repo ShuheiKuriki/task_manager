@@ -51,5 +51,5 @@ def test():
     print("test")
 
 
-t = threading.Thread(target=daily)
-t.start()
+# t = threading.Thread(target=daily)
+# t.start()
