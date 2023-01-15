@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls import include, url
 from . import views
 
 urlpatterns = [
@@ -28,14 +27,14 @@ urlpatterns = [
     path('shoppinglist/', include('shoppinglist.urls')),
     # path('auth/', include('allauth.urls')),     # 追加
 
-    #全ユーザー共通のページを表示
+    # 全ユーザー共通のページを表示
     path('', views.IndexView.as_view(), name='index'),
-    path('sample', views.IndexSampleView.as_view(),name='sample'),
-    #トップページ
-    path('<int:pk>/top', views.top ,name='top'),
+    path('sample', views.IndexSampleView.as_view(), name='sample'),
+    # トップページ
+    path('<int:pk>/top', views.top, name='top'),
 ]
 
-#if settings.DEBUG:    # この if 文 (5STEP) を追加します。
+# if settings.DEBUG:    # この if 文 (5STEP) を追加します。
 import debug_toolbar
 urlpatterns += [
   path('__debug__/', include(debug_toolbar.urls))

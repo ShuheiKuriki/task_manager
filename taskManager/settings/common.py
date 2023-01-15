@@ -31,10 +31,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',                         #追加
-    'allauth',                                      #追加
-    'allauth.account',                              #追加
-    'allauth.socialaccount',                        #追加
+    'django.contrib.sites',                         # 追加
+    'allauth',                                      # 追加
+    'allauth.account',                              # 追加
+    'allauth.socialaccount',                        # 追加
     # 'allauth.socialaccount.providers.line',
     'taskManager',
     'bootstrap4',
@@ -127,7 +127,7 @@ SITE_ID = 1
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 #
 # ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_EMAIL_REQUIRED = True #ユーザー登録画⾯で必須項⽬に
+ACCOUNT_EMAIL_REQUIRED = True  # ユーザー登録画⾯で必須項⽬に
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 
@@ -136,7 +136,7 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
-#認証⽅式を 「メールアドレスとパスワード」 に変更
+# 認証⽅式を 「メールアドレスとパスワード」 に変更
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USERNAME_REQUIRED = True
 
