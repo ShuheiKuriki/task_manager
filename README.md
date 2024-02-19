@@ -6,7 +6,7 @@ Lifeは"日常生活"と"人生"の掛け言葉になっているが、人生設
 
 ログイン機能・LINE通知機能あり。日常的に個人使用しており、なくてはならないアプリです。
 
-- 公開url : https://tasks-day-scheduler.herokuapp.com/
+- 公開url : https://tasks-day-scheduler.herokuapp.com/　→2024/2/19現在は閉鎖しています
 
 ## 使用技術
 - 主要言語 : Python, javascript
